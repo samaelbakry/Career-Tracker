@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from "@/providers/ReduxProvider";
+import AuthProvider from "@/providers/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.className} h-full antialiased`}
-    >
-      <body className={`min-h-full flex flex-col`}>{children}</body>
+    <html lang="en" className={`${geistSans.className} h-full antialiased`}>
+      <body className={`min-h-full flex flex-col`}>
+        <ReduxProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ReduxProvider>
+      </body>
     </html>
   );
 }

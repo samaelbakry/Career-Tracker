@@ -5,6 +5,8 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { loginSchema, loginSchemaType } from "@/schemas/authschema";
 import { signIn } from "@/services/auth";
+import { useAppDispatch } from "@/store/hooks/redux-hooks";
+import { setCredentials } from "@/store/slices/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
@@ -14,6 +16,7 @@ import { toast } from "sonner";
 
 export default function LoginForm() {
   const navigate = useRouter();
+  const dispatch = useAppDispatch()
   const form = useForm<loginSchemaType>({
     mode: "all",
     defaultValues: {
@@ -25,7 +28,15 @@ export default function LoginForm() {
 
   async function sendLogInData(values: loginSchemaType) {
     try {
-     await signIn(values);
+     const userData = await signIn(values);
+      dispatch(setCredentials({
+        user:{
+          id:userData.id,
+          name:userData.user_metadata.full_name,
+          email:userData.email!,
+          role:userData.role!
+        }
+      }))
       toast.success("Logged in successfully!");
       setTimeout(() => {
         navigate.push("/dashboard");
