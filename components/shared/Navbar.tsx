@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50  transition-all duration-300 ${
         isScrolled
           ? 'bg-white/80 backdrop-blur-md border-b border-slate-200/60 shadow-sm py-4'
           : 'bg-transparent py-6'
@@ -37,20 +37,20 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#64748B]">
-          <Link href="#features" className="hover:text-[#1E3A8A] transition-colors">
+          <Link href="/search" className="hover:text-[#1E3A8A] transition-colors">
+            Search
+          </Link>
+          <Link href="/jobs" className="hover:text-[#1E3A8A] transition-colors">
             Jobs
           </Link>
-          <Link href="#pricing" className="hover:text-[#1E3A8A] transition-colors">
-            Pricing
-          </Link>
-          <Link href="#pricing" className="hover:text-[#1E3A8A] transition-colors">
+          <Link href="/companies" className="hover:text-[#1E3A8A] transition-colors">
             Companies
           </Link>
-          <Link href="#about" className="hover:text-[#1E3A8A] transition-colors">
+          <Link href="/about" className="hover:text-[#1E3A8A] transition-colors">
             About
           </Link>
         </nav>
-        {authenticated ? "" : <div className="flex items-center gap-3">
+        {authenticated ? <span>Logout</span>: <div className="flex items-center gap-3">
           <button className="px-5 py-2.5 text-sm font-semibold text-[#1E3A8A] border border-slate-200 rounded-xl hover:bg-slate-50 transition-all active:scale-[0.98]">
             Login
           </button>

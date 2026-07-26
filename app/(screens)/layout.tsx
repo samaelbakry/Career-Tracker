@@ -7,7 +7,7 @@ export default function ScreensLayout({children}: {children: React.ReactNode}) {
   return (
     <div>
       <Navbar />
-      <main className="min-h-[calc(100vh-240px)]">{children}</main>
+      <main className="min-h-[calc(100vh-240px)] mt-15">{children}</main>
       <Toaster/>
       <Footer />
     </div>
