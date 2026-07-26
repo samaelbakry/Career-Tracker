@@ -17,7 +17,7 @@ export default function Hero() {
             <div className="flex items-center  gap-6">
               {authenticated && (
                 <>
-                  <span className="font-light text-xl">{`Welcome back, ${userName}!`}</span>
+                  <span className="font-semibold text-xl">{`Welcome back, ${userName}!`}</span>
                 </>
               )}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#DBEAFE]/60 border border-blue-200/60 text-[#1E3A8A] text-xs font-semibold tracking-wide">

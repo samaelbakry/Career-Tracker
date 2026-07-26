@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/providers/ReduxProvider";
 import AuthProvider from "@/providers/AuthProvider";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,10 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.className} h-full antialiased`}>
-      <body className={`min-h-full flex flex-col`}>
+      <body className={`min-h-full flex flex-col ${geistMono.variable}`}>
         <ReduxProvider>
           <AuthProvider>
-            {children}
+            <ReactQueryProvider>{children}</ReactQueryProvider>
           </AuthProvider>
         </ReduxProvider>
       </body>

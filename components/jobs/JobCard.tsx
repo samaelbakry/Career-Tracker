@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/card";
 import { Job } from "@/types/jobs";
 import { ArrowUpRight, Banknote, Building2, Clock, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function JobCard({ job }: { job: Job }) {
+  const navigate = useRouter()
   const formatSalary = (amount: number) =>
     new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -22,11 +24,10 @@ export default function JobCard({ job }: { job: Job }) {
   const formattedDate = new Date(job?.created_at).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-    year: "numeric",
   });
 
   return (
-    <Card className="group relative w-full max-w-md overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700">
+      <Card onClick={() => navigate.push(`/jobs/${job.id}`)} className="group relative w-full max-w-md overflow-hidden rounded-xl border border-zinc-50/80 bg-white shadow transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-200 hover:shadow-md">
       <div className="h-1 w-full bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500" />
 
       <CardHeader className="p-5 pb-3">
@@ -108,9 +109,6 @@ export default function JobCard({ job }: { job: Job }) {
         <Button className="w-full gap-1 shadow-none" size="sm">
           Apply Now
           <ArrowUpRight className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="sm" className="dark:border-zinc-800">
-          Details
         </Button>
       </CardFooter>
     </Card>

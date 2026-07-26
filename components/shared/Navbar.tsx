@@ -5,6 +5,7 @@ import { Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { useAppSelector } from '@/store/hooks/redux-hooks';
 import { selectedAuthenticated } from '@/store/slices/authSlice';
+import LogoutButton from '../ui/authUI/LogoutButton';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,7 +21,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50  transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 shadow transition-all duration-300 ${
         isScrolled
           ? 'bg-white/80 backdrop-blur-md border-b border-slate-200/60 shadow-sm py-4'
           : 'bg-transparent py-6'
@@ -50,7 +51,7 @@ export default function Navbar() {
             About
           </Link>
         </nav>
-        {authenticated ? <span>Logout</span>: <div className="flex items-center gap-3">
+        {authenticated ? <LogoutButton/> : <div className="flex items-center gap-3">
           <button className="px-5 py-2.5 text-sm font-semibold text-[#1E3A8A] border border-slate-200 rounded-xl hover:bg-slate-50 transition-all active:scale-[0.98]">
             Login
           </button>
