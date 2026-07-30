@@ -5,6 +5,14 @@ export type Company = {
   website: string | null;
   location: string | null;
   industry: string | null;
+  description: string | null;
+  founded_year: number | null;
+  company_size: string | null;
+  headquarters: string | null;
+  careers_url: string | null;
+  linkedin_url: string |null;
+  rating: number | null;
+  open_positions: number | null;
 };
 
 export type Job = {

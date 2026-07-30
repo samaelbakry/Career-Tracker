@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatSalary, formattedDate } from "@/lib/helpers"
 import { getJobDetails } from "@/services/jobs"
 import { Award, BadgeCheck, Banknote, BriefcaseBusiness, Building2, CalendarDays, Clock3, ExternalLink, Globe, MapPin } from "lucide-react"
 import Link from "next/link"
@@ -10,20 +11,6 @@ type prop ={
 export default async function JobDetails({params}:{params:Promise<prop>}) {
   const { jobId } = await params
   const job = await getJobDetails(jobId)
-
-  const formatSalary = (amount: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "EGP",
-      maximumFractionDigits: 0,
-    }).format(amount);
-
-  const formattedDate = (date:string)=>(
-    new Date(date).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  })
-  ) ;
     
     return (
    <div className="min-h-screen bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8 font-sans text-slate-900">
@@ -187,9 +174,11 @@ export default async function JobDetails({params}:{params:Promise<prop>}) {
                     )}
                   </div>
                   <div>
+                    <Link href={`/companies/${job?.company.id}`}>
                     <h3 className="font-bold text-lg text-slate-900">
                       {job.company.name}
                     </h3>
+                    </Link>
                     <p className="text-xs text-slate-500 font-medium">
                       {job.company.industry}
                     </p>

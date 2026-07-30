@@ -7,7 +7,7 @@ export function JobSearchHeader() {
     <section className="relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-64 rounded-full" />
 
-      <div className="max-w-6xl mx-auto space-y-6 text-center sm:text-left">
+      <div className="max-w-7xl mx-auto space-y-6 text-center sm:text-left">
         <Badge
           variant="outline"
           className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium border-blue-200 bg-blue-50/50 text-blue-700 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-300 rounded-full"
