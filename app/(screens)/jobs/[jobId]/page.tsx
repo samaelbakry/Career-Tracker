@@ -1,3 +1,4 @@
+import ApplyButton from "@/components/jobs/ApplyButton"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatSalary, formattedDate } from "@/lib/helpers"
@@ -58,6 +59,7 @@ export default async function JobDetails({params}:{params:Promise<prop>}) {
                 <CalendarDays className="w-4 h-4 text-blue-600" />
                 <span>Posted {formattedDate(job.created_at)}</span>
               </div>
+             <ApplyButton job={job} />
             </div>
           </CardContent>
         </Card>

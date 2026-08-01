@@ -12,7 +12,6 @@ const navLinks = [
   { href: "/search", label: "Search" },
   { href: "/jobs", label: "Jobs" },
   { href: "/companies", label: "Companies" },
-  { href: "/about", label: "About" },
 ];
 
 export default function Navbar() {

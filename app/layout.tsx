@@ -4,6 +4,7 @@ import "./globals.css";
 import ReduxProvider from "@/providers/ReduxProvider";
 import AuthProvider from "@/providers/AuthProvider";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,9 @@ export default function RootLayout({
       <body className={`min-h-full flex flex-col ${geistMono.variable}`}>
         <ReduxProvider>
           <AuthProvider>
-            <ReactQueryProvider>{children}</ReactQueryProvider>
+            <ReactQueryProvider>{children}
+              <Toaster richColors position="top-right" />
+            </ReactQueryProvider>
           </AuthProvider>
         </ReduxProvider>
       </body>
