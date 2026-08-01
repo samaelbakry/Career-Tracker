@@ -23,6 +23,7 @@ export default function AuthProvider({ children}: {children: React.ReactNode}) {
             name: user.user_metadata.full_name,
             email: user.email!,
             role: "job_seeker",
+            created_at: user.created_at,
           },
         }),
       );

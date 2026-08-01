@@ -5,7 +5,7 @@ type Props = {
   userId: string;
   resumeUrl: string;
   coverLetter: string;
-}
+} 
 
 export async function applyForJob({jobId,userId,resumeUrl,coverLetter}: Props) {
 
@@ -41,4 +41,23 @@ export async function applyForJob({jobId,userId,resumeUrl,coverLetter}: Props) {
   }
 
   return data;
+}
+
+export async function getDashboardStats(userId: string) {
+  const { data, error } = await supabase
+    .from("applications")
+    .select("*")
+    .eq("user_id", userId)
+
+     if (error) {
+    throw new Error(error.message);
+  }
+
+  return {
+    applied: data.length ,
+    pending : data.filter((app: { status: string }) => app.status === "pending").length,
+    rejected : data.filter((app: { status: string }) => app.status === "rejected").length,
+    accepted : data.filter((app: { status: string }) => app.status === "accepted").length,
+    interviewed : data.filter((app: { status: string }) => app.status === "interviewed").length,
+  }
 }
