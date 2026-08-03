@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { registerSchema, registerSchemaType } from "@/schemas/authschema";
 import { signUp } from "@/services/auth";
@@ -11,33 +11,35 @@ import { toast } from "sonner";
 import { Button } from "../button";
 import { Field, FieldError, FieldLabel } from "../field";
 import { Input } from "../input";
+import { RadioGroup, RadioGroupItem } from "../radio-group";
+import { Label } from "../label";
 
 export default function RegisterForm() {
-   const navigate = useRouter();
+  const navigate = useRouter();
   const form = useForm<registerSchemaType>({
     mode: "all",
     defaultValues: {
-      name:"",
-      rePassword:"",
+      name: "",
+      rePassword: "",
       email: "",
       password: "",
+      role: "job_seeker",
     },
     resolver: zodResolver(registerSchema),
   });
 
   async function sendRegisterData(values: registerSchemaType) {
     try {
-     await signUp(values);
-      
+      await signUp(values);
+
       toast.success("account created successfully!");
-      form.reset()
-      
-        navigate.push(`/verifyEmail?email=${values.email}`);
-      
+      form.reset();
+
+      navigate.push(`/verifyEmail?email=${values.email}`);
     } catch (error) {
-      console.log(error)
-      if(error instanceof Error){
-        toast.error(error.message)
+      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
       }
     }
   }
@@ -191,7 +193,23 @@ export default function RegisterForm() {
           </Field>
         )}
       />
+      <Controller
+        name="role"
+        control={form.control}
+        render={({ field }) => (
+          <RadioGroup value={field.value} onValueChange={field.onChange} className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="job_seeker" id="job_seeker" />
+              <Label htmlFor="job_seeker">Job Seeker</Label>
+            </div>
 
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="employer" id="employer" />
+              <Label htmlFor="employer">Employer</Label>
+            </div>
+          </RadioGroup>
+        )}
+      />
       <Button
         type="submit"
         disabled={form.formState.isSubmitting}

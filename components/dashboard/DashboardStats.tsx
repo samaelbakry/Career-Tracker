@@ -6,9 +6,9 @@ import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
 import {
   Briefcase,
+  CheckCircle2,
   Clock,
   Video,
-  CheckCircle2,
   XCircle,
 } from "lucide-react";
 

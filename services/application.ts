@@ -61,3 +61,27 @@ export async function getDashboardStats(userId: string) {
     interviewed : data.filter((app: { status: string }) => app.status === "interviewed").length,
   }
 }
+
+export async function getUserApplications(userId: string) {
+  const { data, error } = await supabase
+    .from("applications")
+    .select(`
+      *,
+      job:jobs(
+        id,
+        title,
+        location,
+        company:companies(
+          id,
+          name,
+          logo_url
+        )
+      )
+    `)
+    .eq("user_id", userId)
+    .order("applied_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data;
+}

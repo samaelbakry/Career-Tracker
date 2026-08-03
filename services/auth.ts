@@ -20,6 +20,7 @@ export async function signUp(values: registerSchemaType) {
       emailRedirectTo:"http://localhost:3000/login",
       data: {
         full_name: values.name,
+        role: values.role,
       },
     },
   });
@@ -42,4 +43,19 @@ export async function getCurrentUser() {
 
 export async function signOut() {
   return await supabase.auth.signOut();
+}
+
+export async function getProfile(userId: string) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId);
+
+  console.log("User ID:", userId);
+  console.log("Profiles:", data);
+  console.log("Error:", error);
+
+  if (error) throw error;
+
+  return data;
 }
