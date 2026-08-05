@@ -16,7 +16,7 @@ import { toast } from "sonner";
 
 export default function LoginForm() {
   const navigate = useRouter();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const form = useForm<loginSchemaType>({
     mode: "all",
     defaultValues: {
@@ -28,26 +28,29 @@ export default function LoginForm() {
 
   async function sendLogInData(values: loginSchemaType) {
     try {
-     const userData = await signIn(values);
-     const profile = await getProfile(userData.id)
-    //  console.log(userData)
-      dispatch(setCredentials({
-        user:{
-          id:userData.id,
-          name:userData.user_metadata.full_name,
-          email:userData.email!,
-          role:profile.role,
-          created_at:userData.created_at,
-        }
-      }))
+      const userData = await signIn(values);
+      const profile = await getProfile(userData.id);
+      dispatch(
+        setCredentials({
+          user: {
+            id: userData.id,
+            name: userData.user_metadata.full_name,
+            email: userData.email!,
+            role: profile.role!,
+            created_at: userData.created_at,
+          },
+        }),
+      );
       toast.success("Logged in successfully!");
-      setTimeout(() => {
+      if (profile.role === "employer") {
+        navigate.push("/employer/dashboard");
+      } else {
         navigate.push("/dashboard");
-      }, 1000);
+      }
     } catch (error) {
-      console.log(error)
-      if(error instanceof Error){
-        toast.error(error.message)
+      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
       }
     }
   }

@@ -31,3 +31,37 @@ export const getStatusBadge = (status: string) => {
       };
   }
 };
+
+export const navLinks = {
+  job_seeker: [
+    { href: "/jobSeeker/dashboard", label: "Jobs" },
+    { href: "/jobSeeker/jobs", label: "Jobs" },
+    { href: "/jobSeeker/search", label: "Search" },
+  ],
+  employer: [
+    { href: "/employer/feed", label: "Feed" },
+    { href: "/employer/jobs", label: "My Jobs" },
+    { href: "/employer/PostJob", label: "Post Job" },
+    { href: "/employer/companies", label: "Companies" },
+    { href: "/employer/dashboard", label: "Dashboard" },
+  ],
+};
+
+export const heroContent = {
+  job_seeker: {
+    title: "Organize Every Job Application.",
+    highlight: "Land Your Next Role Faster.",
+    description:
+      "Keep every application, interview, recruiter contact, and follow-up organized in one dashboard.",
+    button: "Go to Dashboard",
+    href: "/jobSeeker/dashboard",
+  },
+  employer: {
+    title: "Hire Smarter.",
+    highlight: "Manage Every Candidate Easily.",
+    description:
+      "Post jobs, review applicants, and track the hiring process from one place.",
+    button: "Employer Dashboard",
+    href: "/employer/dashboard",
+  },
+};

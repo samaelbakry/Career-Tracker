@@ -30,9 +30,9 @@ export default function RegisterForm() {
 
   async function sendRegisterData(values: registerSchemaType) {
     try {
-      await signUp(values);
-
-      toast.success("account created successfully!");
+      const res = await signUp(values);
+      console.log(res , "register")
+      toast.success("Wait for verification your account");
       form.reset();
 
       navigate.push(`/verifyEmail?email=${values.email}`);

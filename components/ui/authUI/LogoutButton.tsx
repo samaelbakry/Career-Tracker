@@ -28,20 +28,24 @@ export default function LogoutButton() {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <Button variant="destructive">Log out</Button>
+      <AlertDialogTrigger render={<Button variant="destructive" />}>
+        Logout
       </AlertDialogTrigger>
+
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+
           <AlertDialogDescription>
             You will need to log back in to access your dashboard and account
             settings.
           </AlertDialogDescription>
         </AlertDialogHeader>
+
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant={"destructive"} onClick={handleSubmit}>
+
+          <AlertDialogAction variant="destructive" onClick={handleSubmit}>
             Log out
           </AlertDialogAction>
         </AlertDialogFooter>

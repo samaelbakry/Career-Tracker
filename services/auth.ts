@@ -49,11 +49,8 @@ export async function getProfile(userId: string) {
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
-    .eq("id", userId);
-
-  console.log("User ID:", userId);
-  console.log("Profiles:", data);
-  console.log("Error:", error);
+    .eq("id", userId)
+    .single()
 
   if (error) throw error;
 

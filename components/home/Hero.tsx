@@ -4,10 +4,15 @@ import DashboardMockup from "./DashboardMockup";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedAuthenticated, selectedUser } from "@/store/slices/authSlice";
+import { heroContent } from "@/constants/constants";
 
 export default function Hero() {
   const authenticated = useAppSelector(selectedAuthenticated);
   const userName = useAppSelector(selectedUser)?.name;
+  const role = useAppSelector(selectedUser)?.role;
+  const isEmployer = role === "employer";
+  console.log("Redux user:", useAppSelector(selectedUser));
+  const content = isEmployer ? heroContent.employer : heroContent.job_seeker;
 
   return (
     <section className="relative pt-32 pb-20 md:pt-44 md:pb-32 min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-b from-white via-[#DBEAFE]/30 to-white">
@@ -27,23 +32,21 @@ export default function Hero() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold tracking-tight text-[#0F172A] leading-[1.12]">
-              Organize Every Job Application.{" "}
+             {content.title}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-[#1E3A8A] to-[#3B82F6]">
-                Land Your Next Role Faster.
+                {content.highlight}
               </span>
             </h1>
 
             <p className="text-lg text-[#64748B] max-w-xl leading-relaxed font-normal">
-              Keep every application, interview, recruiter contact, and
-              follow-up organized in one beautiful dashboard so you never miss
-              an opportunity.
+             {content.description}
             </p>
             {authenticated ? (
               <Link
-                href={"/dashboard"}
+                href={content.href}
                 className="flex items-center justify-center gap-2 px-7 py-4 bg-[#1E3A8A] hover:bg-[#172554] text-white font-semibold rounded-2xl shadow-lg shadow-blue-900/10 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
               >
-                <span>pick up where you left off</span>
+                <span>{content.button}</span>
                 <ArrowRight size={18} />
               </Link>
             ) : (

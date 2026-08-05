@@ -4,19 +4,17 @@ import { useState, useEffect } from "react";
 import { Briefcase } from "lucide-react";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
-import { selectedAuthenticated } from "@/store/slices/authSlice";
+import { selectedAuthenticated, selectedUser } from "@/store/slices/authSlice";
 import LogoutButton from "../ui/authUI/LogoutButton";
 import { usePathname } from "next/navigation";
-
-const navLinks = [
-  { href: "/search", label: "Search" },
-  { href: "/jobs", label: "Jobs" },
-  { href: "/companies", label: "Companies" },
-];
+import { navLinks } from "@/constants/constants";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const authenticated = useAppSelector(selectedAuthenticated);
+  const role = useAppSelector(selectedUser)?.role;
+  const isEmployer = role === "employer";
+  const links = isEmployer ? navLinks.employer : navLinks.job_seeker;
   const pathname = usePathname();
 
   useEffect(() => {
@@ -46,7 +44,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm">
-          {navLinks.map((link) => (
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
