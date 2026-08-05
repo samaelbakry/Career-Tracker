@@ -11,7 +11,6 @@ export default function Hero() {
   const userName = useAppSelector(selectedUser)?.name;
   const role = useAppSelector(selectedUser)?.role;
   const isEmployer = role === "employer";
-  console.log("Redux user:", useAppSelector(selectedUser));
   const content = isEmployer ? heroContent.employer : heroContent.job_seeker;
 
   return (

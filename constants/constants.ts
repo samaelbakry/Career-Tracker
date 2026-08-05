@@ -1,5 +1,6 @@
 import { CheckCircle2, Clock, Video, XCircle } from "lucide-react";
 
+// job_seeker dashboard 
 export const getStatusBadge = (status: string) => {
   const normalized = status?.toLowerCase() ?? "pending";
 
@@ -32,6 +33,7 @@ export const getStatusBadge = (status: string) => {
   }
 };
 
+// navbar links 
 export const navLinks = {
   job_seeker: [
     { href: "/jobSeeker/dashboard", label: "Jobs" },
@@ -40,13 +42,15 @@ export const navLinks = {
   ],
   employer: [
     { href: "/employer/feed", label: "Feed" },
-    { href: "/employer/jobs", label: "My Jobs" },
-    { href: "/employer/PostJob", label: "Post Job" },
+    { href: "/employer/employerJobOffers", label: "My Jobs" },
+    { href: "/employer/postJob", label: "Post Job" },
     { href: "/employer/companies", label: "Companies" },
     { href: "/employer/dashboard", label: "Dashboard" },
   ],
 };
 
+
+// landing page 
 export const heroContent = {
   job_seeker: {
     title: "Organize Every Job Application.",
@@ -65,3 +69,4 @@ export const heroContent = {
     href: "/employer/dashboard",
   },
 };
+

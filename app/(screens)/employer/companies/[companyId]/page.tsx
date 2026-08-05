@@ -3,11 +3,11 @@
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getCompaniesDetails } from "@/services/companies";
-import { Company } from "@/types/jobs";
 import CardSkeleton from "@/components/jobs/CardSkeleton";
 import { useFetch } from "@/hooks/useFetch";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { getAvatarGradient } from "@/lib/helpers";
+import { Company } from "@/types/companies";
 
 
 export default function CompanyDetailsPage() {
@@ -208,7 +208,7 @@ export default function CompanyDetailsPage() {
                 </svg>
               }
               label="Open Positions"
-              value={company.open_positions?.toString()}
+              value={company.open_jobs_count?.toString()}
             />
           </div>
 

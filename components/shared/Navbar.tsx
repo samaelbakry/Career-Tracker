@@ -48,10 +48,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`transition-colors ${
-                pathname === link.href
-                  ? "font-bold text-[#1E3A8A]"
-                  : "font-medium text-[#64748B] hover:text-[#1E3A8A]"
+              className={`transition-colors ${ pathname === link.href ? "font-bold text-[#1E3A8A]" : "font-medium text-[#64748B] hover:text-[#1E3A8A]"
               }`}
             >
               {link.label}

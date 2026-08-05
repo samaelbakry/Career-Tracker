@@ -9,19 +9,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAppSelector } from "@/store/hooks/redux-hooks";
+import { selectedUser } from "@/store/slices/authSlice";
 import { Job } from "@/types/jobs";
 import { ArrowUpRight, Banknote, Building2, Clock, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function JobCard({ job }: { job: Job }) {
+  const role = useAppSelector(selectedUser)?.role;
+  const isEmployer = role === "employer";
   const navigate = useRouter();
 
-  const formatSalary = (amount: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "EGP",
-      maximumFractionDigits: 0,
-    }).format(amount);
+  const formatSalary = (amount?: number | null) =>
+  amount ? new Intl.NumberFormat("en-EG", {
+  style: "currency",
+  currency: "EGP",
+  maximumFractionDigits: 0,
+}).format(amount) : "Negotiable";
 
   const formattedDate = new Date(job?.created_at).toLocaleDateString("en-US", {
     month: "short",
@@ -30,7 +34,7 @@ export default function JobCard({ job }: { job: Job }) {
 
   return (
     <Card
-      onClick={() => navigate.push(`/jobs/${job.id}`)}
+      onClick={isEmployer ? undefined : () => navigate.push(`jobSeeker/jobs/${job.id}`)}
       className="group relative w-full max-w-md cursor-pointer overflow-hidden rounded-3xl border border-dashed border-zinc-300/80 bg-zinc-50/50 p-1 transition-all duration-300 hover:border-solid hover:border-zinc-400 hover:bg-white hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-950/40 dark:hover:border-zinc-700 dark:hover:bg-zinc-950"
     >
       <div className="rounded-[20px] bg-white p-5 dark:bg-zinc-900/90">
@@ -108,7 +112,8 @@ export default function JobCard({ job }: { job: Job }) {
             <div className="flex items-center gap-2">
               <Banknote className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <span className="text-xs font-bold text-emerald-950 dark:text-emerald-200">
-                {formatSalary(job?.salary_min)} – {formatSalary(job?.salary_max)}
+                {formatSalary(job?.salary_min)} –{" "}
+                {formatSalary(job?.salary_max)}
               </span>
             </div>
             <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700/70 dark:text-emerald-400/70">
@@ -118,10 +123,14 @@ export default function JobCard({ job }: { job: Job }) {
         </CardContent>
 
         <CardFooter className="mt-4 p-0">
-          <Button className="w-full h-11 rounded-xl bg-zinc-100 font-semibold text-zinc-900 shadow-none transition-all duration-300 hover:bg-zinc-900 hover:text-white dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-zinc-900">
-            Apply Now
-            <ArrowUpRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Button>
+          {isEmployer ? (
+            ""
+          ) : (
+            <Button className="w-full h-11 rounded-xl bg-zinc-100 font-semibold text-zinc-900 shadow-none transition-all duration-300 hover:bg-zinc-900 hover:text-white dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-zinc-900">
+              Apply Now
+              <ArrowUpRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Button>
+          )}
         </CardFooter>
       </div>
     </Card>
