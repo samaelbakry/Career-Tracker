@@ -48,3 +48,16 @@ export async function searchCompany(query: string) {
 
   return data as Company[];
 }
+
+export async function getCompanyOwner(userId: string) {
+   const {data , error } = await supabase
+  .from("companies")
+  .select("id")
+  .eq("owner_id" , userId)
+  .single()
+
+  if (error) throw new Error(error.message);
+
+  return data as Company
+}
+

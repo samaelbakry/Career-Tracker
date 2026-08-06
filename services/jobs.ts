@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { Job } from "@/types/jobs";
+import { CreateJobT, Job } from "@/types/jobs";
 
 export async function getAllJobs() {
   const { data, error } = await supabase
@@ -13,9 +13,7 @@ export async function getAllJobs() {
     )
     .eq("status", "open");
 
-  if (error) {
-    throw new Error(error.message);
-  }
+  if (error) throw new Error(error.message);
 
   return data as Job[];
 }
@@ -27,15 +25,12 @@ export async function getJobDetails(id:string):Promise <Job> {
       `
     *,
     company:companies(*)
-
         `,
     )
     .eq("id",id)
     .single()
 
-  if (error) {
-    throw new Error(error.message);
-  }
+  if (error) throw new Error(error.message);
 
   return data as Job;
 }
@@ -64,9 +59,43 @@ export async function getJobsByCompany(companyId: string): Promise<Job[]> {
     )
     .eq("company_id", companyId);
 
-  if (error) {
-    throw new Error(error.message);
-  }
+  if (error) throw new Error(error.message);
 
   return data as Job[];
+}
+
+export async function createJob(values:CreateJobT , companyId:string , ownerId: string
+) {
+  const {data , error} = await supabase
+  .from("jobs")
+  .insert({
+    ...values,
+    company_id:companyId,
+    owner_id: ownerId
+  })
+  .select()
+  .single()
+
+  if (error) throw new Error(error.message);
+
+  return data as Job
+}
+
+export async function getEmployerJobs(ownerId: string) {
+  const { data, error } = await supabase
+    .from("jobs")
+    .select(`
+      *,
+      company:companies(
+        id,
+        name,
+        logo_url
+      )
+    `)
+    .eq("owner_id", ownerId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }

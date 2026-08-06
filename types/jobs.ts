@@ -19,3 +19,15 @@ export type Job = {
 
   company: Company;
 };
+
+export type CreateJobT = {
+  title: string;
+  description: string;
+  employment_type: string;
+  experience_level: string;
+  location: string;
+  salary_min: number;
+  salary_max: number;
+  status: "open" | "closed";
+  company_id: string;
+};

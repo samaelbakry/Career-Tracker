@@ -3,13 +3,13 @@
 import CompanyCard from "@/components/compnaies/CompanyCard";
 import { CompanyFormDialog } from "@/components/compnaies/CompanyFormDialog";
 import CardSkeleton from "@/components/jobs/CardSkeleton";
+import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
 import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/useFetch";
 import { getCompanies, searchCompany } from "@/services/companies";
 import { Company } from "@/types/companies";
 import {
   Building2,
-  PlusCircle,
   Search,
   X
 } from "lucide-react";
@@ -17,7 +17,6 @@ import { useState } from "react";
 
 export default function CompaniesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const {
     data: companies,
@@ -50,17 +49,7 @@ export default function CompaniesPage() {
                 Discover top organizations, hiring insights, and workplace
                 profiles.
               </p>
-              <button
-                onClick={() => setIsDialogOpen((prev) => !prev)}
-                className="bg-indigo-500 text-gray-200 flex items-center justify-center gap-1 px-4 py-1 cursor-pointer rounded-lg shadow hover:bg-indigo-700 transition duration-500"
-              >
-                <PlusCircle />
-                Create yours
-              </button>
-              <CompanyFormDialog
-                open={isDialogOpen}
-                onOpenChange={setIsDialogOpen}
-              />
+              <DialogButtonTrigger Component={CompanyFormDialog}/>
             </div>
           </div>
           <div className="relative flex items-center rounded-2xl bg-white p-1.5 border border-stone-200 dark:border-slate-800 shadow-md shadow-stone-200/50 dark:shadow-none transition-all focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10">

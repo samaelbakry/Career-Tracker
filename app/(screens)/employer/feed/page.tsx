@@ -6,6 +6,8 @@ import { Briefcase, Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CardSkeleton from "@/components/jobs/CardSkeleton";
 import JobCard from "@/components/jobs/JobCard";
+import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
+import JobFormDialog from "@/components/jobs/JobFormDialog";
 
 export default function EmployerFeed() {
   const { data: jobs, isLoading } = useFetch({
@@ -40,10 +42,7 @@ export default function EmployerFeed() {
             </span>
           </div>
 
-          <Button className="flex items-center gap-2 rounded-2xl bg-[#6C4FD6] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-[#5b40c2]">
-            <Plus className="h-4 w-4" />
-            Post New Job
-          </Button>
+         <DialogButtonTrigger Component={JobFormDialog} />
         </div>
       </div>
 

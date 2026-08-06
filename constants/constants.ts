@@ -42,7 +42,6 @@ export const navLinks = {
   ],
   employer: [
     { href: "/employer/feed", label: "Feed" },
-    { href: "/employer/employerJobOffers", label: "My Jobs" },
     { href: "/employer/postJob", label: "Post Job" },
     { href: "/employer/companies", label: "Companies" },
     { href: "/employer/dashboard", label: "Dashboard" },
