@@ -42,7 +42,7 @@ export default function EmployerFeed() {
             </span>
           </div>
 
-         <DialogButtonTrigger Component={JobFormDialog} />
+         <DialogButtonTrigger Component={JobFormDialog} componentProps={{mode:"create" as const}} />
         </div>
       </div>
 

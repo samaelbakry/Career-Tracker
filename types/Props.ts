@@ -1,4 +1,9 @@
+import { Job } from "./jobs";
+
 export type FormDialogProps = {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
+  mode: "create" | "edit";
+  job?: Job;
 }
+

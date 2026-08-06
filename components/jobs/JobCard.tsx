@@ -14,18 +14,25 @@ import { selectedUser } from "@/store/slices/authSlice";
 import { Job } from "@/types/jobs";
 import { ArrowUpRight, Banknote, Building2, Clock, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
+import DialogButtonTrigger from "../ui/DialogButtonTrigger";
+import JobFormDialog from "./JobFormDialog";
+import DeleteJobButton from "./DeleteJobButton";
 
 export default function JobCard({ job }: { job: Job }) {
   const role = useAppSelector(selectedUser)?.role;
+  const userId = useAppSelector(selectedUser)?.id;
   const isEmployer = role === "employer";
+  const canMangeJob = isEmployer && userId === job.owner_id
   const navigate = useRouter();
 
   const formatSalary = (amount?: number | null) =>
-  amount ? new Intl.NumberFormat("en-EG", {
-  style: "currency",
-  currency: "EGP",
-  maximumFractionDigits: 0,
-}).format(amount) : "Negotiable";
+    amount
+      ? new Intl.NumberFormat("en-EG", {
+          style: "currency",
+          currency: "EGP",
+          maximumFractionDigits: 0,
+        }).format(amount)
+      : "Negotiable";
 
   const formattedDate = new Date(job?.created_at).toLocaleDateString("en-US", {
     month: "short",
@@ -34,12 +41,14 @@ export default function JobCard({ job }: { job: Job }) {
 
   return (
     <Card
-      onClick={isEmployer ? undefined : () => navigate.push(`jobSeeker/jobs/${job.id}`)}
+      onClick={
+        isEmployer ? undefined : () => navigate.push(`jobSeeker/jobs/${job.id}`)
+      }
       className="group relative w-full max-w-md cursor-pointer overflow-hidden rounded-3xl border border-dashed border-zinc-300/80 bg-zinc-50/50 p-1 transition-all duration-300 hover:border-solid hover:border-zinc-400 hover:bg-white hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-950/40 dark:hover:border-zinc-700 dark:hover:bg-zinc-950"
     >
       <div className="rounded-[20px] bg-white p-5 dark:bg-zinc-900/90">
         <CardHeader className="p-0 pb-4">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
             <div
               className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wider uppercase ${
                 job?.status === "open"
@@ -59,6 +68,13 @@ export default function JobCard({ job }: { job: Job }) {
               <Clock className="h-3 w-3" />
               <span>{formattedDate}</span>
             </div>
+
+            {canMangeJob && (
+              <div className="ml-auto ">
+                <DialogButtonTrigger Component={JobFormDialog} edit componentProps={{mode:"edit" as const , job}} />
+                <DeleteJobButton jobId={job.id} />
+              </div>
+            )}
           </div>
 
           <div className="mt-4 flex items-start gap-3.5">

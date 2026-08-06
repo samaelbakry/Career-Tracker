@@ -18,6 +18,7 @@ export type Job = {
   created_at: string;
 
   company: Company;
+  owner_id:string
 };
 
 export type CreateJobT = {

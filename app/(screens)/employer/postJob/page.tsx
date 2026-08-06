@@ -46,7 +46,7 @@ export default function PostJob() {
               </p>
               
               <div className="flex justify-center sm:justify-end shrink-0">
-                <DialogButtonTrigger Component={JobFormDialog} />
+                <DialogButtonTrigger Component={JobFormDialog}  componentProps={{mode:"create" as const}}/>
               </div>
             </div>
           </div>

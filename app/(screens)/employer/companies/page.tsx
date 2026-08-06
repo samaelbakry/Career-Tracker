@@ -49,7 +49,7 @@ export default function CompaniesPage() {
                 Discover top organizations, hiring insights, and workplace
                 profiles.
               </p>
-              <DialogButtonTrigger Component={CompanyFormDialog}/>
+              <DialogButtonTrigger Component={CompanyFormDialog} componentProps={{mode:"create" as const}}/>
             </div>
           </div>
           <div className="relative flex items-center rounded-2xl bg-white p-1.5 border border-stone-200 dark:border-slate-800 shadow-md shadow-stone-200/50 dark:shadow-none transition-all focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10">

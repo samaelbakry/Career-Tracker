@@ -11,7 +11,8 @@ export async function getAllJobs() {
 
         `,
     )
-    .eq("status", "open");
+    .eq("status", "open")
+    .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
 
@@ -98,4 +99,25 @@ export async function getEmployerJobs(ownerId: string) {
   if (error) throw new Error(error.message);
 
   return data;
+}
+export async function updateJob(id:string,values:Partial<CreateJobT>){
+    const {data,error}=await supabase
+    .from("jobs")
+    .update(values)
+    .eq("id",id)
+    .select()
+    .single();
+
+    if(error) throw error;
+
+    return data;
+}
+
+export async function deleteJob(id:string){
+    const {error}=await supabase
+    .from("jobs")
+    .delete()
+    .eq("id",id);
+
+    if(error) throw error;
 }

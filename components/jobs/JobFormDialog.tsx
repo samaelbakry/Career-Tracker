@@ -14,17 +14,18 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useFetch } from "@/hooks/useFetch";
 import { getCompanyOwner } from "@/services/companies";
-import { createJob } from "@/services/jobs";
+import { createJob, updateJob } from "@/services/jobs";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
 import { CreateJobT } from "@/types/jobs";
 import { FormDialogProps } from "@/types/Props";
 import { useQueryClient } from "@tanstack/react-query";
 import { Briefcase, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export default function JobFormDialog({ open, onOpenChange }: FormDialogProps) {
+export default function JobFormDialog({ open, onOpenChange , mode , job }: FormDialogProps) {
   const userId = useAppSelector(selectedUser)?.id;
   const queryClient = useQueryClient();
 
@@ -54,6 +55,24 @@ export default function JobFormDialog({ open, onOpenChange }: FormDialogProps) {
     },
   });
 
+  useEffect(() => {
+   if(mode === "edit" && job){
+    reset({
+      title: job.title,
+      description: job.description,
+      location: job.location,
+      employment_type: job.employment_type,
+      experience_level: job.experience_level,
+      salary_min: job.salary_min,
+      salary_max: job.salary_max,
+      status: job.status,
+    });
+   }else{
+    reset()
+   }
+  }, [])
+  
+
   const onSubmit = async (data: CreateJobT) => {
     if (!companyId || !userId) {
       toast.error("Company profile not found. Please create a company profile first.");
@@ -67,17 +86,27 @@ export default function JobFormDialog({ open, onOpenChange }: FormDialogProps) {
         salary_min: Number(data.salary_min),
         salary_max: Number(data.salary_max),
       };
-
-      await createJob(payload, companyId , userId);
+      if (mode === "create") {
+        await createJob(payload, companyId, userId);
+        toast.success("Job posting created successfully!");
+      } else if (job?.id) {
+        await updateJob(job.id, payload);
+        toast.success("Job updated successfully!");
+      } else {
+        toast.error("Unable to update job: job ID is missing.");
+      }
+      
       queryClient.invalidateQueries({ queryKey: ["employerJobs"] });
-      toast.success("Job posting created successfully!");
-      reset();
       onOpenChange(false);
+      reset();
+
     } catch (error) {
       console.error("Failed to create job:", error);
       toast.error("Failed to create job posting. Please try again.");
     }
   };
+
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -153,7 +182,7 @@ export default function JobFormDialog({ open, onOpenChange }: FormDialogProps) {
                 {...register("employment_type")}
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring text-foreground"
               >
-                <option value="Full Time" selected>Full Time</option>
+                <option value="Full Time" defaultChecked>Full Time</option>
                 <option value="Part Time">Part Time</option>
                 <option value="Internship">Internship</option>
                 <option value="Contract">Contract</option>
@@ -173,7 +202,7 @@ export default function JobFormDialog({ open, onOpenChange }: FormDialogProps) {
                 {...register("experience_level")}
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring text-foreground"
               >
-                <option value="Junior" selected>Junior</option>
+                <option value="Junior" defaultChecked>Junior</option>
                 <option value="Mid">Mid</option>
                 <option value="Senior">Senior</option>
               </select>
@@ -260,8 +289,9 @@ export default function JobFormDialog({ open, onOpenChange }: FormDialogProps) {
               ) : isLoadingCompany ? (
                 "Loading Company..."
               ) : (
-                "Post Job"
+               mode ? "Update" : "Post"
               )}
+
             </Button>
           </DialogFooter>
         </form>
