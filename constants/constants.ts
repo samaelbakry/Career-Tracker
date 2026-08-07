@@ -41,10 +41,10 @@ export const navLinks = {
     { href: "/jobSeeker/search", label: "Search" },
   ],
   employer: [
+    { href: "/employer/dashboard", label: "Dashboard" },
     { href: "/employer/feed", label: "Feed" },
     { href: "/employer/postJob", label: "Post Job" },
     { href: "/employer/companies", label: "Companies" },
-    { href: "/employer/dashboard", label: "Dashboard" },
   ],
 };
 

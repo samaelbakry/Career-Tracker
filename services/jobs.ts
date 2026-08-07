@@ -82,24 +82,6 @@ export async function createJob(values:CreateJobT , companyId:string , ownerId: 
   return data as Job
 }
 
-export async function getEmployerJobs(ownerId: string) {
-  const { data, error } = await supabase
-    .from("jobs")
-    .select(`
-      *,
-      company:companies(
-        id,
-        name,
-        logo_url
-      )
-    `)
-    .eq("owner_id", ownerId)
-    .order("created_at", { ascending: false });
-
-  if (error) throw new Error(error.message);
-
-  return data;
-}
 export async function updateJob(id:string,values:Partial<CreateJobT>){
     const {data,error}=await supabase
     .from("jobs")

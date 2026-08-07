@@ -5,7 +5,7 @@ import JobCard from "@/components/jobs/JobCard";
 import JobFormDialog from "@/components/jobs/JobFormDialog";
 import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
 import { useFetch } from "@/hooks/useFetch";
-import { getEmployerJobs } from "@/services/jobs";
+import { getEmployerJobs } from "@/services/employer";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
 import { Briefcase, AlertCircle, PlusCircle } from "lucide-react";

@@ -1,6 +1,6 @@
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import DashboardStats from "@/components/dashboard/DashboardStats";
-import UserApplicationsList from "@/components/dashboard/UseApplicationList";
+import DashboardHeader from "@/components/dashboard/JobSeeker/DashboardHeader";
+import DashboardStats from "@/components/dashboard/JobSeeker/DashboardStats";
+import UserApplicationsList from "@/components/dashboard/JobSeeker/UserApplicationList";
 
 export default function Dashboard() {
   return (
