@@ -1,31 +1,63 @@
-import React from 'react'
-import NextLink from 'next/link'
-import { Application } from '@/types/applications'
-import { getStatusBadge } from '@/constants/constants'
-import { Briefcase, Calendar, ExternalLink, FileText, User } from 'lucide-react'
+"use client";
+import { useState } from "react";
+import NextLink from "next/link";
+import { Application } from "@/types/applications";
+import {
+  Briefcase,
+  Calendar,
+  ExternalLink,
+  FileText,
+  User,
+} from "lucide-react";
+import {
+  ApplicationStatus,
+  UpdateApplicationStatus,
+} from "@/services/employer";
+import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+} from "@/components/ui/select";
+import { getApplictaionStatusBadge } from "@/constants/constants";
+import { formattedDate } from "@/lib/helpers";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ActiveCoverLetterData {
-  candidateName: string
-  text: string
+  candidateName: string;
+  text: string;
 }
 
 interface CandidateStatusCardProps {
-  applications: Application[]
-  setActiveCoverLetter: (data: ActiveCoverLetterData) => void
+  applications: Application[];
+  setActiveCoverLetter: (data: ActiveCoverLetterData) => void;
 }
 
-export default function CandidateStatusCard({
-  applications,
-  setActiveCoverLetter,
-}: CandidateStatusCardProps) {
-  const formatDate = (isoString?: string) => {
-    if (!isoString) return 'N/A'
-    return new Date(isoString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    })
-  }
+export default function CandidateStatusCard({ applications , setActiveCoverLetter }: CandidateStatusCardProps) {
+
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const queryClient =  useQueryClient()
+
+  const handleApplictaionUpdate = async (
+    applicataionId: string,
+    status: ApplicationStatus,
+  ) => {
+    try {
+      setUpdatingId(applicataionId);
+      await UpdateApplicationStatus(applicataionId, status);
+      toast.success("Application status updated successfully");
+      queryClient.invalidateQueries({queryKey:["getEmployerApplications"]})
+    } catch (error) {
+      console.error("Failed to update application status:", error);
+      toast.error("Failed to update application status");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -56,10 +88,13 @@ export default function CandidateStatusCard({
                   </div>
                   <div>
                     <div className="font-semibold text-slate-900 dark:text-white">
-                      {application.profiles?.full_name || 'Unknown Candidate'}
+                      {application.profiles?.full_name || "Unknown Candidate"}
                     </div>
                     <div className="font-mono text-xs text-slate-400">
-                      ID: {application.user_id ? `${application.user_id.slice(0, 8)}...` : 'N/A'}
+                      ID:{" "}
+                      {application.user_id
+                        ? `${application.user_id.slice(0, 8)}...`
+                        : "N/A"}
                     </div>
                   </div>
                 </div>
@@ -69,25 +104,52 @@ export default function CandidateStatusCard({
                 <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                   <Briefcase className="h-4 w-4 shrink-0 text-slate-400" />
                   <span className="font-medium">
-                    {application.jobs?.title || 'Position Unavailable'}
+                    {application.jobs?.title || "Position Unavailable"}
                   </span>
                 </div>
               </td>
 
               <td className="px-6 py-4">
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${getStatusBadge(
-                    application.status
-                  )}`}
+                <Select
+                  value={application.status}
+                  disabled={updatingId === application.id}
+                  onValueChange={(value) =>
+                    handleApplictaionUpdate(
+                      application.id,
+                      value as ApplicationStatus,
+                    )
+                  }
                 >
-                  {application.status}
-                </span>
+                  <SelectTrigger
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium outline-none cursor-pointer ring-1 ring-inset ${getApplictaionStatusBadge(
+                      application.status,
+                    )} ${
+                      updatingId === application.id
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                  >
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Application Status</SelectLabel>
+
+                      <SelectItem value="Applied">Applied</SelectItem>
+                      <SelectItem value="Reviewing">Reviewing</SelectItem>
+                      <SelectItem value="Interview">Interview</SelectItem>
+                      <SelectItem value="Offer">Offer</SelectItem>
+                      <SelectItem value="Rejected">Rejected</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </td>
 
               <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                 <div className="flex items-center gap-1.5 text-xs">
                   <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                  <span>{formatDate(application.applied_at)}</span>
+                  <span>{formattedDate(application.applied_at)}</span>
                 </div>
               </td>
 
@@ -99,8 +161,8 @@ export default function CandidateStatusCard({
                       onClick={() =>
                         setActiveCoverLetter({
                           candidateName:
-                            application.profiles?.full_name || 'Candidate',
-                          text: application.cover_letter || '',
+                            application.profiles?.full_name || "Candidate",
+                          text: application.cover_letter || "",
                         })
                       }
                       className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
@@ -133,5 +195,5 @@ export default function CandidateStatusCard({
         </tbody>
       </table>
     </div>
-  )
+  );
 }

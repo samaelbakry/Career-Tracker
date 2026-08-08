@@ -48,21 +48,34 @@ export default function JobStatus() {
           <span>Failed to load job statistics.</span>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, index) => (
-                <CardSkeleton key={index} />
-              ))
-            : statCards.map((stat) => (
-                <JobStatusCard
-                  key={stat.id}
-                  title={stat.title}
-                  count={stat.count}
-                  description={stat.description}
-                  icon={stat.icon}
-                />
-              ))}
-        </div>
+        <>
+          <div className="space-y-1.5 mb-5">
+            <h1 className="text-3xl sm:text-2xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+              <span className="bg-linear-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
+                Job Postings & Status
+              </span>
+            </h1>
+            <p className="text-base text-slate-500">
+              Monitor active listings, track recruitment status, and manage open
+              vacancies.
+            </p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+            {isLoading
+              ? Array.from({ length: 3 }).map((_, index) => (
+                  <CardSkeleton key={index} />
+                ))
+              : statCards.map((stat) => (
+                  <JobStatusCard
+                    key={stat.id}
+                    title={stat.title}
+                    count={stat.count}
+                    description={stat.description}
+                    icon={stat.icon}
+                  />
+                ))}
+          </div>
+        </>
       )}
     </>
   );

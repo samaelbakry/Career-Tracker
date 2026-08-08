@@ -33,6 +33,29 @@ export const getStatusBadge = (status: string) => {
   }
 };
 
+// employer application status 
+export const getApplictaionStatusBadge = (status: string) => {
+  switch (status) {
+    case "Applied":
+      return "bg-blue-50 text-blue-700 ring-blue-600/20";
+
+    case "Reviewing":
+      return "bg-yellow-50 text-yellow-700 ring-yellow-600/20";
+
+    case "Interview":
+      return "bg-purple-50 text-purple-700 ring-purple-600/20";
+
+    case "Offer":
+      return "bg-emerald-50 text-emerald-700 ring-emerald-600/20";
+
+    case "Rejected":
+      return "bg-red-50 text-red-700 ring-red-600/20";
+
+    default:
+      return "bg-gray-50 text-gray-700 ring-gray-600/20";
+  }
+};
+
 // navbar links 
 export const navLinks = {
   job_seeker: [

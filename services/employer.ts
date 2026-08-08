@@ -1,6 +1,13 @@
 import { supabase } from "@/lib/supabase";
 import { Company } from "@/types/companies";
 
+export type ApplicationStatus =
+  | "Applied"
+  | "Reviewing"
+  | "Interview"
+  | "Offer"
+  | "Rejected";
+
 export async function getEmployerJobs(ownerId: string) {
   const { data, error } = await supabase
     .from("jobs")
@@ -37,7 +44,6 @@ export async function getEmployerJobStats(ownerId: string){
 }
 
 export async function getEmployerApplications(companyId: string) {
-  console.log("companyId:", companyId);
 
   const { data, error } = await supabase
     .from("applications")
@@ -68,6 +74,20 @@ export async function getEmployerApplications(companyId: string) {
 
   return data ?? [];
 }
+
+export async function UpdateApplicationStatus(applicationId: string , status:ApplicationStatus) {
+   const { data, error } = await supabase
+    .from("applications")
+    .update({ status })
+    .eq("id", applicationId)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return data 
+}
+
 
 export async function getCompanyByOwner(ownerId: string) {
    const {data , error } = await supabase
