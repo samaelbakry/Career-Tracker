@@ -87,14 +87,14 @@ export default function CompanyDetailsPage() {
         </div>
 
         <section className="relative overflow-hidden bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-3xl border border-stone-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-8">          <div
-            className="pointer-events-none absolute -top-16 -right-16 z-0 h-72 w-72 rounded-full bg-gradient-to-tr from-blue-500/10 via-indigo-500/10 to-purple-500/10 blur-3xl"
+            className="pointer-events-none absolute -top-16 -right-16 z-0 h-72 w-72 rounded-full bg-linear-to-tr from-blue-500/10 via-indigo-500/10 to-purple-500/10 blur-3xl"
             aria-hidden="true"
           />
 
           <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-stone-100 dark:border-slate-800/80">
             <div className="flex items-center space-x-5">
               <div
-                className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${getAvatarGradient(
+                className={`w-20 h-20 rounded-2xl bg-linear-to-br ${getAvatarGradient(
                   company.name
                 )} text-white font-extrabold text-3xl flex items-center justify-center shadow-md shrink-0 border border-white/20 select-none`}
               >

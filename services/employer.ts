@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { Company } from "@/types/companies";
 
 export async function getEmployerJobs(ownerId: string) {
   const { data, error } = await supabase
@@ -30,9 +31,19 @@ export async function getEmployerJobStats(ownerId: string){
     const totalJobs = data?.length
 
     const activeJobs = data?.filter((job)=>job.status === "open").length
-    const closedJobs = data?.filter((job)=>job.status === "close").length
+    const closedJobs = data?.filter((job)=>job.status === "close").length 
 
-    
+   return {totalJobs , activeJobs , closedJobs};
+}
 
-  return {totalJobs , activeJobs , closedJobs};
+export async function getCompanyByOwner(ownerId: string) {
+   const {data , error } = await supabase
+  .from("companies")
+  .select("*")
+  .eq("owner_id" , ownerId)
+  .single()
+
+  if (error) throw new Error(error.message);
+
+  return data as Company
 }
