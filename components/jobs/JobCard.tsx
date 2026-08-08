@@ -42,7 +42,7 @@ export default function JobCard({ job }: { job: Job }) {
   return (
     <Card
       onClick={
-        isEmployer ? undefined : () => navigate.push(`jobSeeker/jobs/${job.id}`)
+        isEmployer ? undefined : () => navigate.push(`/jobSeeker/jobs/${job.id}`)
       }
       className="group relative w-full max-w-md cursor-pointer overflow-hidden rounded-3xl border border-dashed border-zinc-300/80 bg-zinc-50/50 p-1 transition-all duration-300 hover:border-solid hover:border-zinc-400 hover:bg-white hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-950/40 dark:hover:border-zinc-700 dark:hover:bg-zinc-950"
     >

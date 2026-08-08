@@ -61,7 +61,7 @@ export default function Application() {
 
       toast("Application submitted successfully.");
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push("/jobSeeker/dashboard");
       }, 1000);
 
       reset({

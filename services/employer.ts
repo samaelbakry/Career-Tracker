@@ -36,6 +36,39 @@ export async function getEmployerJobStats(ownerId: string){
    return {totalJobs , activeJobs , closedJobs};
 }
 
+export async function getEmployerApplications(companyId: string) {
+  console.log("companyId:", companyId);
+
+  const { data, error } = await supabase
+    .from("applications")
+     .select(`
+      id,
+      user_id,
+      job_id,
+      resume_url,
+      cover_letter,
+      status,
+      applied_at,
+      profiles!applications_user_id_fkey1 (
+        id,
+        full_name
+      ),
+      jobs!inner (
+        id,
+        title,
+        company_id
+      )
+    `)
+    .eq("jobs.company_id", companyId);
+
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ?? [];
+}
+
 export async function getCompanyByOwner(ownerId: string) {
    const {data , error } = await supabase
   .from("companies")
@@ -47,3 +80,5 @@ export async function getCompanyByOwner(ownerId: string) {
 
   return data as Company
 }
+
+

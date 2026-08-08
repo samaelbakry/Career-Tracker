@@ -43,9 +43,9 @@ export default function LoginForm() {
       );
       toast.success("Logged in successfully!");
       if (profile.role === "employer") {
-        navigate.push("/employer/dashboard");
+        navigate.push("/employer/feed");
       } else {
-        navigate.push("/dashboard");
+        navigate.push("/jobSeeker/jobs");
       }
     } catch (error) {
       console.log(error);

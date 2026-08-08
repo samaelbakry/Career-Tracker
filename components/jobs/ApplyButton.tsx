@@ -12,7 +12,7 @@ export default function ApplyButton({job}:{job:Job}) {
 
   const router = useRouter()
    const handleClick = () => {
-    router.push(`/application?id=${jobId}&title=${jobTitle}&company=${companyName}&location=${jobLocation}`);
+    router.push(`/jobSeeker/application?id=${jobId}&title=${jobTitle}&company=${companyName}&location=${jobLocation}`);
   };
 
   return (

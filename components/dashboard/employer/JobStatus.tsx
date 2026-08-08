@@ -48,7 +48,7 @@ export default function JobStatus() {
           <span>Failed to load job statistics.</span>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-10">
           {isLoading
             ? Array.from({ length: 3 }).map((_, index) => (
                 <CardSkeleton key={index} />
