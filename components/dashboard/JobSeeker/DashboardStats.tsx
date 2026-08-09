@@ -30,7 +30,7 @@ export default function DashboardStats() {
     },
     {
       title: "Pending",
-      value: stats?.pending ?? 0,
+      value: stats?.Reviewing ?? 0,
       icon: Clock,
       color: "text-amber-600",
       bgColor: "bg-amber-50",
@@ -38,15 +38,15 @@ export default function DashboardStats() {
     },
     {
       title: "Interview",
-      value: stats?.interviewed ?? 0,
+      value: stats?.Interview ?? 0,
       icon: Video,
       color: "text-purple-600",
       bgColor: "bg-purple-50",
       borderColor: "border-purple-100",
     },
     {
-      title: "Accepted",
-      value: stats?.accepted ?? 0,
+      title: "Accepted-Offer",
+      value: stats?.Offer ?? 0,
       icon: CheckCircle2,
       color: "text-emerald-600",
       bgColor: "bg-emerald-50",

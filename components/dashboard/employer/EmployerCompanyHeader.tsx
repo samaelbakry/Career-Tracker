@@ -55,6 +55,7 @@ export default function EmployerCompanyHeader() {
               src={company.logo_url}
               alt={company.name}
               className="h-full w-full rounded-lg object-contain p-2"
+              onError ={(e)=>{e.currentTarget.style.display = "none"}}
             />
           ) : (
             <Building2 className="h-7 w-7 text-slate-500 sm:h-9 sm:w-9" />

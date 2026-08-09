@@ -55,7 +55,7 @@ export default function UserApplicationsList() {
             </div>
           ))
         ) : applications && applications.length > 0 ? (
-          applications.map((app) => {
+            applications.map((app) => {
             const statusConfig = getStatusBadge(app.status);
             const StatusIcon = statusConfig.icon;
             const company = app.job?.company;
@@ -72,6 +72,7 @@ export default function UserApplicationsList() {
                         src={company.logo_url}
                         alt={company?.name ?? "Company"}
                         className="h-full w-full object-cover"
+                        onError={(e)=>{e.currentTarget.style.display = "none"}}
                       />
                     ) : (
                       <Building2 size={20} />

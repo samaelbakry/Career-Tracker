@@ -9,6 +9,6 @@ export type Application = {
   jobs?: Job;
   profiles?: Profile;
   resume_url?: string;
-  status: "Applied" | "Reviewing" | "Interviewed" | "Accepted" | "Rejected" | string;
+  status: "Applied" | "Reviewing" | "Interview" | "offer" | "Rejected" | string;
   user_id: string;
 }

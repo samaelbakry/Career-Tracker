@@ -2,18 +2,25 @@ import { supabase } from "@/lib/supabase";
 
 type Props = {
   jobId: string;
-  userId: string;
   resumeUrl: string;
   coverLetter: string;
-} 
+};
 
-export async function applyForJob({jobId,userId,resumeUrl,coverLetter}: Props) {
+export async function applyForJob({ jobId, resumeUrl, coverLetter }: Props) {
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("User is not authenticated");
+  }
 
   const { data: existingApplication, error: checkError } = await supabase
     .from("applications")
     .select("id")
     .eq("job_id", jobId)
-    .eq("user_id", userId)
+    .eq("user_id", user.id)
     .maybeSingle();
 
   if (checkError) {
@@ -28,7 +35,7 @@ export async function applyForJob({jobId,userId,resumeUrl,coverLetter}: Props) {
     .from("applications")
     .insert({
       job_id: jobId,
-      user_id: userId,
+      user_id: user.id,
       resume_url: resumeUrl,
       cover_letter: coverLetter,
       status: "Applied",
@@ -37,6 +44,7 @@ export async function applyForJob({jobId,userId,resumeUrl,coverLetter}: Props) {
     .single();
 
   if (error) {
+    console.log(error);
     throw new Error(error.message);
   }
 
@@ -47,25 +55,26 @@ export async function getDashboardStats(userId: string) {
   const { data, error } = await supabase
     .from("applications")
     .select("*")
-    .eq("user_id", userId)
+    .eq("user_id", userId);
 
-     if (error) {
+  if (error) {
     throw new Error(error.message);
   }
 
   return {
-    applied: data.length ,
-    pending : data.filter((app: { status: string }) => app.status === "pending").length,
-    rejected : data.filter((app: { status: string }) => app.status === "rejected").length,
-    accepted : data.filter((app: { status: string }) => app.status === "accepted").length,
-    interviewed : data.filter((app: { status: string }) => app.status === "interviewed").length,
-  }
+    applied: data.length,
+    Reviewing: data.filter((app: { status: string }) => app.status === "Reviewing").length,
+    rejected: data.filter((app: { status: string }) => app.status === "rejected").length,
+    Offer: data.filter((app: { status: string }) => app.status === "Offer",).length,
+    Interview: data.filter((app: { status: string }) => app.status === "Interview").length,
+  };
 }
 
 export async function getUserApplications(userId: string) {
   const { data, error } = await supabase
     .from("applications")
-    .select(`
+    .select(
+      `
       *,
       job:jobs(
         id,
@@ -77,7 +86,8 @@ export async function getUserApplications(userId: string) {
           logo_url
         )
       )
-    `)
+    `,
+    )
     .eq("user_id", userId)
     .order("applied_at", { ascending: false });
 

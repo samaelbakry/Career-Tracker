@@ -1,18 +1,17 @@
-import { CheckCircle2, Clock, Video, XCircle } from "lucide-react";
+import { CheckCircle2, Clock, Handshake, Video, XCircle } from "lucide-react";
 
 // job_seeker dashboard 
 export const getStatusBadge = (status: string) => {
   const normalized = status?.toLowerCase() ?? "pending";
 
   switch (normalized) {
-    case "accepted":
+    case "applied":
       return {
-        label: "Accepted",
+        label: "Applied",
         icon: CheckCircle2,
         className: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
       };
     case "interview":
-    case "interviewed":
       return {
         label: "Interview",
         icon: Video,
@@ -24,9 +23,15 @@ export const getStatusBadge = (status: string) => {
         icon: XCircle,
         className: "bg-rose-50 text-rose-700 ring-rose-600/20",
       };
+    case "offer":
+      return {
+        label: "Offer",
+        icon: Handshake ,
+        className: "bg-rose-50 text-rose-700 ring-rose-600/20",
+      };
     default:
       return {
-        label: "Pending",
+        label: "Reviewing",
         icon: Clock,
         className: "bg-amber-50 text-amber-700 ring-amber-600/20",
       };

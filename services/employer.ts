@@ -38,7 +38,7 @@ export async function getEmployerJobStats(ownerId: string){
     const totalJobs = data?.length
 
     const activeJobs = data?.filter((job)=>job.status === "open").length
-    const closedJobs = data?.filter((job)=>job.status === "close").length 
+    const closedJobs = data?.filter((job)=>job.status === "closed").length 
 
    return {totalJobs , activeJobs , closedJobs};
 }

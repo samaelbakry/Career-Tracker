@@ -1,6 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/lib/supabase";
 import {
   applicationFormSchema,
   ApplicationFormValues,
@@ -49,11 +50,9 @@ export default function Application() {
       toast("Invalid job.");
       return;
     }
-
     try {
       const application = await applyForJob({
         jobId,
-        userId,
         resumeUrl: formData.resume_url,
         coverLetter: formData.cover_letter,
       });
@@ -220,7 +219,7 @@ export default function Application() {
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
             <button
-             onClick={() => router.back()}
+              onClick={() => router.back()}
               type="button"
               className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-100/80 active:bg-slate-200/70 transition-all focus:outline-none focus:ring-2 focus:ring-slate-200"
             >

@@ -17,6 +17,7 @@ export default function JobStatus() {
     enabled: !!userId,
   });
 
+ 
   const statCards = [
     {
       id: "total",
