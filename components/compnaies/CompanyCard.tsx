@@ -13,12 +13,22 @@ export default function CompanyCard({ company }: { company: Company }) {
       <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-blue-600 via-indigo-600 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div className="space-y-4">
         <div className="flex items-start space-x-4">
-          <div
-            className={`w-13 h-13 rounded-xl bg-linear-to-br ${getAvatarGradient(
-              company.name,
-            )} font-extrabold text-xl flex items-center justify-center shadow-sm shrink-0 border border-white/20 select-none`}
-          >
-            {company.name ? company.name.charAt(0).toUpperCase() : "?"}
+          <div className="size-9 rounded-xl overflow-hidden shrink-0 bg-gray-50 shadow">
+            {company?.logo_url ? (
+              <img
+                src={company.logo_url}
+                alt={company.name || "Company logo"}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div
+                className={`w-full h-full bg-linear-to-br ${getAvatarGradient(
+                  company?.name || "",
+                )} font-extrabold text-xl flex items-center justify-center shadow-sm border border-white/20 select-none`}
+              >
+                {company?.name ? company.name.charAt(0).toUpperCase() : "?"}
+              </div>
+            )}
           </div>
 
           <div className="space-y-1.5 overflow-hidden">

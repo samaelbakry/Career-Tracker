@@ -16,17 +16,19 @@ export default function AuthProvider({ children}: {children: React.ReactNode}) {
 
       if (!session) return;
 
-      const user = session.user;
-      const profile = await getProfile(user.id);
+      const authUser = session.user;
+      const profile = await getProfile(authUser.id);
+
       dispatch(
         setCredentials({
-            user: {
-              id: user.id,
-              name: user.user_metadata.full_name,
-              email: user.email!,
-              role: profile?.role as "job_seeker" | "employer",
-              created_at: user.created_at,
-            },
+             user: {
+            id: authUser.id,
+            name: profile.full_name,
+            email: authUser.email!,
+            role: profile.role as "job_seeker" | "employer",
+            avatar_url: profile.avatar_url ?? "",
+            created_at: authUser.created_at,
+          },
         }),
       );
     };
