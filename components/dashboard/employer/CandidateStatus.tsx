@@ -16,7 +16,7 @@ import CandidateStatusCard from "./CandidateStatusCard";
 
 export default function CandidateStatus() {
   const userId = useAppSelector(selectedUser)?.id;
-
+  const [activeInterview, setActiveInterview] = useState(false)
   const [activeCoverLetter, setActiveCoverLetter] = useState<{
     candidateName: string;
     text: string;
@@ -38,8 +38,7 @@ export default function CandidateStatus() {
     isError: applicationsError,
   } = useFetch({
     queryKey: ["getEmployerApplications", company?.id],
-    queryFn: () =>
-      company?.id ? getEmployerApplications(company.id) : Promise.resolve([]),
+    queryFn: () => company?.id ? getEmployerApplications(company.id) : Promise.resolve([]),
     enabled: !!company?.id,
   });
 

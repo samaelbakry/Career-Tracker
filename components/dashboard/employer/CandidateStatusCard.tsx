@@ -26,6 +26,8 @@ import {
 import { getApplictaionStatusBadge } from "@/constants/constants";
 import { formattedDate } from "@/lib/helpers";
 import { useQueryClient } from "@tanstack/react-query";
+import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
+import ScheduleInterviewDialog from "./ScheduleInterviewDialog";
 
 interface ActiveCoverLetterData {
   candidateName: string;
@@ -155,6 +157,7 @@ export default function CandidateStatusCard({ applications , setActiveCoverLette
 
               <td className="px-6 py-4 text-right">
                 <div className="flex items-center justify-end gap-2">
+                  {application.status === "Interview" && <DialogButtonTrigger Component={ScheduleInterviewDialog} componentProps={{application}} interview/>}
                   {application.cover_letter && (
                     <button
                       type="button"

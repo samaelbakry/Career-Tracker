@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, PlusCircle } from "lucide-react";
+import { Calendar1Icon, Edit, PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 
 export type DialogButtonTriggerProps<T> = {
@@ -12,45 +12,59 @@ export type DialogButtonTriggerProps<T> = {
   >;
   componentProps?: T;
   edit?: boolean;
+  interview?: boolean;
 };
 
-export default function DialogButtonTrigger<T>({Component,edit,componentProps}: DialogButtonTriggerProps<T>) {
+export default function DialogButtonTrigger<T>({
+  Component,
+  edit,
+  componentProps,
+  interview,
+}: DialogButtonTriggerProps<T>) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  return (
+   return (
     <>
-      {edit ? (
-        <>
-          <button
-            onClick={() => setIsDialogOpen(true)}
-            className="cursor-pointer group transition duration-500"
-          >
-            <Edit size={16} className="group-hover:text-indigo-500 text-gray-400 mr-2" />
-          </button>
-
-          <Component
-            {...(componentProps as T)}
-            open={isDialogOpen}
-            onOpenChange={setIsDialogOpen}
-          />
-        </>
-      ) : (
-        <>
-          <button
-            onClick={() => setIsDialogOpen(true)}
-            className="bg-indigo-500 text-gray-200 flex items-center justify-center gap-1 px-4 py-1 cursor-pointer rounded-lg shadow hover:bg-indigo-700 transition duration-500"
-          >
-            <PlusCircle />
-            Create yours
-          </button>
-
-          <Component
-            {...(componentProps as T)}
-            open={isDialogOpen}
-            onOpenChange={setIsDialogOpen}
-          />
-        </>
+      {edit && (
+        <button
+          type="button"
+          onClick={() => setIsDialogOpen(true)}
+          className="group cursor-pointer transition duration-500"
+        >
+          <Edit size={16} />
+        </button>
       )}
+
+      {!edit && !interview && (
+        <button
+          type="button"
+          onClick={() => setIsDialogOpen(true)}
+          className="flex items-center justify-center gap-1 rounded-lg bg-indigo-500 px-4 py-1 text-gray-200 shadow transition duration-500 hover:bg-indigo-700"
+        >
+          <PlusCircle />
+          Create yours
+        </button>
+      )}
+
+      {interview && (
+        <button
+          type="button"
+          onClick={() => setIsDialogOpen(true)}
+          className="group flex items-center justify-center gap-1 rounded-lg bg-indigo-400 px-3 py-1 text-gray-200 shadow transition duration-500 hover:bg-indigo-300"
+        >
+          <Calendar1Icon
+            size={16}
+            className="mr-1 text-indigo-100 group-hover:text-white"
+          />
+          <span className="text-xs font-medium">Schedule</span>
+        </button>
+      )}
+
+      <Component
+        {...(componentProps as T)}
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+      />
     </>
   );
 }
