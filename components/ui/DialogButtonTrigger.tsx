@@ -29,7 +29,7 @@ export default function DialogButtonTrigger<T>({
         <button
           type="button"
           onClick={() => setIsDialogOpen(true)}
-          className="group cursor-pointer transition duration-500"
+          className="group cursor-pointer transition duration-500 mr-2"
         >
           <Edit size={16} />
         </button>

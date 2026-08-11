@@ -17,6 +17,7 @@ export default function DashboardStats() {
   const { data: stats, isLoading } = useFetch({
     queryFn: () => getDashboardStats(userId!),
     queryKey: ["dashboardStats", userId],
+    enabled:!!userId
   });
 
   const cards = [

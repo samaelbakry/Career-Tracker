@@ -65,7 +65,7 @@ export async function getDashboardStats(userId: string) {
     applied: data.length,
     Reviewing: data.filter((app: { status: string }) => app.status === "Reviewing").length,
     rejected: data.filter((app: { status: string }) => app.status === "rejected").length,
-    Offer: data.filter((app: { status: string }) => app.status === "Offer",).length,
+    Offer: data.filter((app: { status: string }) => app.status === "Offer").length,
     Interview: data.filter((app: { status: string }) => app.status === "Interview").length,
   };
 }
@@ -73,25 +73,43 @@ export async function getDashboardStats(userId: string) {
 export async function getUserApplications(userId: string) {
   const { data, error } = await supabase
     .from("applications")
-    .select(
-      `
-      *,
-      job:jobs(
+    .select(`
+      id,
+      status,
+      applied_at,
+      resume_url,
+      cover_letter,
+
+      job:jobs (
         id,
         title,
         location,
-        company:companies(
+
+        company:companies (
           id,
           name,
           logo_url
         )
+      ),
+
+      interviews!interviews_application_id_fkey (
+        id,
+        application_id,
+        scheduled_at,
+        duration_minutes,
+        interview_type,
+        meeting_url,
+        notes,
+        status
       )
-    `,
-    )
+    `)
     .eq("user_id", userId)
     .order("applied_at", { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    console.error("getUserApplications:", error);
+    throw new Error(error.message);
+  }
 
   return data;
 }

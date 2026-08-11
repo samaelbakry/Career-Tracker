@@ -26,8 +26,7 @@ export default function DashboardHeader() {
   const [userNameInput, setUserNameInput] = useState(user?.name ?? "");
 
   const hour = new Date().getHours();
-  const greeting =
-    hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
+  const greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

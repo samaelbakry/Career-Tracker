@@ -61,3 +61,4 @@ export async function uploadAvatar(file: File) {
 
   return publicUrl;
 }
+

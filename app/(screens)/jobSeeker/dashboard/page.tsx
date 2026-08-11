@@ -1,5 +1,6 @@
 import DashboardHeader from "@/components/dashboard/JobSeeker/DashboardHeader";
 import DashboardStats from "@/components/dashboard/JobSeeker/DashboardStats";
+import InterviewsStatus from "@/components/dashboard/JobSeeker/InterviewsStatus";
 import UserApplicationsList from "@/components/dashboard/JobSeeker/UserApplicationList";
 
 export default function Dashboard() {
@@ -9,6 +10,7 @@ export default function Dashboard() {
         <DashboardHeader />
         <DashboardStats/>
         <UserApplicationsList/>
+        <InterviewsStatus />
       </div>
     </main>
   )

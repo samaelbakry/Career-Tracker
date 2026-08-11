@@ -1,17 +1,12 @@
 "use client";
 
-import { getStatusBadge } from "@/constants/constants";
 import { useFetch } from "@/hooks/useFetch";
 import { getUserApplications } from "@/services/application";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
-import {
-  Briefcase,
-  Building2,
-  Calendar,
-  ExternalLink,
-  MapPin,
-} from "lucide-react";
+import { Briefcase } from "lucide-react";
+import React from "react";
+import ApplicationCard from "./ApplicationCard";
 
 export default function UserApplicationsList() {
   const userId = useAppSelector(selectedUser)?.id;
@@ -19,6 +14,7 @@ export default function UserApplicationsList() {
   const { data: applications, isLoading } = useFetch({
     queryKey: ["applications", userId],
     queryFn: () => getUserApplications(userId!),
+    enabled: !!userId,
   });
 
   return (
@@ -55,80 +51,11 @@ export default function UserApplicationsList() {
             </div>
           ))
         ) : applications && applications.length > 0 ? (
-            applications.map((app) => {
-            const statusConfig = getStatusBadge(app.status);
-            const StatusIcon = statusConfig.icon;
-            const company = app.job?.company;
-
+          applications.map((app) => {
             return (
-              <div
-                key={app.id}
-                className="group flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between transition-colors hover:bg-slate-50/50 rounded-2xl px-2 -mx-2"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 text-slate-400 shadow-sm">
-                    {company?.logo_url ? (
-                      <img
-                        src={company.logo_url}
-                        alt={company?.name ?? "Company"}
-                        className="h-full w-full object-cover"
-                        onError={(e)=>{e.currentTarget.style.display = "none"}}
-                      />
-                    ) : (
-                      <Building2 size={20} />
-                    )}
-                  </div>
-
-                  <div className="space-y-1">
-                    <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-                      {app.job?.title ?? "Job Title Unavailable"}
-                    </h3>
-
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
-                      <span className="font-medium text-slate-700">
-                        {company?.name ?? "Unknown Company"}
-                      </span>
-
-                      {app.job?.location && (
-                        <span className="flex items-center gap-1">
-                          <MapPin size={12} className="text-slate-400" />
-                          {app.job.location}
-                        </span>
-                      )}
-
-                      {app.applied_at && (
-                        <span className="flex items-center gap-1">
-                          <Calendar size={12} className="text-slate-400" />
-                          {new Date(app.applied_at).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            },
-                          )}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between sm:justify-end gap-3">
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset ${statusConfig.className}`}
-                  >
-                    <StatusIcon size={13} />
-                    {statusConfig.label}
-                  </span>
-
-                  <button
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
-                    title="View Details"
-                  >
-                    <ExternalLink size={15} />
-                  </button>
-                </div>
-              </div>
+              <React.Fragment key={app.id}>
+                <ApplicationCard app={app} />
+              </React.Fragment>
             );
           })
         ) : (

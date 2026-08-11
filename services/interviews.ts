@@ -10,16 +10,8 @@ type ScheduleInterviewProps = {
   meetingUrl?: string;
   notes?: string;
 };
-export async function scheduleInterview({
-  applicationId,
-  employerId,
-  scheduledAt,
-  durationMinutes,
-  interviewType,
-  meetingUrl,
-  notes,
-}: ScheduleInterviewProps) {
-  const { data, error } = await supabase
+export async function scheduleInterview({applicationId,employerId,scheduledAt,durationMinutes,interviewType,meetingUrl,notes,}: ScheduleInterviewProps) {
+    const { data, error } = await supabase
     .from("interviews")
     .insert({
       application_id: applicationId,
