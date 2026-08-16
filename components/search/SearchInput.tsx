@@ -16,44 +16,43 @@ export function SearchInput() {
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
-  const [filter , setFilter] = useState("")
+  const [filter, setFilter] = useState("");
 
   const {
     data: jobs = [],
     isLoading: loading,
     error,
   } = useFetch<Job[]>({
-    queryKey: ["getJobs", searchQuery , filter],
-    queryFn: () => { 
-     if(filter) {
-      return filterJobs(filter)
-     }
-     if (searchQuery){
-      return searchForJob(searchQuery.trim())
-     }
+    queryKey: ["getJobs", searchQuery, filter],
+    queryFn: () => {
+      if (filter) {
+        return filterJobs(filter);
+      }
+      if (searchQuery) {
+        return searchForJob(searchQuery.trim());
+      }
 
-     return getAllJobs()
-    }
+      return getAllJobs();
+    },
   });
 
-  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFilter("")
+    setFilter("");
     setHasSearched(true);
     setSearchQuery(inputValue);
   };
 
-  const handleFilterChange = (value:string)=>{
-    setFilter(value)
-    setHasSearched(true)
-  }
+  const handleFilterChange = (value: string) => {
+    setFilter(value);
+    setHasSearched(true);
+  };
 
   const handleClear = () => {
     setInputValue("");
     setSearchQuery("");
     setHasSearched(false);
-    setFilter("")
+    setFilter("");
   };
 
   const errorMessage =
@@ -101,7 +100,7 @@ export function SearchInput() {
               )}
             </Button>
           </div>
-          <JobFilter filter={filter} onFilterChange={handleFilterChange}/>
+          <JobFilter filter={filter} onFilterChange={handleFilterChange} />
         </form>
 
         <div className="max-w-7xl mx-auto w-full">
@@ -116,7 +115,15 @@ export function SearchInput() {
             <EmptySearchResults />
           )}
 
-         {loading ? <CardSkeleton /> : jobs.length > 0 ? <SearchResults loading={loading} jobs={jobs} /> : null }
+          {loading ? (
+            <div className="grid grid-cols-3 gap-3 my-4">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <CardSkeleton key={index} />
+              ))}
+            </div>
+          ) : jobs.length > 0 ? (
+            <SearchResults loading={loading} jobs={jobs} />
+          ) : null}
         </div>
       </div>
     </>

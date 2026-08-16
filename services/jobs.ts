@@ -1,8 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import { CreateJobT, Job } from "@/types/jobs";
 
-export async function getAllJobs() {
-  const { data, error } = await supabase
+export async function getAllJobs(page = 1 , limit = 6) {
+  const from = (page - 1 ) * limit
+  const to = from + limit - 1
+  const { data, error , count } = await supabase
     .from("jobs")
     .select(
       `
@@ -10,13 +12,15 @@ export async function getAllJobs() {
     company:companies(*)
 
         `,
+    {count :"exact"}
     )
     .eq("status", "open")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from , to);
 
   if (error) throw new Error(error.message);
 
-  return data as Job[];
+  return {jobs:data as Job[] , total :count ?? 0};
 }
 
 export async function getJobDetails(id: string): Promise<Job> {

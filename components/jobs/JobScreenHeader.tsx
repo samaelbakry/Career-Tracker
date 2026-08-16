@@ -23,8 +23,8 @@ export default function JobScreenHeader() {
           </p>
         </div>
 
-        <div className="pt-2">
-          <div className="relative flex-1 w-full">
+        <div>
+          <div className="relative flex-1 w-full border-t pt-1">
             <AvailableJobs />
           </div>
         </div>
