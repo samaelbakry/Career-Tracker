@@ -29,23 +29,6 @@ export function JobSearchHeader() {
             fast-growing startups, and remote-first teams.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-500 pt-1">
-          <span className="font-semibold text-slate-700 dark:text-slate-300">
-            Popular:
-          </span>
-          <button className="hover:text-blue-600 transition-colors">
-            Remote
-          </button>
-          <button className="hover:text-blue-600 transition-colors">
-            React / Next.js
-          </button>
-          <button className="hover:text-blue-600 transition-colors">
-            Full Time
-          </button>
-          <button className="hover:text-blue-600 transition-colors">
-            Senior Engineer
-          </button>
-        </div>
         <div className="pt-2">
           <div className="relative flex-1 w-full">
             <SearchInput />

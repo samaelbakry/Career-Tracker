@@ -19,8 +19,8 @@ export async function getAllJobs() {
   return data as Job[];
 }
 
-export async function getJobDetails(id:string):Promise <Job> {
-  const { data , error } = await supabase
+export async function getJobDetails(id: string): Promise<Job> {
+  const { data, error } = await supabase
     .from("jobs")
     .select(
       `
@@ -28,8 +28,8 @@ export async function getJobDetails(id:string):Promise <Job> {
     company:companies(*)
         `,
     )
-    .eq("id",id)
-    .single()
+    .eq("id", id)
+    .single();
 
   if (error) throw new Error(error.message);
 
@@ -56,7 +56,7 @@ export async function getJobsByCompany(companyId: string): Promise<Job[]> {
       `
       *,
       company:companies(*)
-    `
+    `,
     )
     .eq("company_id", companyId);
 
@@ -65,41 +65,73 @@ export async function getJobsByCompany(companyId: string): Promise<Job[]> {
   return data as Job[];
 }
 
-export async function createJob(values:CreateJobT , companyId:string , ownerId: string
+export async function createJob(
+  values: CreateJobT,
+  companyId: string,
+  ownerId: string,
 ) {
-  const {data , error} = await supabase
-  .from("jobs")
-  .insert({
-    ...values,
-    company_id:companyId,
-    owner_id: ownerId
-  })
-  .select()
-  .single()
-
-  if (error) throw new Error(error.message);
-
-  return data as Job
-}
-
-export async function updateJob(id:string,values:Partial<CreateJobT>){
-    const {data,error}=await supabase
+  const { data, error } = await supabase
     .from("jobs")
-    .update(values)
-    .eq("id",id)
+    .insert({
+      ...values,
+      company_id: companyId,
+      owner_id: ownerId,
+    })
     .select()
     .single();
 
-    if(error) throw error;
+  if (error) throw new Error(error.message);
 
-    return data;
+  return data as Job;
 }
 
-export async function deleteJob(id:string){
-    const {error}=await supabase
+export async function updateJob(id: string, values: Partial<CreateJobT>) {
+  const { data, error } = await supabase
     .from("jobs")
-    .delete()
-    .eq("id",id);
+    .update(values)
+    .eq("id", id)
+    .select()
+    .single();
 
-    if(error) throw error;
+  if (error) throw error;
+
+  return data;
+}
+
+export async function deleteJob(id: string) {
+  const { error } = await supabase.from("jobs").delete().eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function filterJobs(filter: string) {
+  let query = supabase.from("jobs").select(`
+    *
+    ,
+    company:companies(*)`);
+
+  switch (filter) {
+    case "remote":
+      query = query.eq("location", "Remote");
+      break;
+
+    case "react":
+      query = query.or(
+        "title.ilike.%React%,title.ilike.%Next.js%,description.ilike.%React%,description.ilike.%Next.js%",
+      );
+      break;
+
+    case "full-time":
+      query = query.eq("employment_type", "Full Time");
+      break;
+
+    case "senior":
+      query = query.eq("experience_level", "Senior");
+      break;
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  return data;
 }
