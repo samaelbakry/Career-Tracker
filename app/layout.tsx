@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.className} h-full antialiased`}>
-      <body className={`min-h-full flex flex-col ${geistMono.variable}`}>
+      <body className={`min-h-screen flex flex-col ${geistMono.variable}`}>
         <ReduxProvider>
           <AuthProvider>
             <ReactQueryProvider>{children}

@@ -51,10 +51,10 @@ export default function Hero() {
             ) : (
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <Link
-                  href={"/register"}
+                  href={"/selectRole"}
                   className="flex items-center justify-center gap-2 px-7 py-4 bg-[#1E3A8A] hover:bg-[#172554] text-white font-semibold rounded-2xl shadow-lg shadow-blue-900/10 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
                 >
-                  <span>Create Account</span>
+                  <span>Join Us !</span>
                   <ArrowRight size={18} />
                 </Link>
 
