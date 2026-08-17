@@ -1,85 +1,107 @@
 "use client";
+
 import { ArrowRight, Check } from "lucide-react";
 import DashboardMockup from "./DashboardMockup";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
-import { selectedAuthenticated, selectedUser } from "@/store/slices/authSlice";
+import {
+  selectedAuthenticated,
+  selectedUser,
+} from "@/store/slices/authSlice";
 import { heroContent } from "@/constants/constants";
 
 export default function Hero() {
   const authenticated = useAppSelector(selectedAuthenticated);
-  const userName = useAppSelector(selectedUser)?.name;
-  const role = useAppSelector(selectedUser)?.role;
+  const user = useAppSelector(selectedUser);
+
+  const userName = user?.name;
+  const role = user?.role;
+
   const isEmployer = role === "employer";
   const content = isEmployer ? heroContent.employer : heroContent.job_seeker;
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-44 md:pb-32 min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-b from-white via-[#DBEAFE]/30 to-white">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          <div className="lg:col-span-6 space-y-8 text-left">
-            <div className="flex items-center  gap-6">
-              {authenticated && (
-                <>
-                  <span className="font-semibold text-xl">{`Welcome back, ${userName}!`}</span>
-                </>
-              )}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#DBEAFE]/60 border border-blue-200/60 text-[#1E3A8A] text-xs font-semibold tracking-wide">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-b from-white via-blue-50/40 to-white px-4 pt-28 pb-16 sm:px-6 md:pt-36 md:pb-24 lg:px-8">
+      <div className="pointer-events-none absolute -left-40 top-1/4 h-80 w-80 rounded-full bg-blue-200/30 blur-3xl" />
+
+      <div className="pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-indigo-200/30 blur-3xl" />
+
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="relative z-10 grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-8">
+          <div className="space-y-8 text-left lg:col-span-6">
+            {authenticated && (
+              <div className="inline-flex items-center rounded-xl border border-indigo-100 bg-indigo-50/70 px-3.5 py-2 text-sm font-semibold text-indigo-700 dark:border-indigo-900/50 dark:bg-indigo-950/30 dark:text-indigo-300">
+                Welcome back, {userName}!
+              </div>
+            )}
+
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-[#1E3A8A]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" />
                 Track Every Opportunity
               </div>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold tracking-tight text-[#0F172A] leading-[1.12]">
-             {content.title}
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-[#1E3A8A] to-[#3B82F6]">
+            <h1 className="max-w-2xl text-4xl font-extrabold leading-[1.1] tracking-tight text-[#0F172A] sm:text-5xl lg:text-[56px]">
+              {content.title}{" "}
+              <span className="bg-linear-to-r from-[#1E3A8A] to-[#3B82F6] bg-clip-text text-transparent">
                 {content.highlight}
               </span>
             </h1>
 
-            <p className="text-lg text-[#64748B] max-w-xl leading-relaxed font-normal">
-             {content.description}
+            <p className="max-w-xl text-base leading-7 text-[#64748B] sm:text-lg">
+              {content.description}
             </p>
+
             {authenticated ? (
               <Link
                 href={content.href}
-                className="flex items-center justify-center gap-2 px-7 py-4 bg-[#1E3A8A] hover:bg-[#172554] text-white font-semibold rounded-2xl shadow-lg shadow-blue-900/10 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1E3A8A] px-7 py-4 font-semibold text-white shadow-lg shadow-blue-900/10 transition-all duration-300 hover:bg-[#172554] hover:shadow-xl active:scale-[0.98]"
               >
                 <span>{content.button}</span>
-                <ArrowRight size={18} />
+                <ArrowRight className="h-[18px] w-[18px]" />
               </Link>
             ) : (
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
-                  href={"/selectRole"}
-                  className="flex items-center justify-center gap-2 px-7 py-4 bg-[#1E3A8A] hover:bg-[#172554] text-white font-semibold rounded-2xl shadow-lg shadow-blue-900/10 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+                  href="/selectRole"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1E3A8A] px-7 py-4 font-semibold text-white shadow-lg shadow-blue-900/10 transition-all duration-300 hover:bg-[#172554] hover:shadow-xl active:scale-[0.98]"
                 >
-                  <span>Join Us !</span>
-                  <ArrowRight size={18} />
+                  <span>Join Us!</span>
+                  <ArrowRight className="h-[18px] w-[18px]" />
                 </Link>
 
                 <Link
-                  href={"/login"}
-                  className="flex items-center justify-center px-7 py-4 bg-white border border-slate-200 text-[#1E3A8A] hover:bg-slate-50 font-semibold rounded-2xl transition-all duration-300 active:scale-[0.98]"
+                  href="/login"
+                  className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-7 py-4 font-semibold text-[#1E3A8A] shadow-sm transition-all duration-300 hover:bg-slate-50 active:scale-[0.98]"
                 >
                   Login
                 </Link>
               </div>
             )}
 
-            <div className="flex items-center gap-6 pt-2 text-sm text-[#64748B]">
+            <div className="flex flex-col gap-3 pt-1 text-sm text-[#64748B] sm:flex-row sm:items-center sm:gap-6">
               <div className="flex items-center gap-2">
-                <Check size={16} className="text-[#3B82F6]" />
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-50">
+                  <Check className="h-3.5 w-3.5 text-[#3B82F6]" />
+                </span>
+
                 <span>Free forever</span>
               </div>
+
               <div className="flex items-center gap-2">
-                <Check size={16} className="text-[#3B82F6]" />
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-50">
+                  <Check className="h-3.5 w-3.5 text-[#3B82F6]" />
+                </span>
+
                 <span>No credit card required</span>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6">
+          <div className="relative lg:col-span-6">
+            <div className="absolute inset-0 -z-10 scale-90 rounded-full bg-blue-200/30 blur-3xl" />
+
             <DashboardMockup />
           </div>
         </div>
