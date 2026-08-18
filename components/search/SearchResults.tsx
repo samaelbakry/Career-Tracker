@@ -1,6 +1,6 @@
 "use client";
+
 import { Job } from "@/types/jobs";
-import React, { Fragment } from "react";
 import JobCard from "../jobs/JobCard";
 import CardSkeleton from "../jobs/CardSkeleton";
 
@@ -10,25 +10,21 @@ type Props = {
 };
 
 export default function SearchResults({ loading, jobs }: Props) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <CardSkeleton key={index} />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <>
-      {loading ? (
-        [
-          ...Array(3).map((index) => (
-            <Fragment key={index}>
-              <CardSkeleton />
-            </Fragment>
-          )),
-        ]
-      ) : (
-        <div className="grid grid-cols-3 px-3 gap-3 my-4">
-          {jobs.map((item) => (
-            <Fragment key={item.id}>
-              <JobCard job={item} />
-            </Fragment>
-          ))}
-        </div>
-      )}
-    </>
+    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 px-2">
+      {jobs.map((job) => (
+        <JobCard key={job.id} job={job} />
+      ))}
+    </div>
   );
 }

@@ -48,7 +48,7 @@ export default function LoginForm() {
       if (profile.role === "employer") {
         navigate.push("/employer/feed");
       } else {
-        navigate.push("/jobSeeker/jobs");
+        navigate.push("/jobSeeker/search");
       }
     } catch (error) {
       console.log(error);

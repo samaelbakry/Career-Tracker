@@ -1,18 +1,14 @@
 "use client";
 
-import { useFetch } from "@/hooks/useFetch";
-import { getAllJobs } from "@/services/jobs";
-import { Briefcase, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import CardSkeleton from "@/components/jobs/CardSkeleton";
 import JobCard from "@/components/jobs/JobCard";
-import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
 import JobFormDialog from "@/components/jobs/JobFormDialog";
+import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
+import PaginationBar from "@/components/ui/PaginationBar";
+import { useFetch } from "@/hooks/useFetch";
+import { getAllJobs } from "@/services/jobs";
+import { Briefcase, Sparkles } from "lucide-react";
 import { useState } from "react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
 
 const JOBS_PER_PAGE = 6;
 
@@ -146,59 +142,7 @@ export default function EmployerFeed() {
 
         {totalPages > 1 && (
           <div className="mt-10 flex justify-center border-t border-slate-200 pt-6 dark:border-slate-800">
-            <Pagination>
-              <PaginationContent className="gap-2">
-                <PaginationItem>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (page > 1) {
-                        setPage((prev) => prev - 1);
-                      }
-                    }}
-                    disabled={page === 1}
-                    className="flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-600 shadow-xs transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 disabled:pointer-events-none disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-indigo-900 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-400"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    <span className="hidden sm:inline">Previous</span>
-                  </button>
-                </PaginationItem>
-
-                <PaginationItem>
-                  <div className="flex h-10 items-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium shadow-xs dark:border-slate-800 dark:bg-slate-900">
-                    <span className="text-slate-500 dark:text-slate-400">
-                      Page
-                    </span>
-
-                    <span className="mx-1.5 font-bold text-indigo-600 dark:text-indigo-400">
-                      {page}
-                    </span>
-
-                    <span className="text-slate-400">of</span>
-
-                    <span className="ml-1.5 font-semibold text-slate-700 dark:text-slate-200">
-                      {totalPages}
-                    </span>
-                  </div>
-                </PaginationItem>
-
-                <PaginationItem>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (page < totalPages) {
-                        setPage((prev) => prev + 1);
-                      }
-                    }}
-                    disabled={page === totalPages}
-                    className="flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-600 shadow-xs transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 disabled:pointer-events-none disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-indigo-900 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-400"
-                  >
-                    <span className="hidden sm:inline">Next</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+            <PaginationBar page={page} setPage={setPage} totalPages={totalPages} />
           </div>
         )}
       </div>

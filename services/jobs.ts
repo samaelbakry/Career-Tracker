@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { CreateJobT, Job } from "@/types/jobs";
+import { CreateJobT, Job, JobsResponse } from "@/types/jobs";
 
 export async function getAllJobs(page = 1 , limit = 6) {
   const from = (page - 1 ) * limit
@@ -20,7 +20,7 @@ export async function getAllJobs(page = 1 , limit = 6) {
 
   if (error) throw new Error(error.message);
 
-  return {jobs:data as Job[] , total :count ?? 0};
+  return {jobs:data as Job[]  , total :count ?? 0};
 }
 
 export async function getJobDetails(id: string): Promise<Job> {
@@ -40,17 +40,20 @@ export async function getJobDetails(id: string): Promise<Job> {
   return data as Job;
 }
 
-export async function searchForJob(query: string) {
-  console.log("Query:", JSON.stringify(query));
-
-  const { data, error } = await supabase
+export async function searchForJob(
+  query: string
+): Promise<JobsResponse> {
+  const { data, error, count } = await supabase
     .from("jobs")
-    .select("*")
+    .select("*", { count: "exact" })
     .ilike("title", `%${query.trim()}%`);
 
   if (error) throw new Error(error.message);
 
-  return data;
+  return {
+    jobs: data as Job[],
+    total: count ?? 0,
+  };
 }
 
 export async function getJobsByCompany(companyId: string): Promise<Job[]> {
@@ -108,11 +111,16 @@ export async function deleteJob(id: string) {
   if (error) throw error;
 }
 
-export async function filterJobs(filter: string) {
-  let query = supabase.from("jobs").select(`
-    *
-    ,
-    company:companies(*)`);
+export async function filterJobs( filter: string): Promise<JobsResponse> {
+  let query = supabase
+    .from("jobs")
+    .select(
+      `
+        *,
+        company:companies(*)
+      `,
+      { count: "exact" }
+    );
 
   switch (filter) {
     case "remote":
@@ -121,7 +129,7 @@ export async function filterJobs(filter: string) {
 
     case "react":
       query = query.or(
-        "title.ilike.%React%,title.ilike.%Next.js%,description.ilike.%React%,description.ilike.%Next.js%",
+        "title.ilike.%React%,title.ilike.%Next.js%,description.ilike.%React%,description.ilike.%Next.js%"
       );
       break;
 
@@ -134,8 +142,12 @@ export async function filterJobs(filter: string) {
       break;
   }
 
-  const { data, error } = await query;
-  if (error) throw error;
+  const { data, error, count } = await query;
 
-  return data;
+  if (error) throw new Error(error.message);
+
+  return {
+    jobs: data as Job[],
+    total: count ?? 0,
+  };
 }

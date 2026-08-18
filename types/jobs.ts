@@ -32,3 +32,8 @@ export type CreateJobT = {
   status: "open" | "closed";
   company_id: string;
 };
+
+export type JobsResponse = {
+  jobs: Job[];
+  total: number;
+};

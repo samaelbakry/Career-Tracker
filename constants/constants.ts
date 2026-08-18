@@ -64,8 +64,8 @@ export const getApplictaionStatusBadge = (status: string) => {
 // navbar links 
 export const navLinks = {
   job_seeker: [
-    { href: "/jobSeeker/jobs", label: "Jobs" },
     { href: "/jobSeeker/search", label: "Search" },
+    { href: "/jobSeeker/jobs", label: "Jobs" },
     { href: "/jobSeeker/dashboard", label: "Dashboard" },
   ],
   employer: [

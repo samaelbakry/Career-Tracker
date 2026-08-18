@@ -25,114 +25,164 @@ export default function InterviewsStatus() {
 
   if (isLoading) {
     return (
-      <div className="mt-3 space-y-2.5">
+      <div className="space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}
-            className="h-24 animate-pulse rounded-xl border border-slate-200 bg-slate-100"
-          />
+            className="h-27.5 animate-pulse rounded-2xl border border-slate-200/70 bg-white p-4"
+          >
+            <div className="flex items-center justify-between">
+              <div className="h-4 w-32 rounded-md bg-slate-100" />
+              <div className="h-6 w-16 rounded-full bg-slate-100" />
+            </div>
+
+            <div className="mt-4 flex gap-4">
+              <div className="h-3 w-24 rounded bg-slate-100" />
+              <div className="h-3 w-28 rounded bg-slate-100" />
+            </div>
+          </div>
         ))}
       </div>
     );
   }
 
-  const interviews =  applications?.flatMap((application) => application.interviews ?? []) ?? [];
+  const interviews = applications?.flatMap((application) => application.interviews ?? []) ?? [];
 
   if (interviews.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-6">
-        <div className="py-8 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
-            <Briefcase size={22} />
+      <section className="overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-[0_12px_40px_-25px_rgba(15,23,42,0.25)]">
+        <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 ring-1 ring-slate-100">
+            <Briefcase size={23} />
           </div>
 
-          <h3 className="mt-3 text-sm font-semibold text-slate-900">
+          <h3 className="mt-4 text-sm font-bold text-slate-900">
             No scheduled interviews
           </h3>
 
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1.5 max-w-xs text-xs leading-relaxed text-slate-500">
             Interviews will appear here once they are scheduled.
           </p>
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-sm font-semibold text-slate-900">
-            Scheduled Interviews
-          </h2>
+    <section className="overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-[0_12px_40px_-25px_rgba(15,23,42,0.25)]">
+      <div className="flex items-center justify-between border-b border-slate-100 px-5 py-5 sm:px-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-purple-600 ring-1 ring-purple-100">
+            <Video size={18} />
+          </div>
 
-          <p className="mt-0.5 text-xs text-slate-500">
-            Your upcoming interview schedule
-          </p>
+          <div>
+            <h2 className="text-base font-black tracking-tight text-slate-900 sm:text-lg">
+              Scheduled Interviews
+            </h2>
+
+            <p className="mt-0.5 text-[11px] text-slate-500 sm:text-xs">
+              Your upcoming interview schedule
+            </p>
+          </div>
         </div>
 
-        <span className="rounded-full bg-slate-900 px-2.5 py-1 text-xs font-medium text-white">
+        <div className="flex h-8 min-w-8 items-center justify-center rounded-full bg-slate-950 px-2.5 text-[11px] font-bold text-white shadow-sm">
           {interviews.length}
-        </span>
+        </div>
       </div>
 
-      <div className="mt-3 space-y-2.5">
+      <div className="space-y-3 p-4 sm:p-5">
         {interviews.map((interview) => {
-          const scheduledDate = new Date(interview.scheduled_at).toLocaleDateString();
+          const scheduledDate = new Date(
+            interview.scheduled_at,
+          ).toLocaleDateString();
+
+          const isPhone = interview.interview_type === "phone";
+          const InterviewIcon = isPhone ? Phone : Video;
 
           return (
             <div
               key={interview.id}
-              className="rounded-xl border border-slate-200/50 bg-white p-3 shadow-xs transition-all hover:border-slate-300"
+              className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/40 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-200 hover:bg-white hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.3)]"
             >
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5">
-                  {interview.interview_type === "phone" ? (
-                    <Phone className="h-3.5 w-3.5 text-slate-500" />
-                  ) : (
-                    <Video className="h-3.5 w-3.5 text-slate-500" />
-                  )}
+              <div
+                className={`pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full blur-2xl transition-transform duration-500 group-hover:scale-150 ${
+                  isPhone ? "bg-blue-100/70" : "bg-purple-100/70"
+                }`}
+              />
 
-                  <span className="text-xs font-medium capitalize text-slate-800">
-                    {interview.interview_type} Interview
+              <div className="relative z-10">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                        isPhone
+                          ? "bg-blue-50 text-blue-600 ring-1 ring-blue-100"
+                          : "bg-purple-50 text-purple-600 ring-1 ring-purple-100"
+                      }`}
+                    >
+                      <InterviewIcon size={17} />
+                    </div>
+
+                    <div className="min-w-0">
+                      <h3 className="truncate text-sm font-bold text-slate-900">
+                        {interview.interview_type} Interview
+                      </h3>
+
+                      <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                        Interview meeting
+                      </p>
+                    </div>
+                  </div>
+
+                  <span className="inline-flex shrink-0 items-center rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold capitalize text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                    <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    {interview.status}
                   </span>
                 </div>
 
-                <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium capitalize text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                  {interview.status}
-                </span>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm">
+                    <Calendar
+                      size={12}
+                      className="text-slate-400"
+                    />
+                    {formattedDate(interview.scheduled_at)}
+                  </div>
+
+                  <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm">
+                    <Clock
+                      size={12}
+                      className="text-slate-400"
+                    />
+                    {scheduledDate} · {interview.duration_minutes} mins
+                  </div>
+                </div>
+
+                {interview.notes?.trim() && (
+                  <div className="mt-3 flex items-start gap-2 rounded-xl border border-amber-200/60 bg-amber-50/70 p-3 text-xs text-amber-900">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+                      <FileText size={13} />
+                    </div>
+
+                    <p className="pt-0.5 leading-relaxed">
+                      <span className="font-bold">Note:</span>{" "}
+                      {interview.notes.trim()}
+                    </p>
+                  </div>
+                )}
               </div>
 
-              <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="h-3.5 w-3.5 text-slate-400" />
-
-                  <span>{formattedDate(interview.scheduled_at)}</span>
-                </div>
-
-                <div className="flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5 text-slate-400" />
-
-                  <span>
-                    {scheduledDate} ({interview.duration_minutes} mins)
-                  </span>
-                </div>
-              </div>
-
-              {interview.notes?.trim() && (
-                <div className="flex items-start gap-1.5 rounded-lg border border-amber-200/50 bg-amber-50/70 p-2 text-xs text-amber-900">
-                  <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-600" />
-
-                  <p className="leading-tight">
-                    <span className="font-medium">Note:</span>{" "}
-                    {interview.notes.trim()}
-                  </p>
-                </div>
-              )}
+              <div
+                className={`absolute bottom-0 left-4 right-4 h-0.5 rounded-full opacity-50 transition-all duration-300 group-hover:left-0 group-hover:right-0 group-hover:opacity-100 ${
+                  isPhone ? "bg-blue-500" : "bg-purple-500"
+                }`}
+              />
             </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }

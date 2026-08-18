@@ -12,7 +12,7 @@ export default function Footer() {
               </div>
 
               <span className="text-lg font-bold tracking-tight text-[#0F172A]">
-                JobTracker
+                Career Tracker
               </span>
             </div>
 
