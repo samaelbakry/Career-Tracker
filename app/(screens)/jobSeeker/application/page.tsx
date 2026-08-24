@@ -69,8 +69,7 @@ export default function Application() {
         status: "pending",
       });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Something went wrong.";
+      const message = error instanceof Error ? error.message : "Something went wrong.";
 
       toast(message);
     }

@@ -66,6 +66,7 @@ export const navLinks = {
   job_seeker: [
     { href: "/jobSeeker/search", label: "Search" },
     { href: "/jobSeeker/jobs", label: "Jobs" },
+    { href: "/jobSeeker/saved", label: "Saved" },
     { href: "/jobSeeker/dashboard", label: "Dashboard" },
   ],
   employer: [

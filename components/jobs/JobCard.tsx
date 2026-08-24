@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import DialogButtonTrigger from "../ui/DialogButtonTrigger";
 import JobFormDialog from "./JobFormDialog";
 import DeleteJobButton from "./DeleteJobButton";
+import SaveJobs from "./SaveJobs";
 
 export default function JobCard({ job }: { job: Job }) {
   const role = useAppSelector(selectedUser)?.role;
@@ -55,7 +56,6 @@ export default function JobCard({ job }: { job: Job }) {
 
   return (
     <Card
-      onClick={isEmployer ? undefined : handleCardClick}
       className={`
         group relative w-full overflow-hidden rounded-3xl
         border border-slate-200/80 bg-white
@@ -161,7 +161,7 @@ export default function JobCard({ job }: { job: Job }) {
           </div>
         </CardHeader>
 
-        <CardContent className="mt-6 space-y-5 p-0">
+        <CardContent className="mt-6 space-y-5 p-0" >
           <div className="flex flex-wrap gap-2">
             {job.employment_type && (
               <Badge
@@ -272,8 +272,10 @@ export default function JobCard({ job }: { job: Job }) {
         {!isEmployer && (
           <CardFooter className="mt-5 p-0">
             <Button
+             onClick={isEmployer ? undefined : handleCardClick}
               className="
-                h-11 w-full
+                h-11 w-1/2
+                grow mt-1 mx-1
                 rounded-xl
                 bg-slate-900
                 text-sm font-semibold text-white
@@ -297,6 +299,7 @@ export default function JobCard({ job }: { job: Job }) {
                 "
               />
             </Button>
+            <SaveJobs jobId={job.id}/>
           </CardFooter>
         )}
       </div>

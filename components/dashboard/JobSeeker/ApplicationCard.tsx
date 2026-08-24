@@ -7,6 +7,7 @@ import {
   MapPin,
   ChevronRight,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function ApplicationCard({app}: {app: ApplicationWithDetails}) {
   const statusConfig = getStatusBadge(app.status);
@@ -14,7 +15,7 @@ export default function ApplicationCard({app}: {app: ApplicationWithDetails}) {
   const company = app.job?.company;
 
   return (
-    <div className="group relative flex flex-col gap-4 rounded-2xl px-2 py-4 transition-all duration-200 hover:bg-slate-50/80 sm:flex-row sm:items-center sm:justify-between sm:px-3">
+    <Link href={`/jobSeeker/jobs/${app.job?.id}`}  className="group relative flex flex-col gap-4 rounded-2xl px-2 py-4 transition-all duration-200 hover:bg-slate-50/80 sm:flex-row sm:items-center sm:justify-between sm:px-3">
       <div className="flex min-w-0 items-center gap-4">
         <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50 shadow-sm transition-all duration-200 group-hover:border-blue-100 group-hover:shadow-md">
           {company?.logo_url ? (
@@ -79,6 +80,6 @@ export default function ApplicationCard({app}: {app: ApplicationWithDetails}) {
           />
         </button>
       </div>
-    </div>
+    </Link>
   );
 }

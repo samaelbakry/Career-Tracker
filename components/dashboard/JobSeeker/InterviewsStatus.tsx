@@ -13,9 +13,11 @@ import {
   Video,
   Briefcase,
 } from "lucide-react";
+import { useState } from "react";
 
 export default function InterviewsStatus() {
   const userId = useAppSelector(selectedUser)?.id;
+  const [currentTime] = useState(()=>Date.now())
 
   const { data: applications, isLoading } = useFetch({
     queryKey: ["applications", userId],
@@ -94,17 +96,15 @@ export default function InterviewsStatus() {
 
       <div className="space-y-3 p-4 sm:p-5">
         {interviews.map((interview) => {
-          const scheduledDate = new Date(
-            interview.scheduled_at,
-          ).toLocaleDateString();
-
+          const scheduledDate = new Date(interview.scheduled_at).toLocaleDateString();
           const isPhone = interview.interview_type === "phone";
           const InterviewIcon = isPhone ? Phone : Video;
+          const isPassed = new Date(interview.scheduled_at).getTime() < currentTime;
 
           return (
             <div
               key={interview.id}
-              className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/40 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-200 hover:bg-white hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.3)]"
+              className={`group relative ${isPassed ? "opacity-60" : "opacity-100"}  overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/40 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-200 hover:bg-white hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.3)]`}
             >
               <div
                 className={`pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full blur-2xl transition-transform duration-500 group-hover:scale-150 ${
@@ -136,26 +136,31 @@ export default function InterviewsStatus() {
                     </div>
                   </div>
 
-                  <span className="inline-flex shrink-0 items-center rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold capitalize text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                    <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                    {interview.status}
+                  <span
+                    className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[10px] font-bold capitalize ring-1 ring-inset ${
+                      isPassed
+                        ? "bg-slate-100 text-slate-500 ring-slate-300"
+                        : "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+                    }`}
+                  >
+                    <span
+                      className={`mr-1.5 h-1.5 w-1.5 rounded-full ${
+                        isPassed ? "bg-slate-400" : "bg-emerald-500"
+                      }`}
+                    />
+
+                    {isPassed ? "Passed" : interview.status}
                   </span>
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm">
-                    <Calendar
-                      size={12}
-                      className="text-slate-400"
-                    />
+                    <Calendar size={12} className="text-slate-400" />
                     {formattedDate(interview.scheduled_at)}
                   </div>
 
                   <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm">
-                    <Clock
-                      size={12}
-                      className="text-slate-400"
-                    />
+                    <Clock size={12} className="text-slate-400" />
                     {scheduledDate} · {interview.duration_minutes} mins
                   </div>
                 </div>
