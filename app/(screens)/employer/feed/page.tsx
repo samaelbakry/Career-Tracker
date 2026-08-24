@@ -1,6 +1,6 @@
 "use client";
 
-import CardSkeleton from "@/components/jobs/CardSkeleton";
+import CardSkeleton from "@/components/skeletons/CardSkeleton";
 import JobCard from "@/components/jobs/JobCard";
 import JobFormDialog from "@/components/jobs/JobFormDialog";
 import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
@@ -142,7 +142,11 @@ export default function EmployerFeed() {
 
         {totalPages > 1 && (
           <div className="mt-10 flex justify-center border-t border-slate-200 pt-6 dark:border-slate-800">
-            <PaginationBar page={page} setPage={setPage} totalPages={totalPages} />
+            <PaginationBar
+              page={page}
+              setPage={setPage}
+              totalPages={totalPages}
+            />
           </div>
         )}
       </div>

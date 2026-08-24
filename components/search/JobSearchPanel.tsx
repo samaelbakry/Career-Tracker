@@ -6,16 +6,11 @@ import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/useFetch";
 import { filterJobs, getAllJobs, searchForJob } from "@/services/jobs";
 import { JobsResponse } from "@/types/jobs";
-import {
-  AlertCircle,
-  Loader2,
-  Search,
-  X,
-} from "lucide-react";
+import { AlertCircle, Loader2, Search, X } from "lucide-react";
 import SearchResults from "./SearchResults";
 import EmptySearchResults from "./EmptySearchResults";
 import JobFilter from "./JobFilter";
-import CardSkeleton from "../jobs/CardSkeleton";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 export function JobSearchPanel() {
   const [inputValue, setInputValue] = useState("");

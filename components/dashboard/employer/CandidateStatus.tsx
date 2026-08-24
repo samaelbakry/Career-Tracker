@@ -7,16 +7,15 @@ import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
 import {
   AlertCircle,
-  Loader2,
   UserCheck,
   X
 } from "lucide-react";
 import { useState } from "react";
 import CandidateStatusCard from "./CandidateStatusCard";
+import CandidateStatusSkeleton from "@/components/skeletons/CandidateStatusSkeleton";
 
 export default function CandidateStatus() {
   const userId = useAppSelector(selectedUser)?.id;
-  const [activeInterview, setActiveInterview] = useState(false)
   const [activeCoverLetter, setActiveCoverLetter] = useState<{
     candidateName: string;
     text: string;
@@ -46,12 +45,7 @@ export default function CandidateStatus() {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 w-full flex-col items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-        <p className="text-sm text-slate-500">
-          Loading candidate applications...
-        </p>
-      </div>
+     <CandidateStatusSkeleton/>
     );
   }
 

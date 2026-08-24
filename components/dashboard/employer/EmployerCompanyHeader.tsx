@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Company } from "@/types/companies";
 import Link from "next/link";
+import EmployerCompanyHeaderSkeleton from "@/components/skeletons/EmployerCompanyHeaderSkeleton";
 
 export default function EmployerCompanyHeader() {
   const userId = useAppSelector(selectedUser)?.id;
@@ -35,9 +36,7 @@ export default function EmployerCompanyHeader() {
 
   if (!company) {
     return (
-      <div className="rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-500">
-        No company details found. Please set up your company profile.
-      </div>
+     <EmployerCompanyHeaderSkeleton />
     );
   }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import CardSkeleton from "@/components/jobs/CardSkeleton";
+import CardSkeleton from "@/components/skeletons/CardSkeleton";
 import JobCard from "@/components/jobs/JobCard";
 import JobFormDialog from "@/components/jobs/JobFormDialog";
 import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";

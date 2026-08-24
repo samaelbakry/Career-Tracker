@@ -2,7 +2,7 @@
 
 import { Job } from "@/types/jobs";
 import JobCard from "../jobs/JobCard";
-import CardSkeleton from "../jobs/CardSkeleton";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 type Props = {
   loading: boolean;

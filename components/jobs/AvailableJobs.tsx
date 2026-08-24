@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useFetch } from "@/hooks/useFetch";
 import { getAllJobs } from "@/services/jobs";
 import JobCard from "./JobCard";
-import CardSkeleton from "./CardSkeleton";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 import { BriefcaseBusiness } from "lucide-react";
 import PaginationBar from "../ui/PaginationBar";
@@ -60,7 +60,11 @@ export default function AvailableJobs() {
 
           {totalPages > 1 && (
             <div className="flex justify-center border-t border-slate-200/80 pt-6 dark:border-slate-800">
-              <PaginationBar page={page} setPage={setPage} totalPages={totalPages} />
+              <PaginationBar
+                page={page}
+                setPage={setPage}
+                totalPages={totalPages}
+              />
             </div>
           )}
         </>

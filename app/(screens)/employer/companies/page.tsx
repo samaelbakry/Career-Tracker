@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import CompanyCard from "@/components/compnaies/CompanyCard";
 import { CompanyFormDialog } from "@/components/compnaies/CompanyFormDialog";
-import CardSkeleton from "@/components/jobs/CardSkeleton";
+import CardSkeleton from "@/components/skeletons/CardSkeleton";
 import DialogButtonTrigger from "@/components/ui/DialogButtonTrigger";
 import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/useFetch";
@@ -23,12 +23,7 @@ export default function CompaniesPage() {
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
-  const {
-    data: companies,
-    isLoading,
-    isError,
-    error,
-  } = useFetch<Company[]>({
+  const { data: companies, isLoading, isError, error } = useFetch<Company[]>({
     queryKey: ["companies", debouncedSearch],
     queryFn: () =>
       debouncedSearch.trim() ? searchCompany(debouncedSearch) : getCompanies(),

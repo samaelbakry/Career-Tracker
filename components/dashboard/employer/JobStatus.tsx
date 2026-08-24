@@ -1,6 +1,6 @@
 "use client";
 
-import CardSkeleton from "@/components/jobs/CardSkeleton";
+import CardSkeleton from "@/components/skeletons/CardSkeleton";
 import { useFetch } from "@/hooks/useFetch";
 import { getEmployerJobStats } from "@/services/employer";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
@@ -17,7 +17,6 @@ export default function JobStatus() {
     enabled: !!userId,
   });
 
- 
   const statCards = [
     {
       id: "total",
