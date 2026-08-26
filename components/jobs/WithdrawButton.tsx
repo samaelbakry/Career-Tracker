@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Loader2, RotateCcw } from "lucide-react";
+import { Loader2, Undo2 } from "lucide-react";
 import { withdrawApplication } from "@/services/application";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -27,7 +27,7 @@ export default function WithdrawButton({userId,jobId}: {userId: string;jobId: st
     try {
       if (!userId || !jobId) return;
       await withdrawApplication(userId!, jobId)
-      toast.success("Deleted")
+      toast.success("Application withdrawn")
       queryClient.invalidateQueries({queryKey:["applications"]})
     } catch (error) {
       console.error("Failed to withdraw application:", error);
@@ -50,7 +50,7 @@ export default function WithdrawButton({userId,jobId}: {userId: string;jobId: st
               {isLoading ? (
                 <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
               ) : (
-                <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                <Undo2 className="mr-1.5 h-3.5 w-3.5" />
               )}
               Withdraw
             </Button>

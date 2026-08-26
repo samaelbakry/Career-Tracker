@@ -33,16 +33,15 @@ export default function RegisterForm({role="job_seeker"}:{role:Role}) {
 
   async function sendRegisterData(values: registerSchemaType) {
     try {
-      const res = await signUp(values);
-      console.log(res , "register")
+      await signUp(values);
       toast.success("Wait for verification your account");
       form.reset();
 
       navigate.push(`/verifyEmail?email=${values.email}`);
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         toast.error(error.message);
+        console.log(error);
       }
     }
   }

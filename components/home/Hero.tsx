@@ -59,7 +59,7 @@ export default function Hero() {
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1E3A8A] px-7 py-4 font-semibold text-white shadow-lg shadow-blue-900/10 transition-all duration-300 hover:bg-[#172554] hover:shadow-xl active:scale-[0.98]"
               >
                 <span>{content.button}</span>
-                <ArrowRight className="h-[18px] w-[18px]" />
+                <ArrowRight className="h-4.5 w-4.5" />
               </Link>
             ) : (
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -68,7 +68,7 @@ export default function Hero() {
                   className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1E3A8A] px-7 py-4 font-semibold text-white shadow-lg shadow-blue-900/10 transition-all duration-300 hover:bg-[#172554] hover:shadow-xl active:scale-[0.98]"
                 >
                   <span>Join Us!</span>
-                  <ArrowRight className="h-[18px] w-[18px]" />
+                  <ArrowRight className="h-4.5 w-4.5" />
                 </Link>
 
                 <Link

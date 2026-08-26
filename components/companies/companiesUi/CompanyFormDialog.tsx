@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+"use client"
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,7 @@ import { createCompany } from "@/services/companies";
 import { toast } from "sonner";
 import { Building2 } from "lucide-react";
 import { FormDialogProps } from "@/types/Props";
+import { useForm } from "react-hook-form";
 
 export function CompanyFormDialog({
   open,
