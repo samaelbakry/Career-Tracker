@@ -78,6 +78,7 @@ export async function getUserApplications(userId: string) {
       status,
       applied_at,
       resume_url,
+      job_id,
       cover_letter,
 
       job:jobs (
@@ -112,4 +113,21 @@ export async function getUserApplications(userId: string) {
   }
 
   return data;
+}
+
+export async function withdrawApplication(
+  userId: string,
+  jobId: string
+) {
+  const { error } = await supabase
+    .from("applications")
+    .delete()
+    .eq("user_id", userId)
+    .eq("job_id", jobId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return true;
 }

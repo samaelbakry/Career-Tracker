@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useFetch } from "@/hooks/useFetch";
+import { getUserApplications } from "@/services/application";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
 import { Job } from "@/types/jobs";
@@ -16,18 +18,30 @@ import {
   ArrowUpRight,
   Banknote,
   Building2,
+  CheckCircle2,
   Clock,
   MapPin,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import DialogButtonTrigger from "../ui/DialogButtonTrigger";
-import JobFormDialog from "./JobFormDialog";
 import DeleteJobButton from "./DeleteJobButton";
+import JobFormDialog from "./JobFormDialog";
 import SaveJobs from "./SaveJobs";
+import WithdrawButton from "./WithdrawButton";
 
 export default function JobCard({ job }: { job: Job }) {
   const role = useAppSelector(selectedUser)?.role;
   const userId = useAppSelector(selectedUser)?.id;
+
+  const { data: applications } = useFetch({
+    queryKey: ["applications", userId],
+    queryFn: () => getUserApplications(userId!),
+    enabled: !!userId,
+  });
+
+  const isApplied = Boolean(
+    applications?.some((app) => app.job_id === job.id)
+  );
 
   const isEmployer = role === "employer";
   const canManageJob = isEmployer && userId === job.owner_id;
@@ -52,29 +66,41 @@ export default function JobCard({ job }: { job: Job }) {
     if (!isEmployer) {
       navigate.push(`/jobSeeker/jobs/${job.id}`);
     }
-  };
+  }
 
   return (
     <Card
+      onClick={handleCardClick}
       className={`
         group relative w-full overflow-hidden rounded-3xl
-        border border-slate-200/80 bg-white
-        shadow-sm
-        transition-all duration-300
+        border transition-all duration-300
         ${
-          !isEmployer
+          isApplied
+            ? "border-emerald-200/80 bg-emerald-50/30 opacity-85 dark:border-emerald-900/40 dark:bg-emerald-950/10"
+            : "border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-950"
+        }
+        ${
+          !isEmployer && !isApplied
             ? "cursor-pointer hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-950/5"
+            : !isEmployer && isApplied
+            ? "cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-800"
             : ""
         }
-        dark:border-slate-800 dark:bg-slate-950
+        shadow-sm
       `}
     >
-      <div className="absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-blue-600 via-indigo-600 to-violet-600 opacity-70" />
+      <div
+        className={`absolute inset-x-0 top-0 h-1 transition-all ${
+          isApplied
+            ? ""
+            : "bg-linear-to-r from-blue-600 via-indigo-600 to-violet-600 opacity-70"
+        }`}
+      />
 
       <div className="p-5 sm:p-6">
         <CardHeader className="p-0">
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <div
                 className={`
                   inline-flex items-center gap-1.5 rounded-full
@@ -82,7 +108,7 @@ export default function JobCard({ job }: { job: Job }) {
                   text-[10px] font-bold uppercase tracking-wider
                   ${
                     job.status === "open"
-                      ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-400"
+                      ? "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900/60 dark:bg-blue-950/30 dark:text-blue-400"
                       : "border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
                   }
                 `}
@@ -90,14 +116,9 @@ export default function JobCard({ job }: { job: Job }) {
                 <span
                   className={`
                     h-1.5 w-1.5 rounded-full
-                    ${
-                      job.status === "open"
-                        ? "bg-emerald-500"
-                        : "bg-slate-400"
-                    }
+                    ${job.status === "open" ? "bg-blue-500" : "bg-slate-400"}
                   `}
                 />
-
                 {job.status ?? "draft"}
               </div>
 
@@ -107,7 +128,15 @@ export default function JobCard({ job }: { job: Job }) {
               </div>
             </div>
 
-            {canManageJob && (
+            {isApplied && !isEmployer ? (
+              <Badge
+                variant="outline"
+                className="inline-flex items-center gap-1 rounded-full border-emerald-300 bg-emerald-100/80 px-2.5 py-1 text-[10px] font-bold text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+              >
+                <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                Applied
+              </Badge>
+            ) : canManageJob ? (
               <div
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-1"
@@ -120,37 +149,29 @@ export default function JobCard({ job }: { job: Job }) {
                     job,
                   }}
                 />
-
                 <DeleteJobButton jobId={job.id} />
               </div>
-            )}
+            ) : null}
           </div>
 
           <div className="mt-6 flex items-start gap-4">
             <div
-              className="
+              className={`
                 flex h-12 w-12 shrink-0 items-center justify-center
-                rounded-2xl
-                bg-slate-900 text-white
-                shadow-lg shadow-slate-900/10
-                transition-all duration-300
-                group-hover:scale-105 group-hover:shadow-indigo-900/10
-                dark:bg-white dark:text-slate-900
-              "
+                rounded-2xl shadow-lg transition-all duration-300
+                ${
+                  isApplied
+                    ? "bg-emerald-900 text-emerald-100 shadow-emerald-900/10 dark:bg-emerald-100 dark:text-emerald-950"
+                    : "bg-slate-900 text-white shadow-slate-900/10 dark:bg-white dark:text-slate-900"
+                }
+                group-hover:scale-105
+              `}
             >
               <Building2 className="h-5 w-5" />
             </div>
 
             <div className="min-w-0 flex-1 space-y-1">
-              <CardTitle
-                className="
-                  line-clamp-1
-                  text-lg sm:text-xl
-                  font-bold tracking-tight
-                  text-slate-900
-                  dark:text-slate-50
-                "
-              >
+              <CardTitle className="line-clamp-1 text-lg font-bold tracking-tight text-slate-900 sm:text-xl dark:text-slate-50">
                 {job.title ?? "Untitled Position"}
               </CardTitle>
 
@@ -161,22 +182,12 @@ export default function JobCard({ job }: { job: Job }) {
           </div>
         </CardHeader>
 
-        <CardContent className="mt-6 space-y-5 p-0" >
+        <CardContent className="mt-6 space-y-5 p-0">
           <div className="flex flex-wrap gap-2">
             {job.employment_type && (
               <Badge
                 variant="outline"
-                className="
-                  rounded-full
-                  border-slate-200
-                  bg-slate-50
-                  px-3 py-1.5
-                  text-[11px] font-semibold
-                  text-slate-600
-                  dark:border-slate-800
-                  dark:bg-slate-900
-                  dark:text-slate-300
-                "
+                className="rounded-full border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
               >
                 {job.employment_type}
               </Badge>
@@ -185,17 +196,7 @@ export default function JobCard({ job }: { job: Job }) {
             {job.experience_level && (
               <Badge
                 variant="outline"
-                className="
-                  rounded-full
-                  border-slate-200
-                  bg-slate-50
-                  px-3 py-1.5
-                  text-[11px] font-semibold
-                  text-slate-600
-                  dark:border-slate-800
-                  dark:bg-slate-900
-                  dark:text-slate-300
-                "
+                className="rounded-full border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
               >
                 {job.experience_level}
               </Badge>
@@ -204,17 +205,7 @@ export default function JobCard({ job }: { job: Job }) {
             {job.location && (
               <Badge
                 variant="outline"
-                className="
-                  rounded-full
-                  border-slate-200
-                  bg-slate-50
-                  px-3 py-1.5
-                  text-[11px] font-semibold
-                  text-slate-600
-                  dark:border-slate-800
-                  dark:bg-slate-900
-                  dark:text-slate-300
-                "
+                className="rounded-full border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
               >
                 <MapPin className="mr-1.5 h-3 w-3" />
                 {job.location}
@@ -222,31 +213,10 @@ export default function JobCard({ job }: { job: Job }) {
             )}
           </div>
 
-          <div
-            className="
-              relative overflow-hidden
-              rounded-2xl
-              border border-emerald-100
-              bg-linear-to-br from-emerald-50 to-white
-              px-4 py-4
-              dark:border-emerald-900/40
-              dark:from-emerald-950/30
-              dark:to-slate-950
-            "
-          >
+          <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-linear-to-br from-emerald-50 to-white px-4 py-4 dark:border-emerald-900/40 dark:from-emerald-950/30 dark:to-slate-950">
             <div className="flex items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
-                <div
-                  className="
-                    flex h-9 w-9 shrink-0 items-center justify-center
-                    rounded-xl
-                    bg-white
-                    text-emerald-600
-                    shadow-sm
-                    dark:bg-emerald-950/60
-                    dark:text-emerald-400
-                  "
-                >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-xs dark:bg-emerald-950/60 dark:text-emerald-400">
                   <Banknote className="h-4 w-4" />
                 </div>
 
@@ -254,10 +224,8 @@ export default function JobCard({ job }: { job: Job }) {
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700/60 dark:text-emerald-400/60">
                     Salary Range
                   </p>
-
                   <p className="truncate text-xs font-bold text-emerald-950 dark:text-emerald-200">
-                    {formatSalary(job.salary_min)} –{" "}
-                    {formatSalary(job.salary_max)}
+                    {formatSalary(job.salary_min)} – {formatSalary(job.salary_max)}
                   </p>
                 </div>
               </div>
@@ -270,36 +238,36 @@ export default function JobCard({ job }: { job: Job }) {
         </CardContent>
 
         {!isEmployer && (
-          <CardFooter className="mt-5 p-0">
+          <CardFooter className="mt-5 flex items-center gap-2 p-0">
             <Button
-             onClick={isEmployer ? undefined : handleCardClick}
-              className="
-                h-11 w-1/2
-                grow mt-1 mx-1
-                rounded-xl
-                bg-slate-900
-                text-sm font-semibold text-white
-                shadow-sm
-                transition-all duration-300
-                hover:bg-indigo-700
-                hover:shadow-lg hover:shadow-indigo-900/10
-                dark:bg-white
-                dark:text-slate-900
-                dark:hover:bg-indigo-50
-              "
+              disabled={isApplied}
+              className={`
+                h-11 flex-1 rounded-xl text-sm font-semibold shadow-xs transition-all duration-300
+                ${
+                  isApplied
+                    ? "bg-emerald-600 text-white opacity-90 cursor-default dark:bg-emerald-600"
+                    : "bg-slate-900 text-white hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-900/10 dark:bg-white dark:text-slate-900 dark:hover:bg-indigo-50"
+                }
+              `}
             >
-              Apply Now
-
-              <ArrowUpRight
-                className="
-                  ml-1 h-4 w-4
-                  transition-transform duration-300
-                  group-hover:translate-x-0.5
-                  group-hover:-translate-y-0.5
-                "
-              />
+              {isApplied ? (
+                <>
+                  <CheckCircle2 className="mr-1.5 h-4 w-4" />
+                  Application Submitted
+                </>
+              ) : (
+                <>
+                  Apply Now
+                  <ArrowUpRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </>
+              )}
             </Button>
-            <SaveJobs jobId={job.id}/>
+            <div onClick={(e) => e.stopPropagation()}>
+              <SaveJobs jobId={job.id} />
+            </div>
+            {isApplied && 
+              <WithdrawButton userId={userId as string} jobId={job.id} />
+              }
           </CardFooter>
         )}
       </div>

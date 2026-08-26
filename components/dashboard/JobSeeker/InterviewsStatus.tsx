@@ -1,5 +1,6 @@
 "use client";
 
+import UserApplicationsListSkeleton from "@/components/skeletons/UserApplicationsListSkeleton";
 import { useFetch } from "@/hooks/useFetch";
 import { formattedDate } from "@/lib/helpers";
 import { getUserApplications } from "@/services/application";
@@ -29,20 +30,7 @@ export default function InterviewsStatus() {
     return (
       <div className="space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-27.5 animate-pulse rounded-2xl border border-slate-200/70 bg-white p-4"
-          >
-            <div className="flex items-center justify-between">
-              <div className="h-4 w-32 rounded-md bg-slate-100" />
-              <div className="h-6 w-16 rounded-full bg-slate-100" />
-            </div>
-
-            <div className="mt-4 flex gap-4">
-              <div className="h-3 w-24 rounded bg-slate-100" />
-              <div className="h-3 w-28 rounded bg-slate-100" />
-            </div>
-          </div>
+        <UserApplicationsListSkeleton key={i} i={i}/>
         ))}
       </div>
     );
