@@ -28,6 +28,7 @@ import DeleteJobButton from "./DeleteJobButton";
 import JobFormDialog from "./JobFormDialog";
 import SaveJobs from "./SaveJobs";
 import WithdrawButton from "./WithdrawButton";
+import { formatSalary, formattedDate } from "@/lib/helpers";
 
 export default function JobCard({ job }: { job: Job }) {
   const role = useAppSelector(selectedUser)?.role;
@@ -39,34 +40,18 @@ export default function JobCard({ job }: { job: Job }) {
     enabled: !!userId,
   });
 
-  const isApplied = Boolean(
-    applications?.some((app) => app.job_id === job.id)
-  );
+  const isApplied = Boolean(applications?.some((app) => app.job_id === job.id));
 
   const isEmployer = role === "employer";
   const canManageJob = isEmployer && userId === job.owner_id;
 
   const navigate = useRouter();
 
-  const formatSalary = (amount?: number | null) =>
-    amount
-      ? new Intl.NumberFormat("en-EG", {
-          style: "currency",
-          currency: "EGP",
-          maximumFractionDigits: 0,
-        }).format(amount)
-      : "Negotiable";
-
-  const formattedDate = new Date(job.created_at).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
-
   const handleCardClick = () => {
     if (!isEmployer) {
       navigate.push(`/jobSeeker/jobs/${job.id}`);
     }
-  }
+  };
 
   return (
     <Card
@@ -83,8 +68,8 @@ export default function JobCard({ job }: { job: Job }) {
           !isEmployer && !isApplied
             ? "cursor-pointer hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-950/5"
             : !isEmployer && isApplied
-            ? "cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-800"
-            : ""
+              ? "cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-800"
+              : ""
         }
         shadow-sm
       `}
@@ -124,7 +109,7 @@ export default function JobCard({ job }: { job: Job }) {
 
               <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500">
                 <Clock className="h-3 w-3" />
-                {formattedDate}
+                {formattedDate(job.created_at)}
               </div>
             </div>
 
@@ -225,7 +210,8 @@ export default function JobCard({ job }: { job: Job }) {
                     Salary Range
                   </p>
                   <p className="truncate text-xs font-bold text-emerald-950 dark:text-emerald-200">
-                    {formatSalary(job.salary_min)} – {formatSalary(job.salary_max)}
+                    {formatSalary(job.salary_min)} –{" "}
+                    {formatSalary(job.salary_max)}
                   </p>
                 </div>
               </div>
@@ -265,9 +251,9 @@ export default function JobCard({ job }: { job: Job }) {
             <div onClick={(e) => e.stopPropagation()}>
               <SaveJobs jobId={job.id} />
             </div>
-            {isApplied && 
+            {isApplied && (
               <WithdrawButton userId={userId as string} jobId={job.id} />
-              }
+            )}
           </CardFooter>
         )}
       </div>

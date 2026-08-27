@@ -11,6 +11,7 @@ export const getAvatarGradient = (name: string = "C") => {
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return gradients[charCodeSum % gradients.length];
 };
+
 export const formatSalary = (amount: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",

@@ -29,9 +29,38 @@ export default function DeleteJobButton({ jobId }: { jobId: string }) {
   return (
     <>
       <AlertDialog>
-        <AlertDialogTrigger>
-          <Trash2 size={16} color="red" className="cursor-pointer" />
-        </AlertDialogTrigger>
+        <AlertDialogTrigger
+          render={
+            <button
+              type="button"
+              aria-label="Delete item"
+              className="
+    group inline-flex items-center justify-center
+    rounded-xl border border-red-100
+    bg-red-50 p-2
+    text-red-500
+    shadow-sm
+    transition-all duration-200
+    hover:border-red-200
+    hover:bg-red-100
+    hover:text-red-600
+    hover:shadow-md
+    active:scale-95
+    focus-visible:outline-none
+    focus-visible:ring-2
+    focus-visible:ring-red-500
+    focus-visible:ring-offset-2
+    cursor-pointer
+  "
+            >
+              <Trash2
+                size={16}
+                strokeWidth={2}
+                className="transition-transform duration-200 group-hover:scale-110"
+              />
+            </button>
+          }
+        ></AlertDialogTrigger>
 
         <AlertDialogContent>
           <AlertDialogHeader>

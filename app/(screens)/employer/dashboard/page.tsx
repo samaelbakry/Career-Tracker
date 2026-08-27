@@ -1,4 +1,3 @@
-"use client";
 import CandidateStatus from "@/components/dashboard/employer/CandidateStatus";
 import EmployerCompanyHeader from "@/components/dashboard/employer/EmployerCompanyHeader";
 import JobStatus from "@/components/dashboard/employer/JobStatus";
