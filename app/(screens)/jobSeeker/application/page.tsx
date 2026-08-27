@@ -50,12 +50,11 @@ export default function Application() {
       return;
     }
     try {
-      const application = await applyForJob({
+      await applyForJob({
         jobId,
         resumeUrl: formData.resume_url,
         coverLetter: formData.cover_letter,
       });
-      console.log("Application submitted:", application);
 
       toast("Application submitted successfully.");
       setTimeout(() => {

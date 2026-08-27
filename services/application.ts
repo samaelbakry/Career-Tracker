@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { ApplicationWithDetails, RawApplication } from "@/types/applications";
 
 type Props = {
   jobId: string;
@@ -63,62 +64,68 @@ export async function getDashboardStats(userId: string) {
 
   return {
     applied: data.length,
-    Reviewing: data.filter((app: { status: string }) => app.status === "Reviewing").length,
-    rejected: data.filter((app: { status: string }) => app.status === "rejected").length,
-    Offer: data.filter((app: { status: string }) => app.status === "Offer").length,
-    Interview: data.filter((app: { status: string }) => app.status === "Interview").length,
+    Reviewing: data.filter(
+      (app: { status: string }) => app.status === "Reviewing",
+    ).length,
+    rejected: data.filter(
+      (app: { status: string }) => app.status === "rejected",
+    ).length,
+    Offer: data.filter((app: { status: string }) => app.status === "Offer")
+      .length,
+    Interview: data.filter(
+      (app: { status: string }) => app.status === "Interview",
+    ).length,
   };
 }
 
-export async function getUserApplications(userId: string) {
+export async function getUserApplications(userId: string): Promise<ApplicationWithDetails[]> {
   const { data, error } = await supabase
     .from("applications")
     .select(`
+    id,
+    status,
+    applied_at,
+    resume_url,
+    job_id,
+    cover_letter,
+
+    job:jobs (
       id,
-      status,
-      applied_at,
-      resume_url,
-      job_id,
-      cover_letter,
+      title,
+      location,
 
-      job:jobs (
+      company:companies (
         id,
-        title,
-        location,
-
-        company:companies (
-          id,
-          name,
-          logo_url
-        )
-      ),
-
-      interviews!interviews_application_id_fkey (
-        id,
-        application_id,
-        scheduled_at,
-        duration_minutes,
-        interview_type,
-        meeting_url,
-        notes,
-        status
+        name,
+        logo_url
       )
-    `)
-    .eq("user_id", userId)
-    .order("applied_at", { ascending: false });
+    ),
 
-  if (error) {
-    console.error("getUserApplications:", error);
-    throw new Error(error.message);
-  }
+    interviews!interviews_application_id_fkey (
+      id,
+      application_id,
+      scheduled_at,
+      duration_minutes,
+      interview_type,
+      meeting_url,
+      notes,
+      status
+    )
+  `)
+    .eq("user_id", userId);
 
-  return data;
+  if (error) throw error;
+
+  return (data as RawApplication[]).map((app) => ({
+    ...app,
+    job: {
+      ...app.job[0],
+      company: app.job[0]?.company[0],
+    },
+  })) as ApplicationWithDetails[];
 }
 
-export async function withdrawApplication(
-  userId: string,
-  jobId: string
-) {
+export async function withdrawApplication(userId: string, jobId: string) {
   const { error } = await supabase
     .from("applications")
     .delete()

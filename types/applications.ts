@@ -14,24 +14,32 @@ export type Application = {
   user_id: string;
 }
 
+export type ApplicationCompany = {
+  id: string;
+  name: string;
+  logo_url: string | null;
+};
+
+export type ApplicationJob = {
+  id: string;
+  title: string;
+  location: string;
+  company: ApplicationCompany;
+};
+
 export type ApplicationWithDetails = {
-   id: string;
-  status: string;
+  id: string;
+  job_id: string;
   applied_at: string;
-  resume_url: string | null;
-  cover_letter: string | null;
-
-  job: {
-    id: string;
-    title: string;
-    location: string | null;
-
-    company: {
-      id: string;
-      name: string;
-      logo_url: string | null;
-    } | null;
-  } | null;
-
+  cover_letter: string;
+  resume_url: string;
+  status: string;
+  job: ApplicationJob;
   interviews: Interview[];
-}
+};
+
+export type RawApplication = Omit<ApplicationWithDetails, "job"> & {
+  job: (Omit<ApplicationJob, "company"> & {
+    company: ApplicationCompany[];
+  })[];
+};
