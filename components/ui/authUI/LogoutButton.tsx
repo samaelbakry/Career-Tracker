@@ -27,10 +27,11 @@ export default function LogoutButton() {
     try {
       await signOut();
 
+      await fetch("/api/auth/logout" , {
+        method:"POST"
+      })
       dispatch(logout());
-
       toast.success("Logged out successfully");
-
       navigate.push("/");
     } catch (error) {
       console.error(error);

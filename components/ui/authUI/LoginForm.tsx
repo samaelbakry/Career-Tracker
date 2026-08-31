@@ -8,7 +8,14 @@ import { getProfile, signIn } from "@/services/auth";
 import { useAppDispatch } from "@/store/hooks/redux-hooks";
 import { setCredentials } from "@/store/slices/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Eye, EyeOff, LoaderCircle, Lock, Mail } from "lucide-react";
+import {
+  AlertCircle,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  Lock,
+  Mail,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,7 +25,7 @@ import { toast } from "sonner";
 export default function LoginForm() {
   const navigate = useRouter();
   const dispatch = useAppDispatch();
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<loginSchemaType>({
     mode: "all",
     defaultValues: {
@@ -28,10 +35,11 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  async function sendLogInData(values: loginSchemaType) {
+  const sendLogInData = async (values: loginSchemaType) => {
     try {
       const userData = await signIn(values);
       const profile = await getProfile(userData.id);
+
       dispatch(
         setCredentials({
           user: {
@@ -40,11 +48,23 @@ export default function LoginForm() {
             email: userData.email!,
             role: profile.role!,
             created_at: userData.created_at,
-            avatar_url:profile.avatar_url
+            avatar_url: profile.avatar_url,
           },
         }),
       );
+
+      await fetch("/api/auth/set-role", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          role: profile.role,
+        }),
+      });
+
       toast.success("Logged in successfully!");
+
       if (profile.role === "employer") {
         navigate.push("/employer/feed");
       } else {
@@ -56,7 +76,7 @@ export default function LoginForm() {
         toast.error(error.message);
       }
     }
-  }
+  };
 
   return (
     <form onSubmit={form.handleSubmit(sendLogInData)} className="space-y-4">
@@ -64,8 +84,14 @@ export default function LoginForm() {
         name="email"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="space-y-1.5 font-sans">
-            <FieldLabel htmlFor={field.name} className="block text-xs font-semibold text-slate-800">
+          <Field
+            data-invalid={fieldState.invalid}
+            className="space-y-1.5 font-sans"
+          >
+            <FieldLabel
+              htmlFor={field.name}
+              className="block text-xs font-semibold text-slate-800"
+            >
               Email Address
             </FieldLabel>
             <div className="relative">
@@ -100,10 +126,16 @@ export default function LoginForm() {
         name="password"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="space-y-1.5 font-sans">
-              <FieldLabel htmlFor={field.name} className="block text-xs font-semibold text-slate-800">
-                Password
-              </FieldLabel>
+          <Field
+            data-invalid={fieldState.invalid}
+            className="space-y-1.5 font-sans"
+          >
+            <FieldLabel
+              htmlFor={field.name}
+              className="block text-xs font-semibold text-slate-800"
+            >
+              Password
+            </FieldLabel>
 
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -163,6 +195,5 @@ export default function LoginForm() {
         </Link>
       </div>
     </form>
-  
   );
 }
