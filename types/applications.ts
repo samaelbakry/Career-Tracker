@@ -37,9 +37,3 @@ export type ApplicationWithDetails = {
   job: ApplicationJob;
   interviews: Interview[];
 };
-
-export type RawApplication = Omit<ApplicationWithDetails, "job"> & {
-  job: (Omit<ApplicationJob, "company"> & {
-    company: ApplicationCompany[];
-  })[];
-};

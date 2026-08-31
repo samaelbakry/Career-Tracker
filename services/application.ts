@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { ApplicationWithDetails, RawApplication } from "@/types/applications";
+import { ApplicationWithDetails } from "@/types/applications";
 
 type Props = {
   jobId: string;
@@ -82,47 +82,41 @@ export async function getUserApplications(userId: string): Promise<ApplicationWi
   const { data, error } = await supabase
     .from("applications")
     .select(`
-    id,
-    status,
-    applied_at,
-    resume_url,
-    job_id,
-    cover_letter,
-
-    job:jobs (
       id,
-      title,
-      location,
+      status,
+      applied_at,
+      resume_url,
+      job_id,
+      cover_letter,
 
-      company:companies (
+      job:jobs (
         id,
-        name,
-        logo_url
-      )
-    ),
+        title,
+        location,
 
-    interviews!interviews_application_id_fkey (
-      id,
-      application_id,
-      scheduled_at,
-      duration_minutes,
-      interview_type,
-      meeting_url,
-      notes,
-      status
-    )
-  `)
+        company:companies (
+          id,
+          name,
+          logo_url
+        )
+      ),
+
+      interviews!interviews_application_id_fkey (
+        id,
+        application_id,
+        scheduled_at,
+        duration_minutes,
+        interview_type,
+        meeting_url,
+        notes,
+        status
+      )
+    `)
     .eq("user_id", userId);
 
   if (error) throw error;
 
-  return (data as RawApplication[]).map((app) => ({
-    ...app,
-    job: {
-      ...app.job[0],
-      company: app.job[0]?.company[0],
-    },
-  })) as ApplicationWithDetails[];
+  return (data ?? []) as unknown as ApplicationWithDetails[];
 }
 
 export async function withdrawApplication(userId: string, jobId: string) {

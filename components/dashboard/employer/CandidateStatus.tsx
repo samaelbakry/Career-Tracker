@@ -31,11 +31,7 @@ export default function CandidateStatus() {
     enabled: !!userId,
   });
 
-  const {
-    data: applications ,
-    isLoading: applicationsLoading,
-    isError: applicationsError,
-  } = useFetch({
+  const { data: applications , isLoading: applicationsLoading,  isError: applicationsError} = useFetch({
     queryKey: ["getEmployerApplications", company?.id],
     queryFn: () => company?.id ? getEmployerApplications(company.id) : Promise.resolve([]),
     enabled: !!company?.id,

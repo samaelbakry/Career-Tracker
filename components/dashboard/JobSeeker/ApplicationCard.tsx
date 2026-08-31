@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 
 export default function ApplicationCard({app}: {app: ApplicationWithDetails}) {
-  const statusConfig = getStatusBadge(app.status);
+  const statusConfig = getStatusBadge(app?.status);
   const StatusIcon = statusConfig.icon;
   const company = app.job?.company;
 

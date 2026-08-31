@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { Application } from "@/types/applications";
 import { Company } from "@/types/companies";
 
 export type ApplicationStatus =
@@ -72,7 +73,7 @@ export async function getEmployerApplications(companyId: string) {
     throw new Error(error.message);
   }
 
-  return data ?? [];
+ return (data ?? []) as unknown as Application[];
 }
 
 export async function UpdateApplicationStatus(applicationId: string , status:ApplicationStatus) {
