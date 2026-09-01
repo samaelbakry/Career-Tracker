@@ -163,8 +163,7 @@ export default function CandidateStatusCard({ applications , setActiveCoverLette
                       type="button"
                       onClick={() =>
                         setActiveCoverLetter({
-                          candidateName:
-                            application.profiles?.full_name || "Candidate",
+                          candidateName:application.profiles?.full_name || "Candidate",
                           text: application.cover_letter || "",
                         })
                       }
