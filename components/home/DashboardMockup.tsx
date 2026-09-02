@@ -37,7 +37,7 @@ export default function DashboardMockup() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <div className="space-y-2.5 rounded-2xl border border-slate-100 bg-[#F8FAFC] p-3">
             <div className="flex items-center justify-between px-1">
               <span className="text-xs font-bold text-slate-700">Applied</span>
