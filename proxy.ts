@@ -4,19 +4,13 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const role = request.cookies.get("role")?.value;
 
-  if (
-    role === "employer" &&
-    pathname.startsWith("/jobSeeker")
-  ) {
+  if (role === "employer" && pathname.startsWith("/jobSeeker")) {
     return NextResponse.redirect(
       new URL("/employer/feed", request.url)
     );
   }
 
-  if (
-    role === "job_seeker" &&
-    pathname.startsWith("/employer")
-  ) {
+  if (role === "job_seeker" && pathname.startsWith("/employer")) {
     return NextResponse.redirect(
       new URL("/jobSeeker/search", request.url)
     );

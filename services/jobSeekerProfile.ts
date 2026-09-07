@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { JobSeekerProfile } from "@/types/jobSeeker";
 
 export async function updateUserProfile(name: string, avatarUrl: string) {
   const {
@@ -62,3 +63,39 @@ export async function uploadAvatar(file: File) {
   return publicUrl;
 }
 
+
+export async function getJobSeekerProfile( userId: string) {
+  const { data, error } = await supabase
+    .from("job_seeker_profiles")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return data as JobSeekerProfile | null;
+}
+
+
+export async function upsertJobSeekerProfile(
+  profile: Partial<JobSeekerProfile> & {
+    user_id: string;
+  }
+) {
+  const { data, error } = await supabase
+    .from("job_seeker_profiles")
+    // inset if has no user_id, update if has user_id (profile)
+    .upsert(profile, {
+      onConflict: "user_id",
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data as JobSeekerProfile;
+}

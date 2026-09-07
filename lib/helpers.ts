@@ -1,3 +1,5 @@
+import { Certificate, JobSeekerProfile } from "@/types/jobSeeker";
+
 export const getAvatarGradient = (name: string = "C") => {
   const gradients = [
     "from-indigo-500 to-purple-600 text-white",
@@ -24,3 +26,85 @@ export const formattedDate = (date: string) =>
     month: "short",
     day: "numeric",
   });
+
+export function calculateProfileCompletion(
+  profile: JobSeekerProfile | null,
+  certificates: Certificate[] = []
+) {
+  if (!profile) {
+    return {
+      percentage: 0,
+      missing: [
+        "Target job title",
+        "Experience",
+        "Skills",
+        "Location",
+        "Work mode",
+        "Employment type",
+        "Certificates",
+        "Bio",
+      ],
+    };
+  }
+
+  const items = [
+    {
+      label: "Target job title",
+      completed: !!profile.target_job_title,
+    },
+
+    {
+      label: "Experience",
+      completed:
+        profile.experience_years !== null ||
+        !!profile.experience_level,
+    },
+
+    {
+      label: "Skills",
+      completed: profile.skills.length > 0,
+    },
+
+    {
+      label: "Location",
+      completed: !!profile.preferred_location,
+    },
+
+    {
+      label: "Work mode",
+      completed: !!profile.work_mode,
+    },
+
+    {
+      label: "Employment type",
+      completed: !!profile.employment_type,
+    },
+
+    {
+      label: "Certificates",
+      completed: certificates.length > 0,
+    },
+
+    {
+      label: "Bio",
+      completed: !!profile.bio,
+    },
+  ];
+
+  const completed = items.filter(
+    (item) => item.completed
+  ).length;
+
+  const percentage = Math.round(
+    (completed / items.length) * 100
+  );
+
+  const missing = items
+    .filter((item) => !item.completed)
+    .map((item) => item.label);
+
+  return {
+    percentage,
+    missing,
+  };
+}
