@@ -77,6 +77,19 @@ export async function getJobSeekerProfile( userId: string) {
 
   return data as JobSeekerProfile | null;
 }
+export async function getCertificates( userId: string) {
+  const { data, error } = await supabase
+    .from("certificates")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return data 
+}
 
 
 export async function upsertJobSeekerProfile(

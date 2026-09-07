@@ -82,7 +82,7 @@ export function calculateProfileCompletion(
 
     {
       label: "Certificates",
-      completed: certificates.length > 0,
+      completed: certificates?.length > 0,
     },
 
     {
@@ -92,7 +92,7 @@ export function calculateProfileCompletion(
   ];
 
   const completed = items.filter(
-    (item) => item.completed
+    (item) => item?.completed
   ).length;
 
   const percentage = Math.round(
