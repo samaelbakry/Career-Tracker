@@ -17,7 +17,7 @@ export async function signUp(values: registerSchemaType) {
     email: values.email,
     password: values.password,
     options: {
-      emailRedirectTo:"http://localhost:3000/login",
+      emailRedirectTo:"https://career-tracker-lake.vercel.app/login",
       data: {
         full_name: values.name,
         role: values.role,
