@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 import { upsertJobSeekerProfile } from "@/services/jobSeekerProfile";
-import { JobSeekerProfile } from "@/types/jobSeeker";
+import { JobSeekerProfile } from "@/types/profileOptimizing";
 import {
   ProfileFormValues,
   profileSchema,

@@ -1,29 +1,22 @@
 "use client";
+import { useFetch } from '@/hooks/useFetch';
+import { getCertificates } from '@/services/certificates';
+import { useAppSelector } from '@/store/hooks/redux-hooks';
+import { selectedUser } from '@/store/slices/authSlice';
+import { AlertCircle, Loader2, LogIn, UserX } from 'lucide-react';
+import CertificatesForm from './CertificatesForm';
+import CertificatesView from './CertificatesView';
 
-import { useFetch } from "@/hooks/useFetch";
-import { getJobSeekerProfile } from "@/services/jobSeekerProfile";
-import { useAppSelector } from "@/store/hooks/redux-hooks";
-import { selectedUser } from "@/store/slices/authSlice";
-import { AlertCircle, Loader2, LogIn, UserX } from "lucide-react";
+export default function CertificatesCompleteCard() {
+     const userId = useAppSelector(selectedUser)?.id;
 
-import JobSeekerProfileForm from "./JobSeekerProfileForm";
-import JobSeekerProfileView from "./JobSeekerProfileView";
-
-export default function JobSeekerProfileOptimization() {
-  const user = useAppSelector(selectedUser);
-  const userId = user?.id;
-
-  const {
-    data: profile,
-    isLoading,
-    isError,
-  } = useFetch({
-    queryFn: () => getJobSeekerProfile(userId!),
-    queryKey: ["jobSeekerProfile", userId],
+  const { data: certificates = [] , isLoading , isError  , refetch } = useFetch({
+    queryFn: () => getCertificates(userId!),
+    queryKey: ["certificates", userId],
     enabled: !!userId,
   });
 
-  if (!userId) {
+   if (!userId) {
     return (
       <div className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-8 text-center shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-12">
         <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
@@ -67,10 +60,10 @@ export default function JobSeekerProfileOptimization() {
           </div>
           <div className="space-y-1">
             <h3 className="text-lg font-black tracking-tight text-slate-950 sm:text-xl">
-              Failed to Load Profile
+              Failed to Load Certificates
             </h3>
             <p className="text-xs text-slate-500 sm:text-sm">
-              Something went wrong while fetching your details. Please try refreshing the page.
+              Something went wrong while fetching your certificate details. Please try refreshing the page.
             </p>
           </div>
         </div>
@@ -78,7 +71,7 @@ export default function JobSeekerProfileOptimization() {
     );
   }
 
-  if (!profile) {
+  if (!certificates || certificates.length === 0) {
     return (
       <div className="space-y-6">
         <div className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
@@ -89,19 +82,19 @@ export default function JobSeekerProfileOptimization() {
             </div>
             <div>
               <h2 className="text-lg font-black text-slate-950 sm:text-xl">
-                Complete Your Profile
+                Complete Your Certificates
               </h2>
               <p className="text-xs text-slate-500 sm:text-sm">
-                No profile details were found. Fill out the form below to get started.
+                No certificate details were found. Fill out the form below to get started.
               </p>
             </div>
           </div>
         </div>
 
-        <JobSeekerProfileForm userId={userId} profile={null} />
+        <CertificatesForm  />
       </div>
     );
   }
 
-  return <JobSeekerProfileView profile={profile} />;
+  return <CertificatesView certificates={certificates} refetch={refetch} isLoading={isLoading} />;
 }

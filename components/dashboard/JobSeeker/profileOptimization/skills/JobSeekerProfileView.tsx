@@ -1,13 +1,13 @@
-import { JobSeekerProfile } from "@/types/jobSeeker";
+import { JobSeekerProfile } from "@/types/profileOptimizing";
 import {
-    Briefcase,
-    Calendar,
-    Clock,
-    Code2,
-    Globe,
-    MapPin,
-    Sparkles,
-    User
+  Briefcase,
+  Calendar,
+  Clock,
+  Code2,
+  Globe,
+  MapPin,
+  Sparkles,
+  User,
 } from "lucide-react";
 
 export default function JobSeekerProfileView({
@@ -41,7 +41,8 @@ export default function JobSeekerProfileView({
 
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700">
               <Calendar size={13} className="text-blue-500" />
-              {profile?.experience_years ?? 0} {profile?.experience_years === 1 ? "year" : "years"} experience
+              {profile?.experience_years ?? 0}{" "}
+              {profile?.experience_years === 1 ? "year" : "years"} experience
             </span>
           </div>
         </div>
@@ -109,7 +110,9 @@ export default function JobSeekerProfileView({
                 </span>
               ))
             ) : (
-              <p className="text-xs text-slate-400 italic">No skills listed yet.</p>
+              <p className="text-xs text-slate-400 italic">
+                No skills listed yet.
+              </p>
             )}
           </div>
         </div>

@@ -8,7 +8,7 @@ import CardSkeleton from "../skeletons/CardSkeleton";
 
 import { BriefcaseBusiness, Sparkles } from "lucide-react";
 import PaginationBar from "../ui/PaginationBar";
-import ProfileCompletionCard from "../dashboard/JobSeeker/profileOptimization/ProfileCompletionCard";
+import ProfileCompletionCard from "../dashboard/JobSeeker/profileOptimization/skills/ProfileCompletionCard";
 
 const JOBS_PER_PAGE = 6;
 

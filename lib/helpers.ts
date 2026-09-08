@@ -1,4 +1,4 @@
-import { Certificate, JobSeekerProfile } from "@/types/jobSeeker";
+import { Certificate, JobSeekerProfile } from "@/types/profileOptimizing";
 
 export const getAvatarGradient = (name: string = "C") => {
   const gradients = [
@@ -29,7 +29,7 @@ export const formattedDate = (date: string) =>
 
 export function calculateProfileCompletion(
   profile: JobSeekerProfile | null,
-  certificates: Certificate[] = []
+  certificates: Certificate[] = [],
 ) {
   if (!profile) {
     return {
@@ -56,8 +56,7 @@ export function calculateProfileCompletion(
     {
       label: "Experience",
       completed:
-        profile.experience_years !== null ||
-        !!profile.experience_level,
+        profile.experience_years !== null || !!profile.experience_level,
     },
 
     {
@@ -91,13 +90,9 @@ export function calculateProfileCompletion(
     },
   ];
 
-  const completed = items.filter(
-    (item) => item?.completed
-  ).length;
+  const completed = items.filter((item) => item?.completed).length;
 
-  const percentage = Math.round(
-    (completed / items.length) * 100
-  );
+  const percentage = Math.round((completed / items.length) * 100);
 
   const missing = items
     .filter((item) => !item.completed)

@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { JobSeekerProfile } from "@/types/jobSeeker";
+import { JobSeekerProfile } from "@/types/profileOptimizing";
 
 export async function updateUserProfile(name: string, avatarUrl: string) {
   const {
@@ -63,8 +63,7 @@ export async function uploadAvatar(file: File) {
   return publicUrl;
 }
 
-
-export async function getJobSeekerProfile( userId: string) {
+export async function getJobSeekerProfile(userId: string) {
   const { data, error } = await supabase
     .from("job_seeker_profiles")
     .select("*")
@@ -77,25 +76,11 @@ export async function getJobSeekerProfile( userId: string) {
 
   return data as JobSeekerProfile | null;
 }
-export async function getCertificates( userId: string) {
-  const { data, error } = await supabase
-    .from("certificates")
-    .select("*")
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  if (error) {
-    throw error;
-  }
-
-  return data 
-}
-
 
 export async function upsertJobSeekerProfile(
   profile: Partial<JobSeekerProfile> & {
     user_id: string;
-  }
+  },
 ) {
   const { data, error } = await supabase
     .from("job_seeker_profiles")

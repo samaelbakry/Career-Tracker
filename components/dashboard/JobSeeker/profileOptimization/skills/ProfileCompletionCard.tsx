@@ -2,8 +2,8 @@
 
 import { useFetch } from "@/hooks/useFetch";
 import { calculateProfileCompletion } from "@/lib/helpers";
+import { getCertificates } from "@/services/certificates";
 import {
-  getCertificates,
   getJobSeekerProfile,
 } from "@/services/jobSeekerProfile";
 import { useAppSelector } from "@/store/hooks/redux-hooks";

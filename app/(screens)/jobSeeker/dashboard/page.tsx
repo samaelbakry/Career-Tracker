@@ -1,7 +1,8 @@
 import DashboardHeader from "@/components/dashboard/JobSeeker/DashboardHeader";
 import DashboardStats from "@/components/dashboard/JobSeeker/DashboardStats";
 import InterviewsStatus from "@/components/dashboard/JobSeeker/InterviewsStatus";
-import JobSeekerProfileOptimization from "@/components/dashboard/JobSeeker/JobSeekerProfileOptimization";
+import CertificatesCompleteCard from "@/components/dashboard/JobSeeker/profileOptimization/certificates/CertificatesCompleteCard";
+import JobSeekerProfileOptimization from "@/components/dashboard/JobSeeker/profileOptimization/skills/JobSeekerProfileOptimization";
 import UserApplicationsList from "@/components/dashboard/JobSeeker/UserApplicationList";
 
 export default function Dashboard() {
@@ -10,8 +11,8 @@ export default function Dashboard() {
       <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
         <DashboardHeader />
 
-        <JobSeekerProfileOptimization />
-
+        <JobSeekerProfileOptimization/>
+        <CertificatesCompleteCard/>
         <section className="space-y-8">
           <DashboardStats />
 
