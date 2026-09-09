@@ -4,6 +4,7 @@ import {
   Calendar,
   Clock,
   Code2,
+  Edit,
   Globe,
   MapPin,
   Sparkles,
@@ -12,16 +13,18 @@ import {
 
 export default function JobSeekerProfileView({
   profile,
+  onEdit,
 }: {
   profile: JobSeekerProfile | null;
+  onEdit: () => void;
 }) {
   return (
-    <section className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)]">
+    <section className="relative isolate animate-in fade-in-50 slide-in-from-top-3 duration-300 overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)]">
       <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-indigo-200/30 blur-3xl" />
 
       <div className="relative z-10 p-5 sm:p-7 lg:p-8 space-y-8">
-        <div className="border-b border-slate-100 pb-6">
+        <div className="relative border-b border-slate-100 pb-6 pr-28">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-[11px] font-bold tracking-wide text-blue-600 mb-3">
             <Sparkles size={12} />
             Candidate Profile
@@ -45,6 +48,15 @@ export default function JobSeekerProfileView({
               {profile?.experience_years === 1 ? "year" : "years"} experience
             </span>
           </div>
+
+          <button
+            type="button"
+            onClick={onEdit}
+            className="absolute right-0 top-0 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
+          >
+            <Edit size={13} />
+            Edit Profile
+          </button>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3">

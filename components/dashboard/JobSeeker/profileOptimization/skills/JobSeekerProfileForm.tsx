@@ -17,6 +17,7 @@ import {
   UserCheck,
   AlertCircle,
   CheckCircle2,
+  X,
 } from "lucide-react";
 
 import { upsertJobSeekerProfile } from "@/services/jobSeekerProfile";
@@ -29,9 +30,14 @@ import {
 interface Props {
   userId: string;
   profile?: JobSeekerProfile | null;
+  onSuccess: () => void;
 }
 
-export default function JobSeekerProfileForm({ userId, profile }: Props) {
+export default function JobSeekerProfileForm({
+  userId,
+  profile,
+  onSuccess,
+}: Props) {
   const queryClient = useQueryClient();
 
   const {
@@ -71,8 +77,9 @@ export default function JobSeekerProfileForm({ userId, profile }: Props) {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["jobSeekerProfile", userId],
+        queryKey: ["jobSeekerProfile", userId!],
       });
+      onSuccess?.();
     },
   });
 
@@ -81,12 +88,12 @@ export default function JobSeekerProfileForm({ userId, profile }: Props) {
   };
 
   return (
-    <section className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)]">
+    <section className="relative isolate animate-in fade-in-50 slide-in-from-top-3 duration-300 overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)]">
       <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-indigo-200/30 blur-3xl" />
 
       <div className="relative z-10 p-5 sm:p-7 lg:p-8">
-        <div className="mb-7 flex flex-col gap-3 border-b border-slate-100 pb-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative mb-7 flex flex-col gap-3 border-b border-slate-100 pb-5 sm:flex-row sm:items-center sm:justify-between pr-10">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-[11px] font-bold tracking-wide text-blue-600">
               <Sparkles size={12} />
@@ -99,6 +106,15 @@ export default function JobSeekerProfileForm({ userId, profile }: Props) {
               Provide details to help employers match you with the right roles.
             </p>
           </div>
+
+          <button
+            type="button"
+            onClick={onSuccess}
+            className="absolute right-0 top-0 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            aria-label="Close form"
+          >
+            <X size={16} />
+          </button>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

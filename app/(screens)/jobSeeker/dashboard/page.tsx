@@ -8,7 +8,7 @@ import UserApplicationsList from "@/components/dashboard/JobSeeker/UserApplicati
 export default function Dashboard() {
   return (
     <main className="min-h-screen bg-slate-50/50 pb-16 pt-6">
-      <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8 mt-4">
         <DashboardHeader />
 
         <JobSeekerProfileOptimization/>

@@ -7,11 +7,13 @@ import { selectedUser } from "@/store/slices/authSlice";
 import { AlertCircle, Loader2, LogIn, UserX } from "lucide-react";
 import JobSeekerProfileForm from "./JobSeekerProfileForm";
 import JobSeekerProfileView from "./JobSeekerProfileView";
+import { useState } from "react";
 
 
 export default function JobSeekerProfileOptimization() {
   const user = useAppSelector(selectedUser);
   const userId = user?.id;
+  const [isEditing, setIsEditing] = useState(false);
 
   const {
     data: profile,
@@ -78,9 +80,17 @@ export default function JobSeekerProfileOptimization() {
     );
   }
 
-  if (!profile) {
+  if (isEditing && profile) {
     return (
       <div className="space-y-6">
+        <JobSeekerProfileForm userId={userId} profile={profile} onSuccess={() => setIsEditing(false)}  />
+      </div>
+    );
+  }
+
+  if (!profile) {
+  return (
+     <div className="space-y-6">
         <div className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
           <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
           <div className="relative z-10 flex items-center gap-4">
@@ -98,10 +108,10 @@ export default function JobSeekerProfileOptimization() {
           </div>
         </div>
 
-        <JobSeekerProfileForm userId={userId} profile={null} />
+        <JobSeekerProfileForm userId={userId} profile={null} onSuccess={() => setIsEditing(false)}  />
       </div>
-    );
-  }
+  );
+}
 
-  return <JobSeekerProfileView profile={profile} />;
+  return <JobSeekerProfileView profile={profile} onEdit={() => setIsEditing(true)} />;
 }
