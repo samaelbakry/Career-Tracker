@@ -105,7 +105,7 @@ export default function LoginForm() {
                 autoComplete="email"
                 type="email"
                 placeholder="name@example.com"
-                className={`w-full bg-white border rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 ${
+                className={`w-full bg-white border rounded-xl pl-10 pr-4 py-6 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 ${
                   fieldState.invalid
                     ? "border-red-500 ring-2 ring-red-500/10 focus:border-red-500"
                     : "border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10"
@@ -148,7 +148,7 @@ export default function LoginForm() {
                 autoComplete="current-password"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className={`w-full bg-white border rounded-xl pl-10 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 ${
+                className={`w-full bg-white border rounded-xl pl-10 pr-10 py-6 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 ${
                   fieldState.invalid
                     ? "border-red-500 ring-2 ring-red-500/10 focus:border-red-500"
                     : "border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10"
@@ -158,7 +158,6 @@ export default function LoginForm() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer transition-colors"
-                tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -176,7 +175,7 @@ export default function LoginForm() {
       <Button
         type="submit"
         disabled={form.formState.isSubmitting}
-        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-xl py-3 flex items-center justify-center shadow-lg shadow-blue-500/20 active:scale-[0.99] transition-all duration-200 cursor-pointer mt-4"
+        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-xl py-4 flex items-center justify-center shadow-lg shadow-blue-500/20 active:scale-[0.99] transition-all duration-200 cursor-pointer mt-4"
       >
         {form.formState.isSubmitting ? (
           <LoaderCircle className="w-5 h-5 animate-spin text-white" />
@@ -188,7 +187,7 @@ export default function LoginForm() {
       <div className="flex justify-center items-center text-xs text-slate-500 pt-3">
         <span>Don&apos;t have an account?&nbsp;</span>
         <Link
-          href="/select-role"
+          href="/selectRole"
           className="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
         >
           Create an account

@@ -58,6 +58,7 @@ export default function JobCard({ job }: { job: Job }) {
       onClick={handleCardClick}
       className={`
         group relative w-full overflow-hidden rounded-3xl
+        animate-in fade-in-50 slide-in-from-top-3 
         border transition-all duration-300
         ${
           isApplied

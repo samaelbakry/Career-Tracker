@@ -2,12 +2,28 @@
 
 import { deleteCertificate } from "@/services/certificates";
 import { Certificate } from "@/types/profileOptimizing";
-import { Award, Calendar, ExternalLink, Loader2, Plus, Trash2 } from "lucide-react";
+import {
+  Award,
+  Calendar,
+  ExternalLink,
+  Loader2,
+  Plus,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import CertificatesForm from "./CertificatesForm";
 import Link from "next/link";
 
-export default function CertificatesView({certificates, refetch , isLoading}: {certificates: Certificate[], refetch: () => void , isLoading:boolean}) {
+export default function CertificatesView({
+  certificates,
+  refetch,
+  isLoading,
+}: {
+  certificates: Certificate[];
+  refetch: () => void;
+  isLoading: boolean;
+}) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -25,7 +41,7 @@ export default function CertificatesView({certificates, refetch , isLoading}: {c
 
   return (
     <div className="space-y-6">
-      <div className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
+      <div className="relative isolate animate-in fade-in-50 slide-in-from-top-3 duration-300 overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
         <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
 
         <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -41,7 +57,7 @@ export default function CertificatesView({certificates, refetch , isLoading}: {c
             onClick={() => setShowAddForm((prev) => !prev)}
             className="inline-flex items-center gap-2 self-start rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-700 sm:self-auto sm:text-sm"
           >
-            <Plus size={16} />
+            {showAddForm ? <X size={16} /> : <Plus size={16} />}
             {showAddForm ? "Cancel" : "Add Certificate"}
           </button>
         </div>
@@ -55,7 +71,7 @@ export default function CertificatesView({certificates, refetch , isLoading}: {c
             {certificates?.map((cert: Certificate) => (
               <div
                 key={cert.id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-slate-100 bg-slate-50/50 p-5 transition hover:border-slate-200 hover:bg-white hover:shadow-sm"
+                className="group relative flex flex-col animate-in fade-in-50 slide-in-from-top-3 duration-300 justify-between rounded-2xl border border-slate-100 bg-slate-50/50 p-5 transition hover:border-slate-200 hover:bg-white hover:shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
@@ -66,9 +82,7 @@ export default function CertificatesView({certificates, refetch , isLoading}: {c
                       <h4 className="text-sm font-bold text-slate-900 sm:text-base">
                         {cert.created_at ? cert.name : "Untitled Certificate"}
                       </h4>
-                      <p className="text-xs text-slate-500">
-                        {cert.name}
-                      </p>
+                      <p className="text-xs text-slate-500">{cert.name}</p>
                     </div>
                   </div>
 
@@ -78,7 +92,10 @@ export default function CertificatesView({certificates, refetch , isLoading}: {c
                     className="text-slate-400 hover:text-rose-600 disabled:opacity-50"
                   >
                     {deletingId === cert.id ? (
-                      <Loader2 size={16} className="animate-spin text-slate-400" />
+                      <Loader2
+                        size={16}
+                        className="animate-spin text-slate-400"
+                      />
                     ) : (
                       <Trash2 size={16} />
                     )}

@@ -74,7 +74,7 @@ export default function CertificatesCompleteCard() {
   if (!certificates || certificates.length === 0) {
     return (
       <div className="space-y-6">
-        <div className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
+        <div className="relative isolate animate-in fade-in-50 slide-in-from-top-3 duration-300 overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
           <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
           <div className="relative z-10 flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 shadow-inner">

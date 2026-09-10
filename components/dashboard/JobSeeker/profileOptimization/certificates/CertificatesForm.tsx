@@ -72,7 +72,7 @@ export default function CertificatesForm({ onSuccess }: CertificatesFormProps) {
   };
 
   return (
-    <div className="relative isolate overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
+    <div className="relative isolate animate-in fade-in-50 slide-in-from-top-3 duration-300 overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.18)] sm:p-8">
       <div className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-blue-100/40 blur-3xl" />
 
       <form onSubmit={handleSubmit} className="relative z-10 space-y-4">

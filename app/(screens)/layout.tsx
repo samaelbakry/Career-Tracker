@@ -1,5 +1,6 @@
 import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
+import PageTransition from "@/components/shared/PageTransition";
 import React from "react";
 
 export default function ScreensLayout({ children }: { children: React.ReactNode }) {
@@ -28,7 +29,9 @@ export default function ScreensLayout({ children }: { children: React.ReactNode 
         "
       />
       <Navbar />
-      <main className="flex-1 pt-15">{children}</main>
+      <PageTransition>
+        {children}
+      </PageTransition>
       <Footer />
     </div>
   );

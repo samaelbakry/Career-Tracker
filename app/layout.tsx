@@ -31,7 +31,8 @@ export default function RootLayout({
       <body className={`min-h-screen flex flex-col ${geistMono.variable}`}>
         <ReduxProvider>
           <AuthProvider>
-            <ReactQueryProvider>{children}
+            <ReactQueryProvider>
+              {children}
               <Toaster richColors position="top-right" />
             </ReactQueryProvider>
           </AuthProvider>

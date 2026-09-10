@@ -1,5 +1,5 @@
-import { Suspense } from "react";
 import Register from "@/components/ui/authUI/Register";
+import { Suspense } from "react";
 
 export default function RegisterPage() {
   return (

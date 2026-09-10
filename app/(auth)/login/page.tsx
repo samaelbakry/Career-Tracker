@@ -1,5 +1,4 @@
-"use client";
-
+import PageTransition from "@/components/shared/PageTransition";
 import AuthLayout from "@/components/ui/authUI/AuthLayout";
 import LoginForm from "@/components/ui/authUI/LoginForm";
 
@@ -9,7 +8,9 @@ export default function Login() {
       title="Good to see you again"
       subtitle="Log in to your account and pick up where you left off."
     >
+      <PageTransition auth>
       <LoginForm />
+      </PageTransition>
     </AuthLayout>
   );
 }
