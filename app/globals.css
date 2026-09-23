@@ -140,6 +140,44 @@
   }
 }
 
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageExit {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
 .page-enter {
-  animation: page-enter 400ms ease-out both;
+  animation: pageEnter 0.25s ease-out;
+}
+
+.page-exit {
+  animation: pageExit 0.2s ease-in forwards;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E0F2FE; 
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3B82F6, #1E3A8A);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #1d4ed8, #2563eb); 
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1E3A8A #E0F2FE;
 }
