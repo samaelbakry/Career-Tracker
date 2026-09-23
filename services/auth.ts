@@ -17,8 +17,6 @@ export async function signUp(values: registerSchemaType) {
     email: values.email,
     password: values.password,
     options: {
-      emailRedirectTo:
-        "https://career-tracker-lake.vercel.app/auth/callback",
       data: {
         full_name: values.name,
         role: values.role,

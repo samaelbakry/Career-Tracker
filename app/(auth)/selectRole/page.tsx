@@ -13,7 +13,7 @@ export default function SelectRole() {
   const [selectedRole, setSelectedRole] = useState<Role>("job_seeker");
 
   const handleContinue = () => {
-    router.push(`/register?role=${selectedRole}`);
+    router.replace(`/register?role=${selectedRole}`);
   };
 
   return (

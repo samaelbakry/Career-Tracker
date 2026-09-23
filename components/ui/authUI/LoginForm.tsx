@@ -1,5 +1,6 @@
 "use client";
 
+import PageTransition from "@/components/shared/PageTransition";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -63,13 +64,12 @@ export default function LoginForm() {
         }),
       });
 
-      toast.success("Logged in successfully!");
+      toast.success("Logged in successfully! Welcome back");
 
-      if (profile.role === "employer") {
-        navigate.push("/employer/feed");
-      } else {
-        navigate.push("/jobSeeker/search");
-      }
+      const homePage = profile.role === "employer" ? "/employer/feed" : "/jobSeeker/search";
+
+      navigate.replace(homePage)
+
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {
@@ -79,6 +79,7 @@ export default function LoginForm() {
   };
 
   return (
+    <PageTransition auth>
     <form onSubmit={form.handleSubmit(sendLogInData)} className="space-y-4">
       <Controller
         name="email"
@@ -194,5 +195,6 @@ export default function LoginForm() {
         </Link>
       </div>
     </form>
+    </PageTransition>
   );
 }

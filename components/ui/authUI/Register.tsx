@@ -1,9 +1,8 @@
 "use client";
 
-import RegisterForm from "@/components/ui/authUI/RegisterForm";
 import AuthLayout from "@/components/ui/authUI/AuthLayout";
+import RegisterForm from "@/components/ui/authUI/RegisterForm";
 import { useSearchParams } from "next/navigation";
-import PageTransition from "@/components/shared/PageTransition";
 
 export default function Register() {
   const searchParams = useSearchParams();
@@ -23,9 +22,7 @@ export default function Register() {
       title="Create your account"
       subtitle="Start tracking applications and organize your job search today."
     >
-      <PageTransition auth>
       <RegisterForm role={role} />
-      </PageTransition>
     </AuthLayout>
   );
 }

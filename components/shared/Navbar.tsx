@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Briefcase, Menu, X } from "lucide-react";
-import Link from "next/link";
+import { navLinks } from "@/constants/constants";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedAuthenticated, selectedUser } from "@/store/slices/authSlice";
-import LogoutButton from "../ui/authUI/LogoutButton";
+import { Briefcase, Menu, X } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { navLinks } from "@/constants/constants";
+import { useEffect, useState } from "react";
+import LogoutButton from "../ui/authUI/LogoutButton";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
