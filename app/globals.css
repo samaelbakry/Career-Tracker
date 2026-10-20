@@ -181,3 +181,25 @@
   scrollbar-width: thin;
   scrollbar-color: #1E3A8A #E0F2FE;
 }
+
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation: circular-reveal 800ms ease-in-out forwards;
+}
+
+@keyframes circular-reveal {
+  from {
+    clip-path: circle(0% at 100% 0%);
+  }
+
+  to {
+    clip-path: circle(150% at 100% 0%);
+  }
+}

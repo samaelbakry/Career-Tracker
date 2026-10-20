@@ -1,89 +1,69 @@
-import { Briefcase } from "lucide-react";
+import { Briefcase, Globe, Share2, MessageSquare } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200/80 bg-white pt-16 pb-12 font-sans text-sm text-[#64748B]">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8">
-        <div className="grid grid-cols-2 gap-8 pb-12 lg:grid-cols-12 lg:gap-12">
-          <div className="col-span-2 space-y-4 md:col-span-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#1E3A8A] text-white shadow-md shadow-blue-900/10">
-                <Briefcase size={18} />
+    <footer className="border-t border-slate-200 bg-white py-8 font-sans text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-900 text-white shadow-sm dark:bg-blue-600">
+                <Briefcase size={15} />
               </div>
-
-              <span className="text-lg font-bold tracking-tight text-[#0F172A]">
+              <span className="text-base font-bold tracking-tight text-slate-900 dark:text-slate-100">
                 Career Tracker
               </span>
             </div>
-
-            <p className="max-w-sm text-xs leading-relaxed text-[#64748B] sm:text-sm">
-              The modern application tracking workspace built for job seekers,
-              career changers, and modern professionals.
+            <span className="hidden text-slate-300 sm:inline dark:text-slate-700">|</span>
+            <p className="max-w-md text-slate-500 dark:text-slate-400">
+              The modern job application workspace for professionals.
             </p>
           </div>
 
-          <div className="col-span-1 space-y-3 md:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-2 text-slate-600 dark:text-slate-300">
+            <a href="#product" className="transition-colors hover:text-slate-900 dark:hover:text-white">
               Product
-            </p>
-
-            <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>Kanban Board</li>
-              <li>Email Auto-Sync</li>
-              <li>Analytics</li>
-              <li>Pricing</li>
-              <li>Changelog</li>
-            </ul>
-          </div>
-
-          <div className="col-span-1 space-y-3 md:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+            </a>
+            <a href="#resources" className="transition-colors hover:text-slate-900 dark:hover:text-white">
               Resources
-            </p>
-
-            <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>Resume Templates</li>
-              <li>Interview Prep</li>
-              <li>Salary Insights</li>
-              <li>Career Blog</li>
-            </ul>
-          </div>
-
-          <div className="col-span-1 space-y-3 md:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+            </a>
+            <a href="#company" className="transition-colors hover:text-slate-900 dark:hover:text-white">
               Company
-            </p>
-
-            <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>About Us</li>
-              <li>Careers</li>
-              <li>Contact</li>
-              <li>Partners</li>
-            </ul>
-          </div>
-
-          <div className="col-span-1 space-y-3 md:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
-              Legal
-            </p>
-
-            <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>Privacy Policy</li>
-              <li>Terms of Service</li>
-              <li>Cookie Settings</li>
-              <li>Security</li>
-            </ul>
+            </a>
+            <a href="#privacy" className="transition-colors hover:text-slate-900 dark:hover:text-white">
+              Privacy
+            </a>
+            <a href="#terms" className="transition-colors hover:text-slate-900 dark:hover:text-white">
+              Terms
+            </a>
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-8 text-xs sm:flex-row">
-          <p>
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 sm:flex-row dark:border-slate-800/80">
+          <p className="text-slate-400 dark:text-slate-500">
             © {new Date().getFullYear()} Career Tracker Inc. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-2 text-slate-400">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span>All systems operational</span>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 text-slate-400 dark:text-slate-500">
+              <a href="#" aria-label="Website" className="transition-colors hover:text-slate-600 dark:hover:text-slate-300">
+                <Globe size={16} />
+              </a>
+              <a href="#" aria-label="Social Share" className="transition-colors hover:text-slate-600 dark:hover:text-slate-300">
+                <Share2 size={16} />
+              </a>
+              <a href="#" aria-label="Community" className="transition-colors hover:text-slate-600 dark:hover:text-slate-300">
+                <MessageSquare size={16} />
+              </a>
+            </div>
+
+            <div className="flex items-center gap-2 rounded-full border border-slate-100 bg-slate-50/50 px-2.5 py-1 text-[11px] text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+              </span>
+              <span>All systems operational</span>
+            </div>
           </div>
         </div>
       </div>

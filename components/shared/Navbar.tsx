@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import LogoutButton from "../ui/authUI/LogoutButton";
+import Appearance from "./Appearance";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -81,7 +82,8 @@ export default function Navbar() {
           )}
 
           {authenticated ? (
-            <div className="hidden items-center md:flex">
+            <div className="hidden items-center md:flex gap-2">
+              <Appearance/>
               <LogoutButton />
             </div>
           ) : (
@@ -101,6 +103,7 @@ export default function Navbar() {
 
                 <span className="sm:hidden">Sign Up</span>
               </Link>
+               <Appearance/>
             </div>
           )}
 
@@ -150,10 +153,9 @@ export default function Navbar() {
                     );
                   })}
 
-                  <div className="mt-1 border-t border-slate-200/70 pt-1 dark:border-slate-800">
-                    <div className="w-full">
+                  <div className="mt-1 border-t border-slate-200/70 pt-1 dark:border-slate-800 flex items-center gap-2">
                       <LogoutButton />
-                    </div>
+                      <Appearance/>
                   </div>
                 </nav>
               </div>

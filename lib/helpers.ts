@@ -1,4 +1,10 @@
 import { Certificate, JobSeekerProfile } from "@/types/profileOptimizing";
+import {
+  BriefcaseBusiness,
+  CalendarCheck,
+  Handshake,
+  Users,
+} from "lucide-react";
 
 export const getAvatarGradient = (name: string = "C") => {
   const gradients = [
@@ -103,3 +109,40 @@ export function calculateProfileCompletion(
     missing,
   };
 }
+export const stats = (data: {
+  totalApplicants: number;
+  activeJobs: number;
+  interviews: number;
+  offers: number;
+}) => {
+  return [
+    {
+      label: "Total Applicants",
+      value: data.totalApplicants,
+      description: "Applications received",
+      icon: Users,
+      color: "text-blue-600 bg-blue-50 dark:bg-blue-950/40",
+    },
+    {
+      label: "Active Jobs",
+      value: data.activeJobs,
+      description: "Currently open listings",
+      icon: BriefcaseBusiness,
+      color: "text-indigo-600 bg-indigo-50 dark:bg-indigo-950/40",
+    },
+    {
+      label: "Interviews",
+      value: data.interviews,
+      description: "Candidates in interview stage",
+      icon: CalendarCheck,
+      color: "text-violet-600 bg-violet-50 dark:bg-violet-950/40",
+    },
+    {
+      label: "Offers",
+      value: data.offers,
+      description: "Candidates in offer stage",
+      icon: Handshake,
+      color: "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40",
+    },
+  ];
+};

@@ -1,10 +1,31 @@
+
 import React from "react";
+import { ArrowUpRight } from "lucide-react";
 
 type JobStatusCardProps = {
   title: string;
   count: number;
   description?: string;
   icon?: React.ReactNode;
+  accent?: "violet" | "emerald" | "amber";
+};
+
+const accents = {
+  violet: {
+    icon: "bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400",
+    line: "bg-violet-500",
+    glow: "group-hover:shadow-violet-500/5",
+  },
+  emerald: {
+    icon: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400",
+    line: "bg-emerald-500",
+    glow: "group-hover:shadow-emerald-500/5",
+  },
+  amber: {
+    icon: "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400",
+    line: "bg-amber-500",
+    glow: "group-hover:shadow-amber-500/5",
+  },
 };
 
 export default function JobStatusCard({
@@ -12,35 +33,47 @@ export default function JobStatusCard({
   count,
   description,
   icon,
+  accent = "violet",
 }: JobStatusCardProps) {
+  const style = accents[accent];
+
   return (
-    <div className="group relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#6C4FD6]/30 hover:shadow-xl hover:shadow-[#6C4FD6]/10">
-      <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#6C4FD6]/6 blur-2xl transition-opacity duration-300 group-hover:opacity-100 opacity-0" />
+    <article
+      className={`group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 ${style.glow}`}
+    >
+      <div
+        className={`absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${style.line}`}
+      />
 
-      <div className="absolute inset-x-0 top-0 h-0.75 scale-x-0 bg-linear-to-r from-[#6C4FD6] to-[#8B6FE8] transition-transform duration-300 group-hover:scale-x-100" />
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            {title}
+          </p>
 
-      <div className="relative flex items-center justify-between">
-        <span className="text-sm font-semibold tracking-wide text-slate-600">
-          {title}
-        </span>
+          <p className="mt-4 text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+            {count.toLocaleString()}
+          </p>
+        </div>
+
         {icon && (
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-linear-to-br from-[#EDE9FB] to-[#E1DAFA] text-[#6C4FD6] ring-1 ring-[#6C4FD6]/10 transition-all duration-300 group-hover:scale-105 group-hover:from-[#6C4FD6] group-hover:to-[#8358E8] group-hover:text-white group-hover:shadow-md group-hover:shadow-[#6C4FD6]/30">
+          <div
+            className={`flex size-11 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${style.icon}`}
+          >
             {icon}
           </div>
         )}
       </div>
 
-      <div className="relative mt-4 flex items-baseline gap-2">
-        <span className="text-3xl font-extrabold tracking-tight tabular-nums text-[#1E2A5E] sm:text-4xl">
-          {count}
-        </span>
-      </div>
-
       {description && (
-        <p className="relative mt-2 text-xs font-medium text-slate-500">
-          {description}
-        </p>
+        <div className="mt-5 flex items-center justify-between gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+          <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
+            {description}
+          </p>
+
+          <ArrowUpRight className="size-4 shrink-0 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </div>
       )}
-    </div>
+    </article>
   );
 }

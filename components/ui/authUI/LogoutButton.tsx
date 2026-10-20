@@ -51,7 +51,6 @@ export default function LogoutButton() {
             className="gap-2 rounded-xl border-slate-200 bg-white text-slate-600 shadow-xs transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-red-900 dark:hover:bg-red-950/30 dark:hover:text-red-400"
           >
             <LogOut className="h-4 w-4" />
-            <span className="hidden sm:inline">Logout</span>
           </Button>
         }
       />

@@ -1,15 +1,11 @@
+
 "use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { useFetch } from "@/hooks/useFetch";
+import { formatSalary, formattedDate } from "@/lib/helpers";
 import { getUserApplications } from "@/services/application";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
@@ -17,10 +13,11 @@ import { Job } from "@/types/jobs";
 import {
   ArrowUpRight,
   Banknote,
+  BriefcaseBusiness,
   Building2,
-  CheckCircle2,
-  Clock,
-  MapPin,
+  Check,
+  Clock3,
+  MapPin
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import DialogButtonTrigger from "../ui/DialogButtonTrigger";
@@ -28,7 +25,6 @@ import DeleteJobButton from "./DeleteJobButton";
 import JobFormDialog from "./JobFormDialog";
 import SaveJobs from "./SaveJobs";
 import WithdrawButton from "./WithdrawButton";
-import { formatSalary, formattedDate } from "@/lib/helpers";
 
 export default function JobCard({ job }: { job: Job }) {
   const role = useAppSelector(selectedUser)?.role;
@@ -40,7 +36,9 @@ export default function JobCard({ job }: { job: Job }) {
     enabled: !!userId,
   });
 
-  const isApplied = Boolean(applications?.some((app) => app.job_id === job.id));
+  const isApplied = Boolean(
+    applications?.some((app) => app.job_id === job.id),
+  );
 
   const isEmployer = role === "employer";
   const canManageJob = isEmployer && userId === job.owner_id;
@@ -57,76 +55,50 @@ export default function JobCard({ job }: { job: Job }) {
     <Card
       onClick={handleCardClick}
       className={`
-        group relative w-full overflow-hidden rounded-3xl
-        animate-in fade-in-50 slide-in-from-top-3 
-        border transition-all duration-300
+        group relative w-full cursor-pointer overflow-hidden
+        rounded-[1.75rem] border p-0 shadow-none
+        transition-all duration-300
         ${
           isApplied
-            ? "border-emerald-200/80 bg-emerald-50/30 opacity-85 dark:border-emerald-900/40 dark:bg-emerald-950/10"
-            : "border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-950"
+            ? "border-emerald-200 bg-emerald-50/30 dark:border-emerald-900/60 dark:bg-emerald-950/10"
+            : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-xl  dark:border-slate-800 dark:bg-[#101114] dark:hover:border-slate-700 dark:hover:shadow-black/20"
         }
-        ${
-          !isEmployer && !isApplied
-            ? "cursor-pointer hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-950/5"
-            : !isEmployer && isApplied
-              ? "cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-800"
-              : ""
-        }
-        shadow-sm
       `}
     >
-      <div
-        className={`absolute inset-x-0 top-0 h-1 transition-all ${
-          isApplied
-            ? ""
-            : "bg-linear-to-r from-blue-600 via-indigo-600 to-violet-600 opacity-70"
-        }`}
-      />
-
-      <div className="p-5 sm:p-6">
-        <CardHeader className="p-0">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <div
-                className={`
-                  inline-flex items-center gap-1.5 rounded-full
-                  border px-2.5 py-1
-                  text-[10px] font-bold uppercase tracking-wider
-                  ${
-                    job.status === "open"
-                      ? "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900/60 dark:bg-blue-950/30 dark:text-blue-400"
-                      : "border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
-                  }
-                `}
-              >
-                <span
-                  className={`
-                    h-1.5 w-1.5 rounded-full
-                    ${job.status === "open" ? "bg-blue-500" : "bg-slate-400"}
-                  `}
-                />
-                {job.status ?? "draft"}
-              </div>
-
-              <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                <Clock className="h-3 w-3" />
-                {formattedDate(job.created_at)}
-              </div>
+      <div className="p-5 sm:p-7">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-3.5">
+            <div
+              className={`
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-2xl transition-colors duration-300
+                ${
+                  isApplied
+                    ? "bg-emerald-600 text-white"
+                    : "bg-violet-100 text-violet-700 group-hover:bg-violet-600 group-hover:text-white dark:bg-violet-500/10 dark:text-violet-300 dark:group-hover:bg-violet-600 dark:group-hover:text-white"
+                }
+              `}
+            >
+              <Building2 size={22} strokeWidth={1.7} />
             </div>
 
-            {isApplied && !isEmployer ? (
-              <Badge
-                variant="outline"
-                className="inline-flex items-center gap-1 rounded-full border-emerald-300 bg-emerald-100/80 px-2.5 py-1 text-[10px] font-bold text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
-              >
-                <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                Applied
-              </Badge>
-            ) : canManageJob ? (
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1"
-              >
+            <div className="min-w-0">
+              <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                Career opportunity
+              </p>
+
+              <h3 className="line-clamp-2 text-base font-bold tracking-tight text-slate-900 sm:text-lg dark:text-white">
+                {job.title ?? "Untitled Position"}
+              </h3>
+            </div>
+          </div>
+
+          <div
+            className="flex shrink-0 items-center gap-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {canManageJob ? (
+              <>
                 <DialogButtonTrigger
                   Component={JobFormDialog}
                   edit
@@ -136,127 +108,139 @@ export default function JobCard({ job }: { job: Job }) {
                   }}
                 />
                 <DeleteJobButton jobId={job.id} />
+              </>
+            ) : (
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-400 transition-all group-hover:border-violet-200 group-hover:text-violet-600 dark:border-slate-800 dark:text-slate-500 dark:group-hover:border-violet-900 dark:group-hover:text-violet-300">
+                <ArrowUpRight size={17} />
               </div>
-            ) : null}
+            )}
           </div>
+        </div>
 
-          <div className="mt-6 flex items-start gap-4">
-            <div
-              className={`
-                flex h-12 w-12 shrink-0 items-center justify-center
-                rounded-2xl shadow-lg transition-all duration-300
-                ${
-                  isApplied
-                    ? "bg-emerald-900 text-emerald-100 shadow-emerald-900/10 dark:bg-emerald-100 dark:text-emerald-950"
-                    : "bg-slate-900 text-white shadow-slate-900/10 dark:bg-white dark:text-slate-900"
-                }
-                group-hover:scale-105
-              `}
-            >
-              <Building2 className="h-5 w-5" />
+        <p className="mt-5 line-clamp-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+          {job.description}
+        </p>
+
+        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-xs font-medium text-slate-500 dark:text-slate-400">
+          {job.location && (
+            <span className="inline-flex items-center gap-1.5">
+              <MapPin size={14} className="text-violet-500" />
+              {job.location}
+            </span>
+          )}
+
+          {job.employment_type && (
+            <span className="inline-flex items-center gap-1.5">
+              <BriefcaseBusiness size={14} className="text-violet-500" />
+              {job.employment_type}
+            </span>
+          )}
+
+          {job.experience_level && (
+            <span className="inline-flex items-center gap-1.5">
+              <Clock3 size={14} className="text-violet-500" />
+              {job.experience_level}
+            </span>
+          )}
+        </div>
+
+        <div className="my-6 h-px bg-slate-100 dark:bg-slate-800" />
+
+        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <div className="min-w-0">
+            <div className="mb-2 flex items-center gap-2">
+              <Banknote size={15} className="text-emerald-600 dark:text-emerald-400" />
+
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
+                Monthly compensation
+              </span>
             </div>
 
-            <div className="min-w-0 flex-1 space-y-1">
-              <CardTitle className="line-clamp-1 text-lg font-bold tracking-tight text-slate-900 sm:text-xl dark:text-slate-50">
-                {job.title ?? "Untitled Position"}
-              </CardTitle>
+            <p className="break-words text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
+              {formatSalary(job.salary_min)}
+              <span className="mx-2 text-sm font-normal text-slate-300 dark:text-slate-600">
+                —
+              </span>
+              {formatSalary(job.salary_max)}
+            </p>
 
-              <p className="line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                {job.description}
-              </p>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="mt-6 space-y-5 p-0">
-          <div className="flex flex-wrap gap-2">
-            {job.employment_type && (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
               <Badge
                 variant="outline"
-                className="rounded-full border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+                className={`
+                  rounded-full border px-2.5 py-1 text-[10px] font-semibold
+                  ${
+                    job.status === "open"
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-400"
+                      : "border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
+                  }
+                `}
               >
-                {job.employment_type}
+                <span
+                  className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${
+                    job.status === "open" ? "bg-emerald-500" : "bg-slate-400"
+                  }`}
+                />
+                {job.status ?? "draft"}
               </Badge>
-            )}
 
-            {job.experience_level && (
-              <Badge
-                variant="outline"
-                className="rounded-full border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
-              >
-                {job.experience_level}
-              </Badge>
-            )}
+              {isApplied && !isEmployer && (
+                <Badge
+                  variant="outline"
+                  className="gap-1 rounded-full border-emerald-200 bg-emerald-50 text-[10px] text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-400"
+                >
+                  <Check size={11} />
+                  Applied
+                </Badge>
+              )}
 
-            {job.location && (
-              <Badge
-                variant="outline"
-                className="rounded-full border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
-              >
-                <MapPin className="mr-1.5 h-3 w-3" />
-                {job.location}
-              </Badge>
-            )}
-          </div>
-
-          <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-linear-to-br from-emerald-50 to-white px-4 py-4 dark:border-emerald-900/40 dark:from-emerald-950/30 dark:to-slate-950">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-xs dark:bg-emerald-950/60 dark:text-emerald-400">
-                  <Banknote className="h-4 w-4" />
-                </div>
-
-                <div className="min-w-0">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700/60 dark:text-emerald-400/60">
-                    Salary Range
-                  </p>
-                  <p className="truncate text-xs font-bold text-emerald-950 dark:text-emerald-200">
-                    {formatSalary(job.salary_min)} –{" "}
-                    {formatSalary(job.salary_max)}
-                  </p>
-                </div>
-              </div>
-
-              <span className="shrink-0 text-[9px] font-bold uppercase tracking-wider text-emerald-700/60 dark:text-emerald-400/60">
-                Monthly
+              <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                Posted {formattedDate(job.created_at)}
               </span>
             </div>
           </div>
-        </CardContent>
 
-        {!isEmployer && (
-          <CardFooter className="mt-5 flex items-center gap-2 p-0">
-            <Button
-              disabled={isApplied}
-              className={`
-                h-11 flex-1 rounded-xl text-sm font-semibold shadow-xs transition-all duration-300
-                ${
-                  isApplied
-                    ? "bg-emerald-600 text-white opacity-90 cursor-default dark:bg-emerald-600"
-                    : "bg-slate-900 text-white hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-900/10 dark:bg-white dark:text-slate-900 dark:hover:bg-indigo-50"
-                }
-              `}
+          {!isEmployer && (
+            <div
+              className="flex w-full shrink-0 items-center gap-2 sm:w-auto"
+              onClick={(e) => e.stopPropagation()}
             >
-              {isApplied ? (
-                <>
-                  <CheckCircle2 className="mr-1.5 h-4 w-4" />
-                  Application Submitted
-                </>
-              ) : (
-                <>
-                  Apply Now
-                  <ArrowUpRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </>
-              )}
-            </Button>
-            <div onClick={(e) => e.stopPropagation()}>
+              <Button
+                disabled={isApplied}
+                className={`
+                  h-11 min-w-0 flex-1 rounded-xl px-5 text-xs font-semibold
+                  transition-all sm:flex-none
+                  ${
+                    isApplied
+                      ? "cursor-default bg-emerald-600 text-white opacity-100 hover:bg-emerald-600 dark:bg-emerald-700 dark:hover:bg-emerald-700"
+                      : "bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-400 dark:hover:text-slate-950"
+                  }
+                `}
+              >
+                {isApplied ? (
+                  <>
+                    <Check size={15} className="mr-1.5" />
+                    Applied
+                  </>
+                ) : (
+                  <>
+                    Apply now
+                    <ArrowUpRight size={15} className="ml-2" />
+                  </>
+                )}
+              </Button>
+
               <SaveJobs jobId={job.id} />
+
+              {isApplied && (
+                <WithdrawButton
+                  userId={userId as string}
+                  jobId={job.id}
+                />
+              )}
             </div>
-            {isApplied && (
-              <WithdrawButton userId={userId as string} jobId={job.id} />
-            )}
-          </CardFooter>
-        )}
+          )}
+        </div>
       </div>
     </Card>
   );

@@ -4,167 +4,208 @@ import { useFetch } from "@/hooks/useFetch";
 import { getCompanyByOwner } from "@/services/employer";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
 import { selectedUser } from "@/store/slices/authSlice";
-import {
-  Building2,
-  MapPin,
-  Globe,
-  Users,
-  Calendar,
-  Briefcase,
-  Star,
-  ExternalLink,
-  Link2Icon,
-} from "lucide-react";
-import { Company } from "@/types/companies";
-import Link from "next/link";
 import EmployerCompanyHeaderSkeleton from "@/components/skeletons/EmployerCompanyHeaderSkeleton";
+import { Company } from "@/types/companies";
+import {
+  ArrowUpRight,
+  Building2,
+  CalendarDays,
+  ExternalLink,
+  Globe2,
+  MapPin,
+  Star,
+  Users,
+  BriefcaseBusiness,
+  Link2,
+} from "lucide-react";
+import Link from "next/link";
 
 export default function EmployerCompanyHeader() {
   const userId = useAppSelector(selectedUser)?.id;
 
-  const { data: company, isLoading } = useFetch<Company>({
+  const {
+    data: company,
+    isLoading,
+    isError,
+  } = useFetch<Company>({
     queryFn: () => getCompanyByOwner(userId!),
     queryKey: ["employerCompany", userId],
     enabled: !!userId,
   });
 
   if (isLoading) {
+    return <EmployerCompanyHeaderSkeleton />;
+  }
+
+  if (isError || !company) {
     return (
-      <div className="w-full h-80 animate-pulse rounded-2xl bg-slate-100" />
+      <section className="mb-8 rounded-3xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex items-center gap-4">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-500 dark:bg-slate-800">
+            <Building2 className="size-7" />
+          </div>
+          <div>
+            <h2 className="font-semibold text-slate-900 dark:text-white">
+              Company profile unavailable
+            </h2>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              We couldn&poas;t load your company information. Please try again
+              later.
+            </p>
+          </div>
+        </div>
+      </section>
     );
   }
 
-  if (!company) {
-    return (
-     <EmployerCompanyHeaderSkeleton />
-    );
-  }
+  const companyLocation = company.headquarters || company.location;
 
   return (
- <div className="relative mb-6 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] bg-size:16px_16px opacity-40" />
-  <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-50/80 blur-3xl" />
+    <section className="group relative mb-8 overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-950 dark:hover:shadow-black/20">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-linear-to-br from-indigo-50 via-slate-50 to-white dark:from-indigo-950/30 dark:via-slate-900 dark:to-slate-950" />
 
-  <div className="relative flex flex-col gap-6">
-    <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex items-center gap-4">
-        <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-slate-200/80 bg-slate-50/80 text-slate-700 shadow-2xs sm:h-20 sm:w-20">
-          {company.logo_url ? (
-            <img
-              src={company.logo_url}
-              alt={company.name}
-              className="h-full w-full rounded-lg object-contain p-2"
-              onError ={(e)=>{e.currentTarget.style.display = "none"}}
-            />
-          ) : (
-            <Building2 className="h-7 w-7 text-slate-500 sm:h-9 sm:w-9" />
-          )}
-        </div>
+      <div className="pointer-events-none absolute -right-16 -top-24 size-72 rounded-full border border-indigo-200/40 dark:border-indigo-400/10" />
+      <div className="pointer-events-none absolute -right-4 -top-12 size-52 rounded-full border border-indigo-200/40 dark:border-indigo-400/10" />
 
-        <div className="space-y-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-              {company.name}
-            </h1>
-            {company.industry && (
-              <span className="inline-flex items-center rounded-full border border-blue-200/60 bg-blue-50/60 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
-                {company.industry}
-              </span>
-            )}
+      <div className="relative p-5 sm:p-7 lg:p-8">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 items-start gap-4 sm:gap-5">
+            <div className="relative flex size-[76px] shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-200/70 sm:size-24 dark:border-slate-700 dark:bg-slate-900 dark:ring-slate-700">
+              {company.logo_url ? (
+                <img
+                  src={company.logo_url}
+                  alt={`${company.name} logo`}
+                  className="size-full object-contain p-2.5"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                  }}
+                />
+              ) : (
+                <Building2 className="size-9 text-indigo-500 sm:size-11" />
+              )}
+            </div>
+
+            <div className="min-w-0 pt-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="break-words text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl dark:text-white">
+                  {company.name}
+                </h1>
+
+                {company.industry && (
+                  <span className="rounded-full border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-[11px] font-semibold text-indigo-700 dark:border-indigo-400/20 dark:bg-indigo-400/10 dark:text-indigo-300">
+                    {company.industry}
+                  </span>
+                )}
+              </div>
+
+              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+                {company.description ||
+                  "Manage your company profile and hiring activity from one place."}
+              </p>
+
+              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                {companyLocation && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+                    <MapPin className="size-3.5 text-slate-400" />
+                    {companyLocation}
+                  </span>
+                )}
+
+                {company.company_size && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+                    <Users className="size-3.5 text-slate-400" />
+                    {company.company_size} employees
+                  </span>
+                )}
+
+                {company.founded_year && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+                    <CalendarDays className="size-3.5 text-slate-400" />
+                    Est. {company.founded_year}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-medium text-slate-500">
-            {(company.location || company.headquarters) && (
-              <div className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                <span>{company.headquarters || company.location}</span>
-              </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-2 sm:pt-1">
+            {company.website && (
+              <Link
+                href={company.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-950 px-4 text-xs font-semibold text-white transition-all hover:bg-indigo-600 dark:bg-white dark:text-slate-950 dark:hover:bg-indigo-300"
+              >
+                <Globe2 className="size-4" />
+                Visit website
+                <ArrowUpRight className="size-3.5" />
+              </Link>
             )}
 
-            {company.company_size && (
-              <div className="flex items-center gap-1.5">
-                <Users className="h-3.5 w-3.5 text-slate-400" />
-                <span>{company.company_size} employees</span>
-              </div>
+            {company.linkedin_url && (
+              <Link
+                href={company.linkedin_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Company LinkedIn profile"
+                className="flex size-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-indigo-400/30 dark:hover:bg-indigo-400/10 dark:hover:text-indigo-300"
+              >
+                <Link2 className="size-4" />
+              </Link>
             )}
 
-            {company.founded_year && (
-              <div className="flex items-center gap-1.5">
-                <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                <span>Founded {company.founded_year}</span>
-              </div>
+            {company.twitter_url && (
+              <Link
+                href={company.twitter_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Company social profile"
+                className="flex size-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-indigo-400/30 dark:hover:bg-indigo-400/10 dark:hover:text-indigo-300"
+              >
+                <ExternalLink className="size-4" />
+              </Link>
             )}
           </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-2 self-start sm:self-center">
-        {company.website && (
-          <Link
-            href={company.website}
-            target="_blank"         
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-2xs transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
-          >
-            <Globe className="h-3.5 w-3.5 text-slate-500" />
-            <span>Website</span>
-            <ExternalLink className="h-3 w-3 text-slate-400" />
-          </Link>
-        )}
+        {(company.rating != null || company.open_jobs_count != null) && (
+          <div className="mt-7 grid grid-cols-1 gap-3 border-t border-slate-200/80 pt-5 sm:grid-cols-2 dark:border-slate-800">
+            {company.open_jobs_count != null && (
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 transition-colors hover:bg-slate-100/80 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-300">
+                  <BriefcaseBusiness className="size-5" />
+                </div>
 
-        {company.linkedin_url && (
-          <Link
-            href={company.linkedin_url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-2xs transition-all hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-600"
-            aria-label="LinkedIn Profile"
-          >
-            <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
-              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
-            </svg>
-          </Link>
-        )}
+                <div>
+                  <p className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    {company.open_jobs_count.toLocaleString()}
+                  </p>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    Open positions
+                  </p>
+                </div>
+              </div>
+            )}
 
-        {company.twitter_url && (
-          <Link
-            href={company.twitter_url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-2xs transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
-            aria-label="Twitter Profile"
-          >
-            <Link2Icon className="h-4 w-4" />
-          </Link>
+            {company.rating != null && (
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 transition-colors hover:bg-slate-100/80 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-400/10 dark:text-amber-300">
+                  <Star className="size-5 fill-current" />
+                </div>
+
+                <div>
+                  <p className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    {company.rating.toFixed(1)}
+                  </p>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    Company rating
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
-    </div>
-
-    {(company.description || company.rating !== undefined || company.open_jobs_count !== undefined) && (
-      <div className="flex flex-col gap-4 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
-        {company.description && (
-          <p className="max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-600 line-clamp-2">
-            {company.description}
-          </p>
-        )}
-
-        <div className="flex shrink-0 items-center gap-3">
-          {company.rating !== undefined && (
-            <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200/60 bg-slate-50/80 px-2.5 py-1 text-xs font-semibold text-slate-700">
-              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-              <span>{company.rating ? company.rating.toFixed(1) : "4.5"}</span>
-            </div>
-          )}
-
-          {company.open_jobs_count !== undefined && (
-            <div className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200/60 bg-blue-50/50 px-2.5 py-1 text-xs font-semibold text-blue-700">
-              <Briefcase className="h-3.5 w-3.5 text-blue-600" />
-              <span>{company.open_jobs_count} Open Roles</span>
-            </div>
-          )}
-        </div>
-      </div>
-    )}
-  </div>
-</div>
+    </section>
   );
 }
