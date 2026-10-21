@@ -37,3 +37,11 @@ export type JobsResponse = {
   jobs: Job[];
   total: number;
 };
+
+export type JobFilters = {
+  search?: string;
+  employmentType?: string;
+  experienceLevel?: string;
+  location?: string;
+  sortBy?: "newest" | "salary_high" | "salary_low";
+};

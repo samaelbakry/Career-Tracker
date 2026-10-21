@@ -1,26 +1,84 @@
 import { supabase } from "@/lib/supabase";
-import { CreateJobT, Job, JobsResponse } from "@/types/jobs";
+import { CreateJobT, Job, JobFilters, JobsResponse } from "@/types/jobs";
 
-export async function getAllJobs(page = 1 , limit = 6) {
-  const from = (page - 1 ) * limit
-  const to = from + limit - 1
-  const { data, error , count } = await supabase
+export async function getAllJobs(page = 1, limit = 6, filters: JobFilters = {}) {
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  let query = supabase
     .from("jobs")
-    .select(
-      `
-    *,
-    company:companies(*)
+    .select("*, company:companies(*)", { count: "exact" })
+    .eq("status", "open");
 
-        `,
-    {count :"exact"}
-    )
-    .eq("status", "open")
-    .order("created_at", { ascending: false })
-    .range(from , to);
+  const search = filters.search?.trim();
 
-  if (error) throw new Error(error.message);
+  if (search) {
+    const searchPattern = `%${search.replace(/[%_,()]/g, " ")}%`;
 
-  return {jobs:data as Job[]  , total :count ?? 0};
+    const { data: companies, error: companiesError } = await supabase
+      .from("companies")
+      .select("id")
+      .ilike("name", searchPattern);
+
+    if (companiesError) {
+      throw new Error(companiesError.message);
+    }
+
+    const companyIds = (companies ?? []).map((company) => company.id);
+
+    const searchConditions = [
+      `title.ilike.${searchPattern}`,
+      `description.ilike.${searchPattern}`,
+    ];
+
+    if (companyIds.length > 0) {
+      searchConditions.push(`company_id.in.(${companyIds.join(",")})`);
+    }
+
+    query = query.or(searchConditions.join(","));
+  }
+
+  if (filters.employmentType) {
+    query = query.eq("employment_type", filters.employmentType);
+  }
+
+  if (filters.experienceLevel) {
+    query = query.eq("experience_level", filters.experienceLevel);
+  }
+
+  if (filters.location?.trim()) {
+    query = query.ilike("location", `%${filters.location.trim()}%`);
+  }
+
+  switch (filters.sortBy) {
+    case "salary_high":
+      query = query.order("salary_max", {
+        ascending: false,
+        nullsFirst: false,
+      });
+      break;
+
+    case "salary_low":
+      query = query.order("salary_min", {
+        ascending: true,
+        nullsFirst: false,
+      });
+      break;
+
+    default:
+      query = query.order("created_at", { ascending: false });
+  }
+
+  const { data, error, count } = await query.range(from, to);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return {
+    jobs: (data ?? []) as Job[],
+    total: count ?? 0,
+  };
 }
 
 export async function getJobDetails(id: string): Promise<Job> {

@@ -158,28 +158,54 @@
   animation: pageExit 0.2s ease-in forwards;
 }
 
+
+:root {
+  --scrollbar-track: #f5f3ff;
+  --scrollbar-thumb-start: #8b5cf6;
+  --scrollbar-thumb-end: #4f46e5;
+  --scrollbar-thumb-hover-start: #7c3aed;
+  --scrollbar-thumb-hover-end: #4338ca;
+}
+
+.dark {
+  --scrollbar-track: #0f0d1a;
+  --scrollbar-thumb-start: #6d28d9;
+  --scrollbar-thumb-end: #4338ca;
+  --scrollbar-thumb-hover-start: #8b5cf6;
+  --scrollbar-thumb-hover-end: #6366f1;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #E0F2FE; 
-  border-radius: 5px;
+  background: var(--scrollbar-track);
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #3B82F6, #1E3A8A);
-  border-radius: 5px;
+  background: linear-gradient(
+    180deg,
+    var(--scrollbar-thumb-start),
+    var(--scrollbar-thumb-end)
+  );
+  border: 2px solid var(--scrollbar-track);
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #1d4ed8, #2563eb); 
+  background: linear-gradient(
+    180deg,
+    var(--scrollbar-thumb-hover-start),
+    var(--scrollbar-thumb-hover-end)
+  );
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #1E3A8A #E0F2FE;
+  scrollbar-color: var(--scrollbar-thumb-end) var(--scrollbar-track);
 }
 
 
