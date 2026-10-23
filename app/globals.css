@@ -117,6 +117,11 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@layer utilities {
+  .container {
+    @apply mx-auto max-w-[1465] px-4 py-8 sm:px-6 lg:px-8 lg:py-10;
+  }
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -141,13 +146,25 @@
 }
 
 @keyframes pageEnter {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pageExit {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-8px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
 }
 
 .page-enter {
@@ -157,7 +174,6 @@
 .page-exit {
   animation: pageExit 0.2s ease-in forwards;
 }
-
 
 :root {
   --scrollbar-track: #f5f3ff;
@@ -207,7 +223,6 @@
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb-end) var(--scrollbar-track);
 }
-
 
 ::view-transition-old(root),
 ::view-transition-new(root) {

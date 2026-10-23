@@ -61,3 +61,19 @@ export async function getCompanyOwner(userId: string) {
   return data as Company
 }
 
+export async function getHiringCompanyIds(): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("jobs")
+    .select("company_id")
+    .eq("status", "open");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return [...new Set(
+    (data ?? [])
+      .map((job) => job.company_id)
+      .filter((id): id is string => Boolean(id))
+  )];
+}
