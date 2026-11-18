@@ -12,14 +12,14 @@ import {
 
 import CardSkeleton from "@/components/skeletons/CandidateStatusSkeleton";
 import { useFetch } from "@/hooks/useFetch";
-import { getCompanyOwner } from "@/services/companies";
 import { getEmployerApplications } from "@/services/employer";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
-import { selectedUser } from "@/store/slices/authSlice";
 import CandidateStatusCard from "./CandidateStatusCard";
 
 export default function CandidateStatus() {
-  const userId = useAppSelector(selectedUser)?.id;
+  const activeCompanyId = useAppSelector(
+    (state) => state.activeCompany.activeCompanyId,
+  );
 
   const [activeCoverLetter, setActiveCoverLetter] = useState<{
     candidateName: string;
@@ -27,38 +27,34 @@ export default function CandidateStatus() {
   } | null>(null);
 
   const {
-    data: company,
-    isLoading: companyLoading,
-    isError: companyError,
-  } = useFetch({
-    queryKey: ["employerCompany", userId],
-    queryFn: () => {
-      if (!userId) throw new Error("User ID is required");
-      return getCompanyOwner(userId);
-    },
-    enabled: !!userId,
-  });
-
-  const {
     data: applications,
-    isLoading: applicationsLoading,
-    isError: applicationsError,
+    isLoading,
+    isError,
   } = useFetch({
-    queryKey: ["getEmployerApplications", company?.id],
-    queryFn: () =>
-      company?.id
-        ? getEmployerApplications(company.id)
-        : Promise.resolve([]),
-    enabled: !!company?.id,
+    queryKey: ["getEmployerApplications", activeCompanyId!],
+    queryFn: () => getEmployerApplications(activeCompanyId!),
+    enabled: !!activeCompanyId,
   });
 
-  const isLoading = companyLoading || applicationsLoading;
+  if (!activeCompanyId) {
+    return (
+      <div className="my-8 rounded-2xl border border-slate-200 bg-white p-8 text-center dark:border-slate-800 dark:bg-slate-900">
+        <UsersRound className="mx-auto size-8 text-violet-500" />
+        <h3 className="mt-4 font-semibold text-slate-900 dark:text-white">
+          Select a company first
+        </h3>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          Choose an active company to view its candidate applications.
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return <CardSkeleton />;
   }
 
-  if (companyError || applicationsError) {
+  if (isError) {
     return (
       <div
         role="alert"
@@ -70,7 +66,7 @@ export default function CandidateStatus() {
             Unable to load candidate applications
           </p>
           <p className="mt-1 text-sm opacity-80">
-            Please check your company profile and try again.
+            Please try again later.
           </p>
         </div>
       </div>
@@ -81,8 +77,7 @@ export default function CandidateStatus() {
 
   const reviewingCount =
     applications?.filter(
-      (application) =>
-        application.status === "Reviewing"
+      (application) => application.status === "Reviewing",
     ).length ?? 0;
 
   return (

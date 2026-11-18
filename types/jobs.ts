@@ -16,7 +16,7 @@ export type Job = {
   status: "open" | "closed";
 
   created_at: string;
-
+  company_id: string;
   company: Company;
   owner_id:string
 };

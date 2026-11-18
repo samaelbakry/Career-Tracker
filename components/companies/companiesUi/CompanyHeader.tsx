@@ -13,15 +13,10 @@ import {
 
 export default function CompanyHeader() {
   return (
-    <section className="relative isolate mb-8 overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
-      >
-        <div className="absolute -right-24 -top-32 h-96 w-96 rounded-full bg-indigo-200/30 blur-3xl dark:bg-indigo-500/10" />
-        <div className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-cyan-200/30 blur-3xl dark:bg-cyan-500/10" />
-
-        <div className="absolute inset-0 bg-[radial-linear(#94a3b8_0.7px,transparent_0.7px)] [background-size:22px_22px] opacity-[0.13] dark:opacity-[0.08]" />
+    <section className="relative isolate mb-8 overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-950">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -right-24 -top-36 size-104 rounded-full bg-violet-200/35 blur-[100px] dark:bg-violet-600/10" />
+        <div className="absolute -bottom-44 left-[20%] size-100 rounded-full bg-blue-200/30 blur-[100px] dark:bg-blue-600/10" />
       </div>
 
       <div className="relative grid gap-10 px-6 py-8 sm:px-9 sm:py-10 lg:grid-cols-[1.4fr_0.8fr] lg:items-center lg:px-12 lg:py-12">

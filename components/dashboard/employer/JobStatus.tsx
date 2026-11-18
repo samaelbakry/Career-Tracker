@@ -5,7 +5,6 @@ import CardSkeleton from "@/components/skeletons/CardSkeleton";
 import { useFetch } from "@/hooks/useFetch";
 import { getEmployerJobStats } from "@/services/employer";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
-import { selectedUser } from "@/store/slices/authSlice";
 
 import {
   AlertTriangle,
@@ -18,18 +17,14 @@ import {
 import JobStatusCard from "./JobStatusCard";
 
 export default function JobStatus() {
-  const userId = useAppSelector(selectedUser)?.id;
+  const activeCompanyId = useAppSelector(
+    (state) => state.activeCompany.activeCompanyId,
+  );
 
   const { data, isLoading, error } = useFetch({
-    queryFn: () => {
-      if (!userId) {
-        throw new Error("User ID is required");
-      }
-
-      return getEmployerJobStats(userId);
-    },
-    queryKey: ["employerJobStats", userId],
-    enabled: !!userId,
+    queryFn: () => getEmployerJobStats(activeCompanyId!),
+    queryKey: ["employerJobStats", activeCompanyId!],
+    enabled: !!activeCompanyId,
   });
 
   const statCards = [
@@ -76,33 +71,32 @@ export default function JobStatus() {
           </h2>
 
           <p className="max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-            Keep track of your vacancies and monitor your companyA&apos;s hiring activity.
+            Keep track of your vacancies and monitor your company&apos;s hiring
+            activity.
           </p>
         </div>
 
-        {!isLoading && !error && (
+        {!isLoading && !error && data && (
           <div className="flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
             <span className="size-2 rounded-full bg-emerald-500" />
-            <span>
-              {data?.activeJobs ?? 0} active vacancies
-            </span>
+            <span>{data.activeJobs} active vacancies</span>
           </div>
         )}
       </div>
 
-      {error ? (
+      {!activeCompanyId ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+          Select a company to view its job statistics.
+        </div>
+      ) : error ? (
         <div
           role="alert"
           className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-400"
         >
           <AlertTriangle className="mt-0.5 size-5 shrink-0" />
           <div>
-            <p className="font-semibold">
-              Unable to load job statistics
-            </p>
-            <p className="mt-1 opacity-80">
-              Please try again later.
-            </p>
+            <p className="font-semibold">Unable to load job statistics</p>
+            <p className="mt-1 opacity-80">Please try again later.</p>
           </div>
         </div>
       ) : (

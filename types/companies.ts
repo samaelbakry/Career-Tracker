@@ -21,3 +21,8 @@ export type Company = {
   reviews_count: number | null;
   benefits: string[] | null;
 };
+
+export type NewCompanyInput = Omit<
+  Company,
+  "id" | "owner_id" | "created_at" | "open_jobs_count"
+>;

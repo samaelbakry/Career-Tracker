@@ -1,18 +1,18 @@
-"use client"
 
-import DialogButtonTrigger from "../ui/DialogButtonTrigger";
-import JobFormDialog from "../jobs/JobFormDialog";
-import { AlertCircle, BriefcaseBusiness } from "lucide-react";
+"use client";
+
+import { useFetch } from "@/hooks/useFetch";
+import { getEmployerJobs } from "@/services/employer";
+import { useAppSelector } from "@/store/hooks/redux-hooks";
+import { Job } from "@/types/jobs";
+import { AlertCircle, BriefcaseBusiness, Building2 } from "lucide-react";
 import JobCard from "../jobs/JobCard";
 import CardSkeleton from "../skeletons/CardSkeleton";
-import { getEmployerJobs } from "@/services/employer";
-import { useFetch } from "@/hooks/useFetch";
-import { Job } from "@/types/jobs";
-import { useAppSelector } from "@/store/hooks/redux-hooks";
-import { selectedUser } from "@/store/slices/authSlice";
 
 export default function JobListingsContent() {
-  const userId = useAppSelector(selectedUser)?.id;
+  const activeCompanyId = useAppSelector(
+    (state) => state.activeCompany.activeCompanyId,
+  );
 
   const {
     data: employerJobs,
@@ -20,10 +20,33 @@ export default function JobListingsContent() {
     isError,
     error,
   } = useFetch<Job[]>({
-    queryKey: ["employerJobs", userId],
-    queryFn: () => getEmployerJobs(userId!),
-    enabled: !!userId,
+    queryKey: ["employerJobs", activeCompanyId!],
+    queryFn: () => getEmployerJobs(activeCompanyId!),
+    enabled: !!activeCompanyId,
   });
+
+  if (!activeCompanyId) {
+    return (
+      <section className="mt-10" id="job-listings">
+        <div className="relative overflow-hidden rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
+          <div className="mx-auto flex max-w-md flex-col items-center">
+            <div className="mb-5 flex size-16 items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50 text-indigo-600 shadow-sm dark:border-indigo-900/50 dark:bg-indigo-950/50 dark:text-indigo-400">
+              <Building2 className="size-7" />
+            </div>
+
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              Select a company first
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+              Choose an active company to view and manage its job listings.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <>
       {isError && (
@@ -41,18 +64,19 @@ export default function JobListingsContent() {
         </div>
       )}
 
-      <section className="mt-10">
+      <section className="mt-10" id="job-listings">
         <div className="mb-5 flex items-end justify-between">
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
               Your Job Listings
             </h2>
+
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Manage the opportunities you currently have posted.
             </p>
           </div>
 
-          {!isLoading && employerJobs && employerJobs.length > 0 && (
+          {!isLoading && !isError && employerJobs && employerJobs.length > 0 && (
             <span className="hidden rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300 sm:block">
               {employerJobs.length}{" "}
               {employerJobs.length === 1 ? "listing" : "listings"}
@@ -73,7 +97,7 @@ export default function JobListingsContent() {
             ))}
           </div>
         ) : (
-          !isError && (
+          !isError &&(
             <div className="relative overflow-hidden rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
               <div className="pointer-events-none absolute left-1/2 top-0 h-40 w-80 -translate-x-1/2 rounded-full bg-indigo-100/50 blur-3xl dark:bg-indigo-950/20" />
 
@@ -90,13 +114,6 @@ export default function JobListingsContent() {
                   You haven&apos;t posted any jobs yet. Create your first
                   listing and start connecting with qualified candidates.
                 </p>
-
-                <div className="mt-6">
-                  <DialogButtonTrigger
-                    Component={JobFormDialog}
-                    componentProps={{ mode: "create" as const }}
-                  />
-                </div>
               </div>
             </div>
           )

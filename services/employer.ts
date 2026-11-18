@@ -9,40 +9,45 @@ export type ApplicationStatus =
   | "Offer"
   | "Rejected";
 
-export async function getEmployerJobs(ownerId: string) {
+export async function getEmployerJobs(companyId: string) {
   const { data, error } = await supabase
     .from("jobs")
-    .select(`
-      *,
-      company:companies(
-        id,
-        name,
-        logo_url
-      )
-    `)
-    .eq("owner_id", ownerId)
+    .select("*")
+    .eq("company_id", companyId)
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
 
-  return data;
+  return data ?? [];
 }
 
-export async function getEmployerJobStats(ownerId: string){
+export async function getEmployerJobStats(companyId: string) {
   const { data, error } = await supabase
     .from("jobs")
-    .select("id , status")
-    .eq("owner_id", ownerId);
-    
-    if (error) throw new Error(error.message);
+    .select("id, status")
+    .eq("company_id", companyId);
 
-    const totalJobs = data?.length
+  if (error) throw new Error(error.message);
 
-    const activeJobs = data?.filter((job)=>job.status === "open").length
-    const closedJobs = data?.filter((job)=>job.status === "closed").length 
+  const jobs = data ?? [];
 
-   return {totalJobs , activeJobs , closedJobs};
+  const totalJobs = jobs.length;
+
+  const activeJobs = jobs.filter(
+    (job) => job.status === "open",
+  ).length;
+
+  const closedJobs = jobs.filter(
+    (job) => job.status === "closed",
+  ).length;
+
+  return {
+    totalJobs,
+    activeJobs,
+    closedJobs,
+  };
 }
+
 
 export async function getEmployerApplications(companyId: string) {
 
@@ -89,17 +94,19 @@ export async function UpdateApplicationStatus(applicationId: string , status:App
   return data 
 }
 
+export async function getCompanyByOwner(
+  userId: string,
+): Promise<Company | null> {
+  const { data, error } = await supabase
+    .from("companies")
+    .select("*")
+    .eq("owner_id", userId)
+    .maybeSingle();
 
-export async function getCompanyByOwner(ownerId: string) {
-   const {data , error } = await supabase
-  .from("companies")
-  .select("*")
-  .eq("owner_id" , ownerId)
-  .single()
+  if (error) {
+    console.error("getCompanyByOwner:", error);
+    throw error;
+  }
 
-  if (error) throw new Error(error.message);
-
-  return data as Company
+  return data as Company | null;
 }
-
-

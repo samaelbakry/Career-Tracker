@@ -13,6 +13,8 @@ import {
   Clock3,
   Users,
 } from "lucide-react";
+import EmployerHiringEmptyState from "./EmployerHiringEmptyState";
+import { Company } from "@/types/companies";
 
 function ActivitySkeleton() {
   return (
@@ -38,7 +40,7 @@ export default function EmployerHiringActivity() {
     data: company,
     isLoading: companyLoading,
     isError: companyError,
-  } = useFetch({
+  } = useFetch<Company | null>({
     queryKey: ["employerCompany", userId],
     queryFn: () => getCompanyByOwner(userId!),
     enabled: !!userId,
@@ -57,6 +59,8 @@ export default function EmployerHiringActivity() {
 
   const loading = companyLoading || activityLoading;
   const hasError = companyError || activityError;
+
+  console.log("EmployerHiringActivity - error:", activity, hasError);
 
   const stats = [
     {
@@ -128,16 +132,8 @@ export default function EmployerHiringActivity() {
             Try again <ArrowUpRight className="size-4" />
           </button>
         </div>
-      ) : !company ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 p-8 text-center dark:border-slate-700">
-          <BriefcaseBusiness className="mx-auto size-8 text-slate-400" />
-          <p className="mt-3 font-semibold text-slate-900 dark:text-white">
-            Set up your company profile
-          </p>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Your hiring activity will appear here once your company is set up.
-          </p>
-        </div>
+      ) : !company || (company.open_jobs_count ?? 0) === 0 ? (
+        <EmployerHiringEmptyState />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {stats.map((stat) => {

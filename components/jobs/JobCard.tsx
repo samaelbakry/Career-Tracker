@@ -40,8 +40,13 @@ export default function JobCard({ job }: { job: Job }) {
     applications?.some((app) => app.job_id === job.id),
   );
 
-  const isEmployer = role === "employer";
-  const canManageJob = isEmployer && userId === job.owner_id;
+const activeCompanyId = useAppSelector(
+  (state) => state.activeCompany.activeCompanyId,
+);
+
+const isEmployer = role === "employer";
+
+const canManageJob = isEmployer && !!activeCompanyId && job.company_id === activeCompanyId;
   const navigate = useRouter();
 
   const handleCardClick = () => {
