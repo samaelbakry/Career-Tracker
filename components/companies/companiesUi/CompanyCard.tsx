@@ -10,6 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 type CompanyCardData = Company & {
   cover_image?: string | null;
@@ -23,11 +24,9 @@ type CompanyCardData = Company & {
   benefits?: string[] | null;
 };
 
-export default function CompanyCard({
-  company,
-}: {
-  company: CompanyCardData;
-}) {
+export default function CompanyCard({ company }: { company: CompanyCardData }) {
+  const [coverImageError, setCoverImageError] = useState(false);
+  const [logoImageError, setLogoImageError] = useState(false);
   const openJobs = Math.max(0, Number(company.open_jobs_count) || 0);
   const rating = Number(company.rating);
   const hasRating = Number.isFinite(rating) && rating > 0;
@@ -38,6 +37,12 @@ export default function CompanyCard({
 
   const companySize = company.company_size || company.employees || null;
   const profileUrl = `/employer/companies/${company.id}`;
+  
+  console.log("Company images:", {
+  company: company.name,
+  cover: company.cover_image,
+  logo: company.logo_url,
+});
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-[0_16px_45px_-20px_rgba(79,70,229,0.22)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-500/40">
@@ -46,11 +51,12 @@ export default function CompanyCard({
         aria-label={`Explore ${company.name}`}
         className="relative block h-36 overflow-hidden bg-linear-to-br from-indigo-100 via-violet-50 to-sky-100 dark:from-indigo-950 dark:via-slate-900 dark:to-slate-800"
       >
-        {company.cover_image && (
+        {company.cover_image && !coverImageError && (
           <img
             src={company.cover_image}
             alt=""
             aria-hidden="true"
+            onError={() => setCoverImageError(true)}
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         )}
@@ -95,11 +101,12 @@ export default function CompanyCard({
             aria-label={`View ${company.name} profile`}
             className="flex h-[76px] w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-2xl border-[5px] border-white bg-white shadow-md transition-transform duration-300 group-hover:scale-[1.03] dark:border-slate-900 dark:bg-slate-800"
           >
-            {company.logo_url ? (
+            {company.logo_url && !logoImageError ? (
               <img
                 src={company.logo_url}
                 alt={`${company.name} logo`}
                 loading="lazy"
+                onError={() => setLogoImageError(true)}
                 className="h-full w-full rounded-xl object-contain p-1.5"
               />
             ) : (
@@ -148,9 +155,7 @@ export default function CompanyCard({
 
               {company.founded_year && (
                 <>
-                  <span className="text-slate-300 dark:text-slate-700">
-                    ·
-                  </span>
+                  <span className="text-slate-300 dark:text-slate-700">·</span>
                   <CalendarDays className="h-3.5 w-3.5 shrink-0" />
                   <span className="shrink-0">{company.founded_year}</span>
                 </>

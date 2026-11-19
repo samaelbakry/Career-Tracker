@@ -43,6 +43,7 @@ export default function CompanyHeader() {
             <DialogButtonTrigger
               Component={CompanyFormDialog}
               componentProps={{ mode: "create" as const }}
+              title="Create your company"
             />
 
             <a

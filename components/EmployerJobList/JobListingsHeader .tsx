@@ -38,11 +38,6 @@ export default function JobListingsHeader() {
   });
 
 
-  console.log("Active Company ID:", activeCompanyId);
-console.log("Employer Jobs:", employerJobs);
-console.log("Loading:", jobsLoading);
-console.log("Error:", jobsError);
-
   const totalListings = employerJobs?.length ?? 0;
 
   const activeListings =
@@ -96,6 +91,7 @@ console.log("Error:", jobsError);
               <DialogButtonTrigger
                 Component={JobFormDialog}
                 componentProps={{ mode: "create" as const }}
+                title="Add job post"
               />
             ) : (
               <Link

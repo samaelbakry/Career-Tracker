@@ -11,6 +11,7 @@ import {
   Sparkles,
   TrendingUp,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function EmployerFeedHeader() {
   const { data, isLoading } = useFetch({
@@ -49,18 +50,14 @@ export default function EmployerFeedHeader() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <DialogButtonTrigger
-              Component={JobFormDialog}
-              componentProps={{ mode: "create" as const }}
-            />
-
-            <a
+           
+            <Link
               href="#available-jobs"
               className="group inline-flex h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white/80 px-4 text-sm font-semibold text-slate-700 transition-all hover:border-violet-200 hover:bg-violet-50 hover:text-violet-700 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-400/10 dark:hover:text-violet-300"
             >
               Explore listings
               <ArrowDownRight className="size-4 transition-transform group-hover:translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
+            </Link>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-slate-200/80 pt-5 dark:border-slate-800">

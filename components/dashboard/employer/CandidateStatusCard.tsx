@@ -200,6 +200,7 @@ export default function CandidateStatusCard({
                           Component={ScheduleInterviewDialog}
                           componentProps={{ application }}
                           interview
+                          title="Schedule"
                         />
                       )}
 

@@ -395,7 +395,6 @@ export default function CompaniesExplorer() {
         </div>
       )}
 
-      {/* Companies */}
       {!isLoading && !isError && filteredCompanies.length > 0 && (
         <div
           className={

@@ -94,19 +94,19 @@ export async function UpdateApplicationStatus(applicationId: string , status:App
   return data 
 }
 
-export async function getCompanyByOwner(
+export async function getCompaniesByOwner(
   userId: string,
-): Promise<Company | null> {
+): Promise<Company[]> {
   const { data, error } = await supabase
     .from("companies")
     .select("*")
     .eq("owner_id", userId)
-    .maybeSingle();
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("getCompanyByOwner:", error);
+    console.error("getCompaniesByOwner:", error);
     throw error;
   }
 
-  return data as Company | null;
+  return (data ?? []) as Company[];
 }

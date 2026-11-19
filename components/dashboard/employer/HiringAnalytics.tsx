@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useAppSelector } from "@/store/hooks/redux-hooks";
@@ -58,7 +57,7 @@ export default function HiringAnalytics() {
   }
 
   const hasApplications = data.totalApplicants > 0;
-  const hasJobs = data.topJobs.length > 0;
+  const hasJobs = data.totalJobs > 0;
 
   if (!hasApplications && !hasJobs) {
     return (
@@ -77,8 +76,8 @@ export default function HiringAnalytics() {
           description="Once you publish job listings and receive applications, you'll see your recruitment performance, application pipeline, and most popular jobs here."
           icon={Sparkles}
           action={{
-            label: "Create your first job",
-            href: "/employer/jobs/create",
+            label: "View your job listings",
+            href: "/employer/postJob",
           }}
         />
       </section>

@@ -5,40 +5,54 @@ export type HiringActivityStats = {
   underReview: number;
   interviewStage: number;
   totalApplications: number;
+  totalJobs: number;
 };
 
-export async function getEmployerHiringActivity(companyId: string): Promise<HiringActivityStats> {
-  const { data, error } = await supabase
-    .from("applications")
-    .select(`
-      id,
-      status,
-      applied_at,
-      jobs!inner (
+export async function getEmployerHiringActivity(
+  companyId: string,
+): Promise<HiringActivityStats> {
+  const [applicationsResult, jobsResult] = await Promise.all([
+    supabase
+      .from("applications")
+      .select(`
         id,
-        company_id
-      )
-    `)
-    .eq("jobs.company_id", companyId);
+        status,
+        applied_at,
+        jobs!inner (
+          id,
+          company_id
+        )
+      `)
+      .eq("jobs.company_id", companyId),
 
-  if (error) {
-    throw new Error(error.message);
+    supabase
+      .from("jobs")
+      .select("id", { count: "exact", head: true })
+      .eq("company_id", companyId),
+  ]);
+
+  if (applicationsResult.error) {
+    throw new Error(applicationsResult.error.message);
   }
 
-  const applications = data ?? [];
+  if (jobsResult.error) {
+    throw new Error(jobsResult.error.message);
+  }
+
+  const applications = applicationsResult.data ?? [];
 
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
   return {
+    totalJobs: jobsResult.count ?? 0,
     totalApplications: applications.length,
 
-    newApplications: applications.filter((application) => {
-      return (
+    newApplications: applications.filter(
+      (application) =>
         application.applied_at &&
-        new Date(application.applied_at) >= sevenDaysAgo
-      );
-    }).length,
+        new Date(application.applied_at) >= sevenDaysAgo,
+    ).length,
 
     underReview: applications.filter(
       (application) => application.status === "Reviewing",

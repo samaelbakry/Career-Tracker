@@ -1,20 +1,18 @@
 "use client";
 
 import { useFetch } from "@/hooks/useFetch";
-import { getCompanyByOwner } from "@/services/employer";
 import { getEmployerHiringActivity } from "@/services/hiringActivity";
 import { useAppSelector } from "@/store/hooks/redux-hooks";
-import { selectedUser } from "@/store/slices/authSlice";
 import {
   Activity,
   ArrowUpRight,
   BriefcaseBusiness,
+  Building2,
   CalendarClock,
   Clock3,
   Users,
 } from "lucide-react";
 import EmployerHiringEmptyState from "./EmployerHiringEmptyState";
-import { Company } from "@/types/companies";
 
 function ActivitySkeleton() {
   return (
@@ -34,33 +32,21 @@ function ActivitySkeleton() {
 }
 
 export default function EmployerHiringActivity() {
-  const userId = useAppSelector(selectedUser)?.id;
-
-  const {
-    data: company,
-    isLoading: companyLoading,
-    isError: companyError,
-  } = useFetch<Company | null>({
-    queryKey: ["employerCompany", userId],
-    queryFn: () => getCompanyByOwner(userId!),
-    enabled: !!userId,
-  });
+  const activeCompanyId = useAppSelector(
+    (state) => state.activeCompany.activeCompanyId,
+  );
 
   const {
     data: activity,
-    isLoading: activityLoading,
-    isError: activityError,
+    isLoading,
+    isError,
     refetch,
   } = useFetch({
-    queryKey: ["employerHiringActivity", company?.id],
-    queryFn: () => getEmployerHiringActivity(company!.id),
-    enabled: !!company?.id,
+    queryKey: ["employerHiringActivity", activeCompanyId!],
+    queryFn: () => getEmployerHiringActivity(activeCompanyId!),
+    enabled: !!activeCompanyId,
   });
 
-  const loading = companyLoading || activityLoading;
-  const hasError = companyError || activityError;
-
-  console.log("EmployerHiringActivity - error:", activity, hasError);
 
   const stats = [
     {
@@ -107,7 +93,7 @@ export default function EmployerHiringActivity() {
           </p>
         </div>
 
-        {!loading && !hasError && activity && (
+        {!isLoading && !isError && activity && (
           <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
             <BriefcaseBusiness className="size-4" />
             <span>
@@ -117,22 +103,39 @@ export default function EmployerHiringActivity() {
         )}
       </div>
 
-      {loading ? (
+      {!activeCompanyId ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center dark:border-slate-700 dark:bg-slate-900">
+          <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-400/10 dark:text-violet-400">
+            <Building2 className="size-6" />
+          </div>
+
+          <h3 className="font-semibold text-slate-900 dark:text-white">
+            Select a company first
+          </h3>
+
+          <p className="mt-2 max-w-sm text-sm text-slate-500 dark:text-slate-400">
+            Choose an active company to view its hiring activity and candidate
+            pipeline.
+          </p>
+        </div>
+      ) : isLoading ? (
         <ActivitySkeleton />
-      ) : hasError ? (
+      ) : isError ? (
         <div className="rounded-2xl border border-red-200 bg-white p-6 dark:border-red-900/50 dark:bg-slate-900">
           <p className="text-sm font-semibold text-slate-900 dark:text-white">
             We couldn&apos;t load your hiring activity.
           </p>
+
           <button
             type="button"
             onClick={() => refetch()}
             className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-violet-600 hover:text-violet-700 dark:text-violet-400"
           >
-            Try again <ArrowUpRight className="size-4" />
+            Try again
+            <ArrowUpRight className="size-4" />
           </button>
         </div>
-      ) : !company || (company.open_jobs_count ?? 0) === 0 ? (
+      ) : !activity ? (
         <EmployerHiringEmptyState />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -166,6 +169,7 @@ export default function EmployerHiringActivity() {
                   <p className="text-xs text-slate-500 dark:text-slate-400">
                     {stat.description}
                   </p>
+
                   <ArrowUpRight className="size-4 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </div>
               </article>

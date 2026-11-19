@@ -111,6 +111,7 @@ const canManageJob = isEmployer && !!activeCompanyId && job.company_id === activ
                     mode: "edit" as const,
                     job,
                   }}
+                  title="Edit job Post"
                 />
                 <DeleteJobButton jobId={job.id} />
               </>

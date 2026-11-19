@@ -13,14 +13,10 @@ export type DialogButtonTriggerProps<T> = {
   componentProps?: T;
   edit?: boolean;
   interview?: boolean;
+  title:string
 };
 
-export default function DialogButtonTrigger<T>({
-  Component,
-  edit,
-  componentProps,
-  interview,
-}: DialogButtonTriggerProps<T>) {
+export default function DialogButtonTrigger<T>({ Component, edit, componentProps, interview , title}: DialogButtonTriggerProps<T>) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -95,7 +91,7 @@ export default function DialogButtonTrigger<T>({
       "
           />
 
-          <span>Create yours</span>
+          <span>{title}</span>
         </button>
       )}
 
@@ -141,7 +137,7 @@ export default function DialogButtonTrigger<T>({
             <Calendar1Icon size={14} strokeWidth={2.2} />
           </span>
 
-          <span>Schedule</span>
+          <span>{title}</span>
         </button>
       )}
 
