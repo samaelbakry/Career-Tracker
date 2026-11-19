@@ -13,7 +13,7 @@ export type DialogButtonTriggerProps<T> = {
   componentProps?: T;
   edit?: boolean;
   interview?: boolean;
-  title:string
+  title?:string
 };
 
 export default function DialogButtonTrigger<T>({ Component, edit, componentProps, interview , title}: DialogButtonTriggerProps<T>) {

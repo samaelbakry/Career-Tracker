@@ -15,9 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import JobCard from "../jobs/JobCard";
-import JobFormDialog from "../jobs/JobFormDialog";
 import CardSkeleton from "../skeletons/CardSkeleton";
-import DialogButtonTrigger from "../ui/DialogButtonTrigger";
 import PaginationBar from "../ui/PaginationBar";
 
 const JOBS_PER_PAGE = 6;
@@ -348,13 +346,6 @@ export default function EmployerFeedExplorer() {
               <RotateCcw className="size-4" />
               Reset search
             </button>
-
-            <div className="mt-3">
-              <DialogButtonTrigger
-                Component={JobFormDialog}
-                componentProps={{ mode: "create" as const }}
-              />
-            </div>
           </div>
         </div>
       )}
